@@ -1,0 +1,158 @@
+{% extends 'base/base.html' %} 
+{% load static %} 
+{% load humanize %}
+{% block css %} 
+
+{% endblock css%} 
+
+{% block menu %}
+    {% if user.type == 1 %}
+        {% include 'menu/menu_director.html' %}
+    {% elif user.type == 4 %}
+        {% include 'menu/menu_sotuvchi.html' %}
+    {% elif user.type == 2 %}
+        {% include 'menu/menu_bugalter.html' %}
+    {% elif user.type == 18 %}
+      {% include 'menu/menu_operator.html' %}
+    {% else %}
+      {% include 'menu/menu_sotuv_rahbari.html' %}
+    {% endif %}
+{% endblock menu %}
+
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="container-full">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <h3>Sotuvchi "{{ seller }}" malumotlari </h3>
+    </div>
+    <section class="content">
+
+      <div class="row" style="padding-top: 10px">
+        <div class="col-12">
+          <div class="box">
+            <div class="box-header with-border align-center">
+
+                <div class="row">
+                    <div class="col-xl-4">
+
+                    <h4 class="box-title">Sotuvchi malumotlari</h4>
+                    
+                    </div>
+
+                    <div class="col-xl-4">
+                        <!-- bush -->
+                    </div>
+
+                    <div class="col-xl-4">
+                      <div class="input-group">
+                          <input type="text" onchange="filterdate(this)" class="form-control pull-right" id="reservation">
+
+                          <a href="" id="date_f">
+                            <div class="input-group-addon" style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                          </a>
+
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive-lg">
+                <table class="table mb-0" id="complex_header">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th>Mijozlari</th>
+                      <th>Umummiy summa</th>
+                      <th>Status</th>
+                      <th>Buyurtma Sana</th>
+                      <th>To'lov Sana</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for vg in orders %}
+                      <tr>
+
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{% url 'mijoz' vg.customer.id %}">{{ vg.customer.name }}</a>  </td>
+                        <td>{{ vg.summa_total|floatformat:2|intcomma  }}</td>
+
+                        {% if vg.status == '1' %}
+                            <td><span class="badge badge-warning">Buyurtma olindi</span></td>
+                        {% endif %}
+                        {% if vg.status == '2' %}
+                            <td><span class="badge badge-primary">Yuklanmoqda</span></td>
+                        {% endif %}
+                        {% if vg.status == '3' %}
+                            <td><span class="badge badge-primary">Yuklanmoqda</span></td>
+                        {% endif %}
+                        {% if vg.status == '4' %}
+                            <td><span class="badge badge-success">Bajarildi</span></td>
+                        {% endif %}
+                        {% if vg.status == '5' %}
+                            <td><span class="badge badge-success">Bekor qilindi</span></td>
+                        {% endif %}
+
+                        <td>{{ vg.date|date:'j-m-Y' }}</tj>                      
+                        <td>{{ vg.payment_date|date:'j-m-Y' }}</td>                      
+                        
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th scope="col">Jami:</th>
+                      <th></th>
+                      <th>{{ total_summa|floatformat:2|intcomma }}</th>
+                      <th></th>
+                      <th> </th>
+                      <th></th>
+                      
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+{% endblock content %} 
+{% block js %}
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+     function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+        }
+    </script>
+
+{% endblock js %}

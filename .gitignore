@@ -1,0 +1,15 @@
+__pycache__/
+/venv
+/.vscode
+db.sqlite3
+db.sqlite3-journal
+media
+*.mo
+.idea
+env
+back.json
+backup1.json
+debug.log
+staticfiles
+.env
+venv

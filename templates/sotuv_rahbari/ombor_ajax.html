@@ -1,0 +1,5 @@
+{% for ombor in ombors %}
+            
+    <li><a href="{% url 'ombor_detail' ombor.id %}"><i class="ti-more"></i>{{ ombor.name }}</a></li>
+
+{% endfor %}

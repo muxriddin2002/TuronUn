@@ -1,0 +1,720 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+
+{% if user.type == 19 %}
+{% include 'menu/menu_ombor_kassa.html' %}
+
+{% endif %}
+    
+    
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+
+                <div class="row">
+
+                    <div class="col-12 " id="message_container">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                        {% elif message.tags == 'error' %}
+                        <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col-xl-12 text-right" >
+                        <div>                       
+                            <div>
+                                <div class="box-body">
+                                    <button type="button" data-toggle="modal" data-target="#modal-center" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Chiqim turini qo'shish</button>
+                                    <button class="btn btn-warning" data-toggle="modal" data-target="#modal-center3"><i class="fa fa-exchange" aria-hidden="true"></i> Chiqim</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#modal-center4"><i class="fa fa-exchange" aria-hidden="true"></i> Tashqi kirim</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12 col-12 text-left ">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="col-xl-12 m-3">
+                                <h4 class="box-title">Kassa</h4> 
+                            </div>
+                            <div class="box-body">
+                                <div>
+                                    <p class="text-mute d-inline-block   font-size-16">Kassa ($)</p> :
+                                    <h3 class="text-white d-inline-block  font-weight-500">{{ kassa_dollor|floatformat:2|intcomma }}</h3>
+                                    <br>
+                                    <p class="text-mute d-inline-block font-size-16">Kassa (so'm): </p>
+                                    <h3 class="text-whited d-inline-block font-weight-500">{{ kassa_sum|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              
+
+                    <div class="col-12">
+                      <div class="box">
+
+                           <div class="box-header with-border">
+                                <div class="row">
+
+                                    <div class="col-xl-4">
+                                        <h4 class="box-title">Kassa</h4> 
+                                    </div>
+                                    
+                                    <div class="col-xl-4">
+                                            {% if user.type == 12 or user.type == 1 %}
+                                                <button class="btn btn-vimeo" data-toggle="modal" data-target="#modal-center1"><i class="fa fa-refresh" aria-hidden="true"></i> Dollordan so'mga </button>
+                                                <button class="btn btn-vimeo" data-toggle="modal" data-target="#modal-center2"><i class="fa fa-refresh" aria-hidden="true"></i> So'mdan dollorga </button>
+                                            {% endif %}
+                                        </div>
+                                   
+                                        <div class="col-xl-4">
+                                            <div class="input-group">
+                                                <input type="text" onchange="filterdate(this)"
+                                                    class="form-control pull-right" id="reservation">
+                                                <a href="" id="date_f">
+                                                    <div class="input-group-addon"
+                                                        style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </a>
+
+                                            </div>
+                                        
+                                        </div>
+                                </div>
+                                
+                            </div>
+
+                        <div class="box-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills rounded nav-justified">
+                                <li class="nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab" aria-expanded="false"> Kirimlar </a> </li>
+                                <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab" aria-expanded="false">Chiqimlar</a> </li>
+                                {% if user.type == 12 or user.type == 1 %}
+                                    <li class="nav-item"> <a href="#navpills-3" class="nav-link" data-toggle="tab" aria-expanded="false"> Convert history </a> </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <div class="box">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+
+                                <div id="navpills-1" class="tab-pane active">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Kirimlar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive">
+                                                        <table id="excel" class="table table-striped table-bordered display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th>Mijoz</th>
+                                                                    <th>To'lov</th>
+                                                                    <th>Sana</th>
+                                                                    <th>Dan</th>
+                                                                    <th>Type</th>
+                                                                    <th>Turi</th>
+                                                                    <th>Kurs</th>
+                                                                    {% if user.type == 1 %}
+                                                                        <th>Bank hisob raqam</th>
+                                                                    {% endif %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for history in kirim_history %}
+                                                                <tr>
+                                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                                    <td>
+                                                                        {{ history.customer|default_if_none:'Tashqi kirim' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ history.payment|floatformat:2|intcomma }}
+                                                                    </td>
+                                                                    <td>{{ history.date|date:'j-m-Y' }}</td>
+                                                                    <td>
+                                                                        {{ history.by_user.first_name }}
+                                                                    </td>
+                                                                    <td>
+                                                                       {{ history.get_type_display }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ history.get_turi_display }}
+                                                                    </td>
+                                                                    
+                                                                    <td>
+                                                                        {{ history.currency }}
+                                                                    </td>
+                                                                    {% if user.type == 1 %}
+                                                                    <td>
+                                                                        {{ history.bank_shot }}
+                                                                    </td>
+                                                                    {% endif %}
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="navpills-2" class="tab-pane">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Chiqimlar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive">
+                                                        <table id="excel1" class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th>Taminotchi</th>
+                                                                    <th>To'lov</th>
+                                                                    <th>Sana</th>
+                                                                    <th>Dan</th>
+                                                                    <th>Type</th>
+                                                                    <th>Turi</th>
+                                                                    <th>Kurs</th>
+                                                                    
+                                                                    {% if user.type == 1 %}
+                                                                        <th>Bank hisob raqam</th>
+                                                                    {% endif %}
+                                                                    <th>Kassa</th>
+                                                                        
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for history in chiqim_history %}
+                                                                <tr>
+                                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                                    
+                                                                    {% if history.clienttin %}
+                                                                        <td>
+                                                                            <a href=".">{{ history.clienttin.name }}</a>
+                                                                        </td>
+                                                                    {% elif history.clientun %}
+                                                                        <td>
+                                                                            <a href=".">{{ history.clientun.name }}</a>
+                                                                        </td>
+                                                                    {% elif history.client %}
+                                                                        <td>
+                                                                            <a href=".">{{ history.client.name }}</a>
+                                                                        </td>
+                                                                    {% else %}
+                                                                        <td>
+                                                                            <a href=".">Tashqi chiqim</a>
+                                                                        </td>
+                                                                    {% endif %}
+                                                                        
+                                                                    <td>
+                                                                        {{ history.payment|floatformat:2|intcomma }}
+                                                                    </td>
+                                                                    <td>{{ history.date|date:'j-m-Y' }}</td>
+                                                                    <td>
+                                                                        {{ history.by_user.first_name }}
+                                                                    </td>
+                                                                    <td>
+                                                                       {{ history.get_type_display }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ history.get_turi_display }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ history.currency }}
+                                                                    </td>
+                                                                    {% if user.type == 1 %}
+                                                                        <td>
+                                                                            {{ history.bank_shot|default_if_none:'-' }}
+                                                                        </td>
+                                                                    {% endif %}
+                                                                        <td>{{ history.cash|default_if_none:'Yo\'q' }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="navpills-3" class="tab-pane">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Convert history</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive">
+                                                        <table id="excel2" class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th>Kim tomonidan</th>
+                                                                    <th>Summa</th>
+                                                                    <th>Kassa</th>
+                                                                    <th>Dollorga/So'mga</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for history in convertHistory %}
+                                                                <tr>
+                                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                                    <td>
+                                                                        {{ history.converter.first_name }} {{ history.converter.last_name }} {{ history.converter.username }}
+                                                                    </td>
+                                                                    
+                                                                    <td>
+                                                                        {{ history.som|floatformat:2|intcomma }}
+                                                                    </td>
+                                                                    
+                                                                    <td>
+                                                                        {{ history.cash }}
+                                                                    </td>
+                                                                    <td>   
+                                                                        
+                                                                        {% if history.to_dollor %}
+                                                                            <button class="btn btn-vimeo"> <i class="fa fa-dollar" aria-hidden="true"></i></but>
+                                                                        {% endif %}
+                                                                        {% if history.to_som %}
+                                                                            <button class="btn btn-vimeo"> <i class="fa fa-money" aria-hidden="true"></i></button>
+                                                                        {% endif %}
+                                                                            
+                                                                    </td>
+                                                                    
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                      </div>
+                    </div>
+                </div>
+             
+                
+                <!-- Button trigger modal dolllor to sum -->
+                <div class="modal center-modal fade" id="modal-center1" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Dollorni so'mga convert qilish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'dollor_to_sum' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <select class="form-control" name="kassa" id="kassa">
+                                            <option value="">Kassa tanlang</option>
+                                                <option  value="kassa1">Asosiy kassadan</option>
+                                                <option value="kassa2">Ikkinchi  kassadan</option>
+                                                <option value="kassa3">Qozoq  kassadan</option>
+                                        </select>
+                                        <br>
+                                        <input id="dollor" type="number"  step="any" min="0" oninput="validity.valid||(value='');" class="form-control" name="dollor_to_sum" placeholder="Dollor miqdori kiriting!" required>
+    
+                                        <div class="form-group dollar_narxi">
+                                            <h6 >Dollar kursi</h6>
+                                            <input class="form-control dollar_narxi"
+                                                    type="text" 
+                                                    placeholder="Доллар курси" name="current_dollor_olish_sum"
+                                                    value="{{ olish_sum }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                        data-dismiss="modal">
+                                        Yopish
+                                    </button>
+                                    <button type="submit" class="btn btn-rounded btn-primary float-right">Convert</button>
+    
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Button trigger modal sum to dolllor-->
+                <div class="modal center-modal fade" id="modal-center2" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">So'mni dollorga convert qilish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'sum_to_dollor' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <select class="form-control" name="kassa" id="kassa">
+                                            <option value="">Kassa tanlang</option>
+                                                <option  value="kassa1">Asosiy kassadan</option>
+                                                <option value="kassa2">Ikkinchi  kassadan</option>
+                                                <option value="kassa3">Qozoq kassadan</option>
+                                        </select>
+                                        <br>
+                                        <input type="number"  step="any" min="0" oninput="validity.valid||(value='');"  class="form-control" name="sum_to_dollor" placeholder="So'm miqdori kiriting!" required>
+    
+                                        <div class="form-group dollar_narxi">
+                                            <h6 >Dollar kursi</h6>
+                                            <input class="form-control dollar_narxi"
+                                                    type="text" 
+                                                    placeholder="Доллар курси" name="current_dollor_sotish_sum"
+                                                    value="{{ sotish_sum }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                        data-dismiss="modal">
+                                        Yopish
+                                    </button>
+                                    <button type="submit" class="btn btn-rounded btn-primary float-right">Convert</button>
+    
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button trigger modal tashqi kirim-->
+                <div class="modal center-modal fade" id="modal-center4" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tashqi chiqim</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'outincomepayment' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <select class="form-control" name="kassa" id="kassa">
+                                            <option value="">Kassa tanlang</option>
+                                                <option  value="kassa1">Asosiy kassaga</option>
+                                                <option value="kassa2">Ikkinchi  kassaga</option>
+                                                <option value="kassa3">Qozoq  kassaga</option>
+                                        </select>
+                                        <br>
+                                        <select class="form-control" name="turi" id="turi">
+                                            <option value="">To'lob turini tanlang</option>
+                                                <option  value="1">USD</option>
+                                                <option value="2">So'm</option>
+                                        </select>
+                                        <input type="number" step="any" min="0" oninput="validity.valid||(value='');" class="form-control" name="money" placeholder="Miqdori kiriting!" required>
+                                        <input type="text" class="form-control" name="comment" placeholder="Izoh kiriting!" required>
+    
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                        data-dismiss="modal">
+                                        Yopish
+                                    </button>
+                                    <button type="submit" class="btn btn-rounded btn-primary float-right">Saqlash</button>
+    
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button trigger modal  chiqim-->
+                <div class="modal center-modal fade" id="modal-center3" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chiqim qilish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'chiqimpayment' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <select class="form-control" name="kassa" id="kassa" required>
+                                            <option value="">Kassa tanlang</option>
+                                                <option  value="kassa1">Asosiy kassaga</option>
+                                                <option value="kassa2">Ikkinchi  kassaga</option>
+                                                <option value="kassa3">Qozoq  kassaga</option>
+                                        </select>
+                                        <br>
+                                        <label for="categories">Chiqim turi</label>
+                                        <select class="form-control" name="categories" id="categories"required>
+                                            <option value="">Kategory tanlang</option>
+                                            {% for cat in categories %}
+                                                <option  value="{{ cat.id }}">{{ cat.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                            <select class="form-control" name="subcategory" id="subcategory">
+                                                    
+                                            </select>
+                                        <br>
+                                        <select class="form-control" name="turi" id="turi">
+                                            <option value="">To'lob turini tanlang</option>
+                                                <option  value="1">USD</option>
+                                                <option value="2">So'm</option>
+                                        </select>
+                                        <input type="number" step="any" min="0" oninput="validity.valid||(value='');" class="form-control" name="money" placeholder="Miqdori kiriting!" required>
+                                        <input type="text" class="form-control" name="comment" placeholder="Izoh kiriting!" required>
+    
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                        data-dismiss="modal">
+                                        Yopish
+                                    </button>
+                                    <button type="submit" class="btn btn-rounded btn-primary float-right">Chiqim</button>
+    
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chiqim turini qo'shish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-group" action="{% url 'add-type-expanse' %}" method="post">
+                                    {% csrf_token %}
+                                    <label for="categories"></label>
+                                    <select class="form-control" name="categories" id="categories" required>
+                                        <option value="">Kategory tanlang</option>
+                                        {% for cat in categories %}
+                                            <option  value="{{ cat.id }}">{{ cat.name }}</option>
+                                        {% endfor %}
+                                    <div class="form-group p-3">
+                                        <input type="text" class="form-control" name="name" placeholder="Chiqim turi"
+                                               required>
+                                    </div>
+                                    <div class="form-group p-3">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Qo'shish
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal center-modal fade" id="modal-center-kassa-convert" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Kassalar orasida almashuv</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-group" action="{% url 'kassa_converts' %}" method="post">
+                                {% csrf_token %}
+                                    <div class="form-group pt-2">
+                                        <label for="from_kassa">Kassadan</label>
+                                        <select class="form-control" name="from_kassa" required>
+                                            <option value="" disabled selected>Kasssa tanlang</option>
+                                                <option value="kassa1">Asosiy kassadan</option>
+                                                <option value="kassa2">Ikkinchi kassadan</option>
+                                                <option value="kassa3">Qozoq kassadan</option>
+                                            
+                                        </select>
+                                        <label for="to_kassa">Kassaga</label>
+                                        <select class="form-control" id="to_kassa" name="to_kassa" required>
+                                            <option value="" disabled selected>Qaysi Kasssaga tanlang</option>
+                                                <option value="kassa1">Asosiy kassaga</option>
+                                                <option value="kassa2">Ikkinchi kassaga</option>
+                                                <option value="kassa3">Qozoq kassaga</option>
+                                            
+                                        </select>
+                                        <br>
+                                        <select name="currency" id="" class="form-control select1">
+                                            <option value="" disabled selected>Valyuta turini tanlang</option>
+                                            <option value="usd">Dollar</option>
+                                            <option value="usz">So'm</option>
+                                        </select>
+                                        <div class="form-group dollar_narxi1" style="display:none;">
+                                            <h6 >Dollar kursi</h6>
+                                            <input class="form-control dollar_narxi1"
+                                                   type="text"
+                                                   placeholder="Доллар курси" name="dollar_narxi"
+                                                   value="1">
+                                        </div>
+                                    </div>
+                                    <div class="form-group pt-2">
+                                        <input type="number"  step="any" min="0" oninput="validity.valid||(value='');"  class="form-control" name="summa" 
+                                               placeholder="Summa"
+                                               required>
+                                        <input type="text" class="form-control" name="izoh" 
+                                               placeholder="Izoh"
+                                               required>
+                                    </div>
+                                    <div class="form-group pt-2">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Belgilash
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- /.modal -->
+
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    
+    <script>
+        $('#excel').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+             'excel','pdf'
+            ],
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+        } );
+    </script>
+    
+    <script>
+        $('#excel1').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+             'excel','pdf'
+            ],
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+        } );
+    </script>
+    <script>
+        $('#excel2').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+             'excel','pdf'
+            ],
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+        } );
+    </script>
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    <script>
+       function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+        }
+    </script>
+
+<!-- ajax for smart select -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#categories").change(function () {
+    var url = "{% url 'ajax_load_categories' %}";
+    var id = $(this).val();
+
+    $.ajax({
+        url: url,
+        data: {
+        'id': id
+        },
+        success: function (data) {
+        $("#subcategory").html(data);
+        }
+    });
+
+    });
+</script>
+
+
+{% endblock js %}
+

@@ -1,0 +1,72 @@
+{% load humanize %} {% load static %}
+<table id="example12" class="table table-striped table-bordered display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Sotuvchi ismi</th>
+
+            <th style="padding-left: 100px;">Toshkent</th>
+            <th>Sirdaryo</th>
+            <th>Jizzax</th>
+            <th>Samarqand</th>
+            <th>Buxoro</th>
+            <th>Navoiy</th>
+            <th>Xorazm</th>
+            <th>Qoraqalpogiston</th>
+            <th>Farg'ona</th>
+            <th>Namangan</th>
+            <th>Andijon</th>
+            <th>Afg'on</th>
+            <th>Qashqadaryo</th>
+            <th>Surxondaryo</th>
+            <th>Jami:</th>
+
+        </tr>
+    </thead>
+    <!-- seller huddud summasi -->
+    <tbody>
+
+        {% for s_hudud in emp_hudud_sums %}
+        <tr>
+
+            <td style="position: absolute !important;
+            left: 20px !important;
+            width: 12em !important;
+            background-color:rgb(245, 245, 245) !important;">{{ s_hudud.Ismi }}</td>
+            <td style="padding-left: 100px;">{{ s_hudud.tashkent.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.sirdaryo.summa_total|default_if_none:"0"|floatformat:2|intcomma}}</td>
+            <td>{{ s_hudud.jizzax.summa_total|default_if_none:"0"|floatformat:2 |intcomma}}</td>
+            <td>{{ s_hudud.samarqand.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.buxoro.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.navoiy.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.xorazm.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.qoraqalpoq.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.fargona.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.namangan.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.andijan.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.afgon.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.qashqadaryo.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>{{ s_hudud.surxondaryo.summa_total|default_if_none:"0"|floatformat:2|intcomma }}</td>
+            <td>
+                {{ s_hudud.total|default_if_none:"0"|floatformat:2|intcomma }}
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+<script>
+    $('#example12').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+        
+    } );
+</script>

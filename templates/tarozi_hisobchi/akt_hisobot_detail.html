@@ -1,0 +1,163 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% if user.type == 8 %}
+    {% include 'menu/menu_tarozi_hisobchi.html' %}
+    {% elif user.type == 10  %}
+    {% include 'menu/menu_texnolog.html' %}
+    {% elif user.type == 4  %}
+    {% include 'menu/menu_sotuvchi.html' %}
+    {% else %}
+    {% include 'menu/menu_tarozi_moliya.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <h3>Akt : {{ akt.name }}</h3>
+            </div>
+            <section class="content">
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Vagonlar ro'yxati</h4>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Vagon raqami</th>
+                                            <th scope="col">Brutto Akt</th>
+                                            <th scope="col">Tara Akt</th>
+                                            <th scope="col">Netto Akt</th>
+                                            <th scope="col">Brutto Fakt</th>
+                                            <th scope="col">Tara Fakt</th>
+                                            <th scope="col">Netto Fakt</th>
+                                            <th scope="col">Netto Farqi</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for vg in akt.wagons.all %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td >{{ vg.number }}</td>
+                                                <td class="sum_1">{{ vg.brutto_akt }}</td>
+                                                <td class="sum_2">{{ vg.tara_akt }}</td>
+                                                <td class="sum_3">{{ vg.netto_akt }}</td>
+                                                <td class="sum_4">{{ vg.brutto_fakt }}</td>
+                                                <td class="sum_5">{{ vg.tara_fakt }}</td>
+                                                <td class="sum_6">{{ vg.netto_fakt }}</td>
+                                                <td data-value="true" >{{ vg.netto_akt|sub:vg.netto_fakt }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                            <tr>
+                                                <td></td>
+                                                <td>Jami: </td>
+                                                <td class="sum1"></td>
+                                                <td class="sum2"></td>
+                                                <td class="sum3"></td>
+                                                <td class="sum4"></td>
+                                                <td class="sum5"></td>
+                                                <td class="sum6"></td>
+                                                <td class="sum"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+        var values = document.querySelectorAll("[data-value='true']");
+        var valuesSum = document.querySelector(".sum");
+        const numberFormat = new Intl.NumberFormat("en-GB")
+        var sum = 0;
+        for (let i =0; i < values.length; i++) {
+            sum += Number(values[i].innerHTML.replace(/[\s.,%]/g, ''))
+        }
+        valuesSum.innerHTML = numberFormat.format(sum)
+    </script>
+    <script>
+        var values1 = document.querySelectorAll(".sum_1");
+        console.log()
+        var valuesSum1 = document.querySelector(".sum1");
+        const numberFormat1 = new Intl.NumberFormat("en-GB")
+        var sum1 = 0;
+        for (let i =0; i < values1.length; i++) {
+            sum1 += Number(values1[i].innerHTML.replace(/[\s.,%]/g, ''))
+        }
+        valuesSum1.innerHTML = numberFormat1.format(sum1)
+    </script>
+    <script>
+        var values2 = document.querySelectorAll(".sum_2");
+        var valuesSum2 = document.querySelector(".sum2");
+        const numberFormat2 = new Intl.NumberFormat("en-GB")
+        var sum2 = 0;
+        for (let i =0; i < values2.length; i++) {
+            sum2 += Number(values2[i].innerHTML.replace(/[\s.,%]/g, ''))
+        }
+        valuesSum2.innerHTML = numberFormat2.format(sum2)
+    </script>
+
+    <script>
+        var values3 = document.querySelectorAll(".sum_3");
+        var valuesSum3 = document.querySelector(".sum3");
+        const numberFormat3 = new Intl.NumberFormat("en-GB")
+        var sum3 = 0;
+        for (let i =0; i < values3.length; i++) {
+            sum3 += Number(values3[i].innerHTML.replace(/[\s.,%]/g, ''))
+        }
+        valuesSum3.innerHTML = numberFormat3.format(sum3)
+    </script>
+
+    <script>
+        var values4 = document.querySelectorAll(".sum_4");
+        var valuesSum4 = document.querySelector(".sum4");
+        const numberFormat4 = new Intl.NumberFormat("en-GB")
+        var sum4 = 0;
+        for (let i =0; i < values4.length; i++) {
+            sum4 += Number(values4[i].innerHTML.replace(/[\s.,%]/g, ''))
+        }
+        valuesSum4.innerHTML = numberFormat4.format(sum4)
+    </script>
+
+    <script>
+        var values5 = document.querySelectorAll(".sum_5");
+        var valuesSum5 = document.querySelector(".sum5");
+        const numberFormat5 = new Intl.NumberFormat("en-GB")
+        var sum5 = 0;
+        for (let i =0; i < values5.length; i++) {
+            sum5 += Number(values5[i].innerHTML.replace(/[\s.,%]/g, ''))
+        }
+        valuesSum5.innerHTML = numberFormat5.format(sum5)
+    </script>
+
+    <script>
+        var values6 = document.querySelectorAll(".sum_6");
+        var valuesSum6 = document.querySelector(".sum6");
+        const numberFormat6 = new Intl.NumberFormat("en-GB")
+        var sum6 = 0;
+        for (let i =0; i < values6.length; i++) {
+            sum6 += Number(values6[i].innerHTML.replace(/[\s.,%]/g, ''))
+        }
+        valuesSum6.innerHTML = numberFormat6.format(sum6)
+    </script>
+{% endblock js %}

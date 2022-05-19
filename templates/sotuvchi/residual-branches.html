@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block menu %}
+    {% include 'menu/menu_sotuvchi.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="row">
+                     <div class="col-12 " id="message_container">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                        {% elif message.tags == 'error' %}
+                        <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-12">
+                      <div class="box">
+                        <div class="row" style="padding-top:10px;">
+                            <div class="col-12">
+                                <div class="box">
+                                    <div class="box-header">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <h4 class="box-title">Filiallar hisobi</h4>
+                                            </div>
+                                            <div class="col-8" >
+                                                <div style="display: flex;align-items: center;justify-content: center;">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="box-title">
+                                                    <form action="{% url 'change-all-residue' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="form-control">Hammasini yangilash</button>
+                                                    </form>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                            <table id="complex_header" class="table table-striped table-bordered display" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Maxsulot</th>
+                                                        <th>Hajmi</th>
+                                                        <th>Filial nomi</th>
+                                                        <th>Manzili</th>
+                                                        <th>Yangilangan Sana</th>
+                                                        <th>Qoldiqni Yangilash</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                        {% for i in residue %}
+                                                    <tr>
+                                                        <td>{{i.product.name}}</td>
+                                                        <td>{{i.quantity}}</td>
+                                                        <td>{{i.filial}}</td>
+                                                        <td>{{i.manzil}}</td>
+                                                        <td>{{i.date|date:"Y-m-d H:i"}}</td>
+                                                        <td><a href="{% url 'change-residue' i.id %}"><button class="form-control">Yangilash</button></a></td>
+                                                    </tr>
+                                                   
+                                                        {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+	<script src="{% static 'main/js/template.js'%}"></script>
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+
+    <script>
+           $('#complex_header').DataTable( {
+            'dom': 'Blfrtip',
+            'buttons': [
+            { extend: 'excel', className: 'excelButton' },
+            { extend: 'pdf', className: 'pdfButton' }
+            ],
+            'pageLength':100,
+            'lengthChange': true,
+            
+        } );
+    </script>
+
+{% endblock js %}

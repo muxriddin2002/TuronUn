@@ -1,0 +1,149 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% if user.type == 8 %}
+    {% include 'menu/menu_tarozi_hisobchi.html' %}
+    {% elif user.type == 10  %}
+    {% include 'menu/menu_texnolog.html' %}
+    {% else %}
+    {% include 'menu/menu_tarozi_moliya.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <div class="row">
+                                    <div class="col-xl-3">
+                                        <h4 class="box-title">Klientlar ro'yxati</h4>
+                                    </div>
+                                    <div class="col-xl-7">
+                                        <form class="form-inline" action="" method="get">
+                                            <input type="text" class="form-control" name="search" style="width: 350px;" placeholder="Qidirish ...">
+                                            <button type="submit" class="btn btn-primary" style="width: 34px; height: 34px;padding: 2px; margin-left: 10px;">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <button type="button" data-toggle="modal" class="btn btn-primary" data-target="#modal-center">
+                                        Yangi qo'shish
+                                    </button>
+                                </div>
+
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0" id = "excel31">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Kompaniya</th>
+                                            <th scope="col">Masul shaxs</th>
+                                            <th scope="col">Telefon</th>
+                                            <th scope="col">Manzil</th>
+                                            <!-- <th scope="col">Qarz</th> -->
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for client in clients %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ client.compony }}</td>
+                                                <td>{{ client.name }}</td>
+                                                <td>{{ client.phone }}</td>
+                                                <td>{{ client.address }}</td>
+                                                <!-- <td>{{ client.debt }}</td> -->
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+
+<!-- modal  -->
+                <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Taminotchi qo'shish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'craete-client' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <p style="color: white">Kompaniya ismi</p>
+                                        <input type="text" name="compony" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <p style="color: white">Taminotchi ismi</p>
+                                        <input type="text" name="name" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <p style="color: white">Taminotchi hududi</p>
+                                        <input type="text" name="hudud" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <p style="color: white">Taminotchi telefon nomeri</p>
+                                            </div>
+                                            <div style="text-align: end" class="col-6">
+                                                <p style="color: white">Namuna 998991234567</p>
+                                            </div>
+                                        </div>
+                                        <input type="number" name="phone" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Qo'shish</button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+<script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+  <script>
+    $('#excel31').DataTable( {
+ 'dom': 'Blfrtip',
+ 'buttons': [
+     'excel',
+     'pdf'
+ ],
+ 'pageLength':100,
+ 'lengthChange': true,
+ 
+} );
+</script>
+{% endblock js %}

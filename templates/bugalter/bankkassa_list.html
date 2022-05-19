@@ -1,0 +1,240 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+
+{% if user.type == 2 %}
+    {% include 'menu/menu_bugalter.html' %}
+{% elif  user.type == 21 %}
+    {% include 'menu/menu_yordamchi_bugalter.html' %}
+{% else %}
+    {% include 'menu/menu_director.html' %}
+{% endif %}
+    
+    
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+
+                <div class="row">
+
+                    <div class="col-12">
+                      <div class="box">
+
+                           <div class="box-header with-border">
+                                <div class="row">
+
+                                    <div class="col-xl-4">
+                                        <h4 class="box-title">Bank hisob raqamlar</h4> 
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <form id="yemForm" data-products-url="{% url 'ajax_bank_shots' %}"  novalidate>
+                                            {% csrf_token %}
+                
+                                             <div class="form-group p-3 text-center" style="display: flex; flex-direction: row; flex-wrap: nowrap; align-content: center; justify-content: center;">
+                                                <select class="form-control " style="width: 410px; text-align: center;"  id="id_shots"  name="shot_id" required>
+                                                    <option value="">Bank hisob raqamini tanlang tanlang</option>
+                                                    {% for hisob in hisoblar %}
+                                                        <option value="{{ hisob.id }}">{{ hisob.bank_name }} {{ hisob.shot_numbers }} </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                
+                                        </form>
+                                    </div>
+                                        <div class="col-xl-4">
+                                            <div class="input-group">
+                                                <input type="text" onchange="filterdate(this)"
+                                                    class="form-control pull-right" id="reservation">
+                                                <a href="" id="date_f">
+                                                    <div class="input-group-addon"
+                                                        style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        <div class="box-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills rounded nav-justified">
+                                <li class="nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab" aria-expanded="false"> Kirimlar </a> </li>
+                                <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab" aria-expanded="false">Chiqimlar</a> </li>
+                            </ul>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <div class="box">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+
+                                <div id="navpills-1" class="tab-pane active">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Kirimlar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive" id = 'ajax_bank_shots_data_html'>
+                                                    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="navpills-2" class="tab-pane">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Chiqimlar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive" id="ajax_bank_shots_chiqim_data_html">
+                                                     
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                      </div>
+                    </div>
+                </div>
+             
+            </section>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    
+{% endblock content %}
+{% block js %}
+
+<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+
+<script>
+   function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+        }
+</script>
+      
+    
+    <script>
+        $('#excel1').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+            
+        } );
+    </script>
+
+<!-- ajax for smart select -->
+<script>
+    $("#id_shots").change(function () {
+    var url = "{% url 'ajax_bank_shots' %}";
+    var id = $(this).val();
+
+    $.ajax({
+        url: url,
+        
+        data: {
+        'id': id
+        },
+        success: function (data) {
+        $("#ajax_bank_shots_data_html").html(data);
+        }
+    });
+
+    });
+</script>
+
+<script>
+    $("#id_shots").change(function () {
+    var url = "{% url 'ajax_bank_chiqim_shots' %}";
+    var id = $(this).val();
+
+    $.ajax({
+        url: url,
+        
+        data: {
+        'id': id
+        },
+        success: function (data) {
+        $("#ajax_bank_shots_chiqim_data_html").html(data);
+        }
+    });
+
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+    var url = "{% url 'ajax_bank_shots_data' %}";
+    var tegirmonId = $(this).val();
+
+    $.ajax({
+        url: url,
+        
+        data: {
+        'tegirmon': tegirmonId
+        },
+        success: function (data) {
+        $("#ajax_bank_shots_data_html").html(data);
+        }
+    });
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+    var url = "{% url 'ajax_bank_shots_chiqim_data' %}";
+    var tegirmonId = $(this).val();
+
+    $.ajax({
+        url: url,
+        
+        data: {
+        'tegirmon': tegirmonId
+        },
+        success: function (data) {
+        $("#ajax_bank_shots_chiqim_data_html").html(data);
+        }
+    });
+
+    });
+</script>
+
+{% endblock js %}
+

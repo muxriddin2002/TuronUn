@@ -1,0 +1,83 @@
+{% load static %}
+{% load humanize %}
+{% block css %}
+{% endblock css %}
+
+<table id="excel" class="table table-striped table-bordered display" style="width:100%">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Xaridor</th>
+            <th scope="col">Hudud</th>
+            <th scope="col">Qabul qilgan inson</th>
+            <th scope="col">Summa</th>
+            <th scope="col">Status</th>
+            <th scope="col">Bank hisob</th>
+            <th scope="col">Sana</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        
+{% for ord in shots %}
+<tr>
+    <th scope="row">{{ forloop.counter }}</th>
+    
+    {% if ord.customer.name %}
+        <td>
+            <a href="#">{{ ord.customer.name }}</a>
+        </td>
+    {% elif ord.sub_category %}
+        <td>
+            <a href="#">Tashqi kirim {{ ord.sub_category }}</a>
+        </td>
+    {% else %}
+        <td>
+            <a href="#">Nomalum</a>
+        </td>
+    {% endif %}
+    
+    <td>{{ ord.customer.get_hudud_display }}</td>
+    <td>{{ ord.by_user }}</td>
+    <td>{{ ord.payment|floatformat:2|intcomma }}</td>
+   <td>{{ ord.get_turi_display }}</td>
+   <td>{{ ord.bank_shot|default_if_none:'-' }}</td>
+    <td>{{ ord.date|date:'j-m-Y H:i' }}</td>
+ 
+</tr>
+{% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Jami:</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th> {{ shots_total_sum|floatformat:2|intcomma }} </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <th scope="col">Hisob raqamdagi summa:</th>
+            <th scope="col" class="border-right">{{ bank_summa|intcomma }}</th>
+            
+        </tr>
+    </tfoot>
+</table>
+
+<script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+<script>
+    $('#excel').DataTable( {
+       'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+        
+    } );
+</script>

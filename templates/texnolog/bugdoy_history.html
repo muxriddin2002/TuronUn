@@ -1,0 +1,210 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% include 'menu/menu_texnolog.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+            </div>
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <h4 class="box-title">Bug'doy ombori Tarixi</h4>
+                                    </div>
+                                    <div class="col-xl-4">
+                                            <button type="button"data-toggle="modal" data-target="#modal-center" class="btn btn-rounded btn-primary">Olish</button>
+
+                                    </div>
+                                    <div class="col-xl-4">
+                                        <div class="input-group">
+                                            <input type="text" onchange="filterdate(this)"
+                                                   class="form-control pull-right" id="reservation">
+                                            <a href="" id="date_f">
+                                                <div class="input-group-addon"
+                                                     style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0" id = "excel40">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Sana</th>
+                                            <th scope="col">Kilo birinchi tozalov</th>
+                                            <th scope="col">Kilo ikkinchi tozalov</th>
+                                            <th scope="col">Kilo uchunchi tozalov</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for bg in bugdoys %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ bg.date }}</td>
+                                                <td>{{ bg.kilo_1 }}</td>
+                                                <td>{{ bg.kilo_2 }}</td>
+                                                <td>{{ bg.kilo_3 }}</td>
+                                                {% if bg.status == True %}
+                                                <td><span class="badge badge-success">Bajarildi</span></td>
+                                                {% else %}
+                                                <td>
+                                                    <button class="btn btn-warning" onclick="openModal(
+                                                            {{ bg.id }}, {{ bg.kilo_1 }}, {{ bg.kilo_2 }}, {{ bg.kilo_3 }}
+                                                            )"
+                                                            style="width: 34px; height: 34px;padding: 2px; margin-left: 10px;">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </button>
+                                                    <a  class="btn btn-primary" href="{% url 'texnolog-status-wheats' %}?id={{ bg.id }}"
+                                                            style="width: 34px; height: 34px;padding: 2px; margin-left: 10px;">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                </td>
+                                            {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Bug'doy olish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-group" action="{% url 'texnolog-add-wheats' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group p-3">
+                                        <input type="number" step="0.00" name="kilo_1" class="form-control" placeholder="Bug'doy olish">
+                                    </div>
+                                    <div class="form-group p-3">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Olish
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="modal center-modal fade" id="modal-center-2" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Bug'doy olish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-group" action="{% url 'texnolog-edit-wheats' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group p-3">
+                                        <label>Birinchi tozalov</label>
+                                        <input type="number" step="0.00" id="kilo_1" name="kilo_1" class="form-control" placeholder="Birinchi tozalov">
+                                    </div>
+                                    <div class="form-group p-3">
+                                        <label>Ikkinchi tozalov</label>
+                                        <input type="number" step="0.00" id="kilo_2" name="kilo_2" class="form-control" placeholder="Ikkinchi tozalov">
+                                    </div>
+                                    <div class="form-group p-3">
+                                        <label>Uchinchi tozalov</label>
+                                        <input type="number" step="0.00" id="kilo_3" name="kilo_3" class="form-control" placeholder="Uchinchi tozalov">
+                                    </div>
+                                    <input type="hidden" name="id" id="w_id">
+                                    <div class="form-group p-3">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Olish
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    
+      <script>
+        $('#excel40').DataTable( {
+     'dom': 'Blfrtip',
+     'buttons': [
+         'excel',
+         'pdf'
+     ],
+     'pageLength':100,
+     'lengthChange': true,
+     
+    } );
+    </script>
+    
+
+    <script>
+       function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+        }
+        function openModal(id, kilo_1, kilo_2, kilo_3){
+            $("#w_id").attr('value',id)
+            $("#kilo_1").attr('value',kilo_1)
+            $("#kilo_2").attr('value',kilo_2)
+            $("#kilo_3").attr('value',kilo_3)
+            $("#modal-center-2").modal("show");
+        }
+    </script>
+{% endblock js %}

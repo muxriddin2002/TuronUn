@@ -1,0 +1,378 @@
+{% load humanize %}
+{% for basket in orders.baskets.all %}
+
+<tr>
+  <input type="hidden" id="pro_id_edit" value="{{basket.product.id}}" />
+  <input type="hidden" id="e_id" value="{{basket.id}}" />
+
+  <th scope="row">{{ forloop.counter }}</th>
+
+  <td>{{ basket.product }}</td>
+
+  <td>
+    <input
+      type="text"
+      placeholder="Yangi narxi"
+      id="narxi_edit"
+      class="narxi_edit myField"
+      name="narxi_edit"
+      value="{{ basket.price|floatformat:2 }}"
+      required
+    />
+  </td>
+
+  <td>
+    <input
+      type="text"
+      name="qop_soni_edit"
+      placeholder="Qop soni"
+      id="qop_soni_edit"
+      class="qop_soni_edit myField"
+      name="miqdor_edit"
+      value="{{ basket.hajmi|floatformat:2 }}"
+      required
+    />
+  </td>
+
+  <td id="total_expenses">
+    <input type="text" class="total_edit" placeholder="Jami summa" disabled />
+  </td>
+
+  <td>
+    <button type="button" class="btn btn-primary btn_sub_edit">
+      Saqlash <i class="fa fa-pencil"></i>
+    </button>
+  </td>
+
+  <td>
+    <button class="btn btn-danger btn_delete_item"><i class="fa fa-trash"></i></button>
+  </td>
+
+  <script>
+    let priceEdit = document.querySelectorAll(".narxi_edit");
+    let amount = document.querySelectorAll(".qop_soni_edit");
+    let order_id = window.location.pathname.split("/").pop();
+
+    priceEdit.forEach((eachPrice) => {
+        console.log(eachPrice)
+        let priceValue = 0;
+        let amountValue = 0;
+        let pro_id =
+        eachPrice.parentElement.previousElementSibling.previousElementSibling
+            .previousElementSibling.previousElementSibling.value;
+        
+        let b =
+        eachPrice.parentElement.nextElementSibling.nextElementSibling
+            .nextElementSibling.children[0];
+
+        let amount = eachPrice.parentElement.nextElementSibling.children[0];
+
+        eachPrice.addEventListener("keyup", (e) => {
+        priceValue = e.target.value;
+        console.log(priceValue)
+        console.log(amountValue, "check");
+        if (!priceValue || !amountValue) {
+            b.style.pointerEvents = "none";
+        } else {
+            b.style.pointerEvents = "fill";
+
+            b.setAttribute(
+            "name",
+            "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+
+            
+
+            b.addEventListener("click", (e) => {
+            console.log(
+                "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+            });
+        }
+        });
+
+        amount.addEventListener("change", (e) => {
+        amountValue = e.target.value;
+
+        if (!priceValue || !amountValue) {
+            b.style.pointerEvents = "none";
+        } else {
+            b.style.pointerEvents = "fill";
+
+            
+
+            b.setAttribute(
+            "name",
+            "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+
+            b.addEventListener("click", (e) => {
+            console.log(
+                "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+            });
+        }
+        });
+    });
+
+
+    </script>
+
+</tr>
+
+{% endfor %}
+
+
+<script>
+    (function () {
+      "use strict";
+  
+      $("table").on("change", "input", function () {
+        var row = $(this).closest("tr");
+        var qty = parseFloat(row.find(".qop_soni_edit").val());
+        var price = parseFloat(row.find(".narxi_edit").val());
+        var total = qty * price;
+        row.find(".total_edit").val(isNaN(total) ? "" : total);
+      });
+  
+      let priceEdit = document.querySelectorAll(".narxi_edit");
+      let amount = document.querySelectorAll(".qop_soni_edit");
+      let order_id = window.location.pathname.split("/").pop();
+  
+      priceEdit.forEach((eachPrice) => {
+        let eId = eachPrice.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.value
+        console.log(eId)  
+        let priceValue = eachPrice.value;
+        let amountValue = eachPrice.parentElement.nextElementSibling.children[0].value;
+        let pro_id =
+          eachPrice.parentElement.previousElementSibling.previousElementSibling
+            .previousElementSibling.previousElementSibling.value;
+        let b =
+          eachPrice.parentElement.nextElementSibling.nextElementSibling
+            .nextElementSibling.children[0];
+
+        let deleteBtn =
+            eachPrice.parentElement.nextElementSibling.nextElementSibling
+              .nextElementSibling.nextElementSibling.children[0];    
+  
+        let amount = eachPrice.parentElement.nextElementSibling.children[0];
+
+
+        deleteBtn.setAttribute(
+              "name",
+              "{% url 'sotuvchi-delete-basket' %}/" +
+              order_id +
+              "/" +
+                 eId
+            );
+  
+  
+            deleteBtn.addEventListener("click", (e) => {
+              console.log(
+                "{% url 'sotuvchi-delete-basket' %}/" +
+                  order_id +
+                  "/" +
+                     eId
+              );
+            });
+          
+
+
+        amount.addEventListener("keyup", (e) => {
+          amountValue = e.target.value;
+          if (!priceValue || !amountValue) {
+            b.style.pointerEvents = "none";
+          } else {
+            b.style.pointerEvents = "fill";
+  
+            b.setAttribute(
+              "name",
+              "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue + "/" +  eId
+            );
+  
+  
+            b.addEventListener("click", (e) => {
+              console.log(
+                "{% url 'sotuvchi-edit-basket' %}/" +
+                  order_id +
+                  "/" +
+                  pro_id +
+                  "/" +
+                  priceValue +
+                  "/" +
+                  amountValue+ "/" +  eId
+              );
+            });
+          }
+        });
+  
+        eachPrice.addEventListener("keyup", (e) => {
+          priceValue = e.target.value;
+          if (!priceValue || !amountValue) {
+            b.style.pointerEvents = "none";
+          } else {
+            b.style.pointerEvents = "fill";
+  
+            b.setAttribute(
+              "name",
+              "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue+ "/" +  eId
+            );
+  
+  
+            b.addEventListener("click", (e) => {
+              console.log(
+                "{% url 'sotuvchi-edit-basket' %}/" +
+                  order_id +
+                  "/" +
+                  pro_id +
+                  "/" +
+                  priceValue +
+                  "/" +
+                  amountValue+ "/" +  eId
+              );
+            });
+          }
+        });
+      });
+  
+      
+    })();
+</script> 
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- <script src="sweetalert2.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css" /> -->
+
+<script>
+(function () {
+    "use strict";
+
+    $("table").on("change", "input", function () {
+    var row = $(this).closest("tr");
+    var qty = parseFloat(row.find(".qop_soni_edit").val());
+    var price = parseFloat(row.find(".narxi_edit").val());
+    var total = qty * price;
+    row.find(".total_edit").val(isNaN(total) ? "" : total);
+    });
+
+    $(".btn_sub_edit").click(function (e) {
+    e.preventDefault();
+    var targetUrl = $(this).attr("name");
+    console.log(targetUrl);
+    if (targetUrl) {
+        $.ajax({
+          url: targetUrl,
+          type: "GET",
+          //dataType: "json",
+          success: function () {
+            Swal.fire({
+              position: "top-center",
+              icon: "success",
+              title: "Muvofaqqiyatli ozgartirildi",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            //alert(JSON.parse(response["is_already_created"]));
+          },
+          error: function (data) {
+            Swal.fire({
+              icon: "error",
+              title: "",
+              text: data.responseJSON.message,
+            });
+            //alert(JSON.stringify(response["responseText"]));
+          },
+        });
+      }
+    });
+})();
+</script>
+
+
+<script>
+    (function () {
+        "use strict";
+    
+        $("table").on("change", "input", function () {
+        var row = $(this).closest("tr");
+        var qty = parseFloat(row.find(".qop_soni_edit").val());
+        var price = parseFloat(row.find(".narxi_edit").val());
+        var total = qty * price;
+        row.find(".total_edit").val(isNaN(total) ? "" : total);
+        });
+    
+        $(".btn_delete_item").click(function (e) {
+        e.preventDefault();
+        var targetUrl = $(this).attr("name");
+        console.log(targetUrl);
+        if (targetUrl) {
+            $.ajax({
+              url: targetUrl,
+              type: "GET",
+              //dataType: "json",
+              success: function () {
+                Swal.fire({
+                  position: "top-center",
+                  icon: "success",
+                  title: "Muvofaqqiyatli o'chirildi!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                //alert(JSON.parse(response["is_already_created"]));
+              },
+              error: function (data) {
+                Swal.fire({
+                  icon: "error",
+                  title: "",
+                  text: data.responseJSON.message,
+                });
+                //alert(JSON.stringify(response["responseText"]));
+              },
+            });
+          }
+        });
+    })();
+</script>

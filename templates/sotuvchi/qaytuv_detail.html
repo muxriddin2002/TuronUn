@@ -1,0 +1,184 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% include 'menu/menu_sotuvchi.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <h3>Qaytaruvchi : {{ order.customer.name }}</h3>
+            </div>
+            <section class="content">
+
+                <div class="row">
+                    <div id="akt_add">
+                        <form action="{% url 'sotuvchi-add-basket-qaytuv' %}" method="post" class="form-inline">
+                            {% csrf_token %}
+                            <div class="form-group p-3">
+                                <select class="form-control" name="tegirmon" id="tegirmon" style="width: 220px;" required>
+                                    <option value="">Omborni tanlang</option>
+                                    {% for teg in tegirmon %}
+                                        <option value="{{ teg.id }}">{{ teg.name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group p-3">
+                                <select class="form-control" name="pro_id" id="maxsulot" style="width: 220px;"
+                                        required>
+                                    <option value="">Mahsulotni tanlang</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group p-3">
+                                <input type="number" class="form-control" name="qop_soni" placeholder="Hajmi" required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="text" class="form-control myField" name="narxi" placeholder="Narxi" required
+                                       style="width: 220px;">
+                            </div>
+                            <input type="hidden" value="{{ order.id }}" name="order_id">
+                            <div class="form-group p-3">
+                                <button type="submit" class="btn btn-success"
+                                        style="width: 36px; height: 36px; padding: 3px"><i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="akt_edit" style="display: none">
+                        <form action="{% url 'sotuvchi-edit-basket-qaytuv' %}" method="post" class="form-inline">
+                            {% csrf_token %}
+                            <div class="form-group p-3">
+                                <select class="form-control" name="pro_id_edit" style="width: 220px;"
+                                        required>
+                                    <option value="">Mahsulotni tanlang</option>
+                                    {% for pro in products %}
+                                        <option id="pro_{{ pro.id }}" value="{{ pro.id }}">{{ pro.product.name }} {{ pro.miqdori }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" class="form-control" id="miqdori_edit" name="miqdori_edit" placeholder="Miqdori" required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" class="form-control " id="qop_soni_edit" name="qop_soni_edit" placeholder="Hajmi" required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="text" id="narxi_edit" class="form-control myField" name="narxi_edit" placeholder="Narxi" required
+                                       style="width: 220px;">
+                            </div>
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <input type="hidden" id="e_id" name="vg_id">
+                            <div class="form-group p-3">
+                                <button type="submit" class="btn btn-warning"
+                                        style="width: 36px; height: 36px; padding: 3px"><i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Mahsulotlar ro'yxati</h4>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Maxsulot</th>
+                                            <th scope="col">Hajmi</th>
+                                            <th scope="col">Narxi</th>
+                                            <th scope="col">Tahrirlash</th>
+                                            <th scope="col">O'chirish</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for vg in order.baskets.all %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ vg.product.product.name }}</td>
+                                                <td>{{ vg.hajmi }}</td>
+                                                <td>{{ vg.price }}</td>
+                                                <td>
+                                                    <button class="btn btn-warning"
+                                                            onclick="edit_open(
+                                                                    {{ vg.id }},
+                                                                    {{ vg.product.id }},
+                                                                    {{ vg.miqdori }},
+                                                                    {{ vg.hajmi }},
+                                                                    {{ vg.price }}
+                                                                    )"
+                                                            style="width: 30px; height: 30px; padding: 3px"><i
+                                                            class="fa fa-pencil"></i></button>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger"
+                                                       href="{% url 'sotuvchi-delete-basket-qaytuv' %}?order_id={{ order.id }}&bk_id={{ vg.id }}"
+                                                       style="width: 30px; height: 30px; padding: 3px"><i
+                                                            class="fa fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    <script>
+        function edit_open(id, pro_id, miqdori, hajmi, narxi) {
+            document.getElementById("akt_edit").style.display = "unset";
+            document.getElementById("pro_"+String(pro_id)).selected="selected";
+            document.getElementById('miqdori_edit').value = miqdori;
+            document.getElementById('qop_soni_edit').value = hajmi;
+            document.getElementById('narxi_edit').value = narxi;
+            document.getElementById('e_id').value = id;
+        }
+    </script>
+    <script>
+        let mahsulotlar = {{ maxsulotjs|safe }};
+        $('#tegirmon').on('change', function() {
+            let tegirmon = document.getElementById('tegirmon')
+            let stringSelect = ""
+            for (let i = 0; i < mahsulotlar.length; i++) {
+                if (mahsulotlar[i]['tegirmon'] ===  parseInt(tegirmon.value)) {
+                    stringSelect += `
+                    <option value="${mahsulotlar[i]['id']}">${mahsulotlar[i]['product__name']} + ${mahsulotlar[i]['miqdori']}</option>
+                    `
+                }
+            }
+            $("#maxsulot").append(`${stringSelect}`)
+        })
+</script>
+    <script>
+    $(".myField").keyup(function() {
+        $(".myField").val(this.value.match(/[0-9, .]*/));
+    });
+    </script>
+{% endblock js %}

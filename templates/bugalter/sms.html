@@ -1,0 +1,166 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+{% endblock css %}
+{% block menu %}
+    {% if user.type == 2 %}
+        {% include 'menu/menu_bugalter.html' %}
+    {% elif user.type == 1 %}
+        {% include 'menu/menu_director.html' %}
+    {% elif user.type == 17 %}
+        {% include 'menu/menu_sotuv_rahbari.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="col-12">
+                    <ul class="nav nav-tabs customtab2 py-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tab_asosiy" role="tab">
+                                <span class="hidden-xs-down">Asosiy</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab_template" role="tab">
+                                <span class="hidden-xs-down">SMS shablonlar</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_asosiy" role="tabpanel">
+                            <form action="{% url 'smsgateway' %}" method="post">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {% if message.tags == "error" %}
+                                            <div class="alert alert-danger">
+                                                {{ message }}</div>
+                                        {% endif %}
+                                        {% if message.tags == "success" %}
+                                            <div class="alert alert-success">
+                                                {{ message }}</div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-12">
+                                            <div class="box" >
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">Mijozlar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="form-group" style="border: 1px solid rgba(101, 101, 156, 0.582); border-radius: 10px;">
+                                                        <select class="form-control select2" multiple="multiple" id="leads" name="leads"
+                                                                data-placeholder="Leadlarni tanlash"
+                                                                style="width: 100%;">
+                                                            {% for l in mijoz %}
+                                                                <option value="{{ l.id }}">{{ l.name|default_if_none:"" }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">SMS Gateway</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    {% csrf_token %}
+                                                    <div class="demo-checkbox">
+                                                        <div class="form-group">
+                                                            <label>Xabar</label>
+                                                            <textarea style="border: 1px solid rgb(76, 76, 124);" rows="5" cols="5" class="form-control" name="sms" id="sms"
+                                                                      placeholder="" required></textarea>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-rounded btn-success pull-right">Jo'natish</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        <div class="tab-pane" id="tab_template" role="tabpanel">
+                            <a href="{% url 'newsmstemplate' %}" class="btn btn-primary float-right m-10" role="button">
+                                <i class="fa fa-plus fa-lg"></i><span>Qo'shish</span>
+                            </a>
+                            <br>
+                            <div class="box">
+                                <div class="box-body">
+
+                                    <div class="table-responsive">
+                                        <table id="complex_header" class="table table-striped omadbek table-bordered display" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nomi</th>
+                                                    <th>Turi</th>
+                                                    <th>Yaratilgan sana</th>
+                                                    <th>Matn</th>
+                                                    <th>Status</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for i in sms_templates %}
+                                                <tr>
+                                                    <td>{{ i.name }}</td>
+                                                    <td>{{ i.get_type_display }}</td>
+                                                    <td>{{ i.created_at|date:'Y-m-d' }}</td>
+                                                    <td>{{ i.text|truncatewords:5 }}</td>
+                                                    <td>
+                                                        <input type="checkbox" id="sms_t_{{ i.id }}"
+                                                           class="filled-in chk-col-success"
+                                                           value="{{ i.pk }}"
+                                                           onchange="status_change(this);"
+                                                           {% if i.active %}checked{% endif %}/>
+                                                        <label for="sms_t_{{ i.id }}"></label>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    <script>
+        function status_change(obj) {
+                let nowV = obj.checked;
+                let nextV = nowV;
+                nowV ^= true;
+                obj.checked = nowV;
+                let pk = obj.value;
+                let val = nextV ? 1 : 0;
+
+                $.ajax({
+                    type: 'get',
+                    url: `{% url 'sms_template_status_change' %}?pk=${pk}&val=${val}`,
+                    success: function (r) {
+                        obj.checked = nextV;
+                    },
+                    error: function (e) {
+                    }
+                });
+            }
+    </script>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+{% load humanize %}
+
+{% endblock css %}
+{% block menu %}
+        {% include 'menu/menu_bugalter.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="row">
+                    <div class="col-12 " id="message_container">
+                        {% if messages %}
+                            {% for message in messages %}
+                            {% if message.tags == 'success' %}
+                            <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                            {% elif message.tags == 'error' %}
+                            <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                            {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="col-xl-6 col-6 text-center">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Umumiy Haqdorlik</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{haqdorlik|floatformat:2|intcomma}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-6 text-center">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Umumiy Qarzdorlik</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{qarzdorlik|floatformat:2|intcomma}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Button trigger modal -->
+
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h4 class="box-title">Vozvratlar hisobi</h4>
+                                </div>
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table id="complex_header19" class="table table-striped table-bordered display" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Klient nomi</th>
+                                                    <th>Sotuvchisi</th>
+                                                    <th>Umumiy Summa</th>
+                                                    <th>Sana</th>
+                                                    <th>Koment</th>
+                                                    <th>Statusi</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    {% for i in qaytuv %}
+                                                <tr>
+                                                    <td><a href="{% url 'client_informations' i.id %}">{{i.customer}}</a></td>
+                                                    <td>{{i.seller}}</td>
+                                                    <td>{{i.summa_total|intcomma}}</td>
+                                                    <td>{{i.date|date:'Y-m-d H:i'}}</td>
+                                                    <td>{{i.comment}}</td>
+                                                    {% if i.status == '1' %}
+                                                    <td><span class="badge badge-warning">Faol</span></td>
+                                                    {% else %}
+                                                    <td><span class="badge badge-primary">Barajarilgan</span></td>
+                                                    {% endif %}
+                                                </tr>
+                                                    {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+{#                        {% for i in qaytuv %}#}
+{#                        <div class="modal center-modal fade" id="modal-center{{i.id}}" tabindex="-1">#}
+{#                            <div class="modal-dialog">#}
+{#                                <div class="modal-content">#}
+{#                                    <div class="modal-header">#}
+{#                                        <h5 class="modal-title">To'lov qilish</h5>#}
+{#                                        <button type="button" class="close" data-dismiss="modal">#}
+{#                                            <span aria-hidden="true">&times;</span>#}
+{#                                        </button>#}
+{#                                    </div>#}
+{#                                    <div class="modal-body">#}
+{#                                        <form action="{% url 'paymentclient' %}" method="post">#}
+{#                                            {% csrf_token %}#}
+{#                                            <div class="form-group p-3">#}
+{#                                                <input type="number" name="price" class="form-control" placeholder="Summa">#}
+{#                                                <input type="hidden" name="order_id" value="{{i.id}}">#}
+{#                                            </div>#}
+{#                                            <div class="form-group p-3">#}
+{#                                                <button type="button" class="btn btn-rounded btn-secondary"#}
+{#                                                        data-dismiss="modal">#}
+{#                                                    Yopish#}
+{#                                                </button>#}
+{#                                                <button type="submit" class="btn btn-rounded btn-primary float-right">To'lov qilish</button>#}
+{#                                            </div>#}
+{#                                        </form>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        {% endfor %}#}
+                    </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+<!-- Vendor JS -->
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    <script>
+           $('#complex_header19').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+        
+    } );
+    </script>
+	<!-- Sunny Admin App -->
+
+<script>
+
+</script>
+{% endblock js %}

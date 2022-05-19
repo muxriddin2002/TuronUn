@@ -1,0 +1,188 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% if user.type == 1 %}
+        {% include 'menu/menu_director.html' %}
+    {% elif user.type == 2 %}
+        {% include 'menu/menu_bugalter.html' %}
+    {% elif user.type == 12 %}
+        {% include 'menu/menu_kassir.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Akt nomi</th>
+                                            <th scope="col">Sana</th>
+                                            <th scope="col">Klient</th>
+                                            <th scope="col">Stansiya</th>
+                                            <th scope="col">Vagon soni</th>
+                                            <th scope="col">Kimga</th>
+                                            <th scope="col">Narxi</th>
+                                            <th scope="col">Umumiy netto</th>
+                                            <th scope="col">Summa</th>
+                                            <th scope="col">Umumiy tan narx</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>{{ akt.name }}</td>
+                                            <td>{{ akt.date_start|date:'Y-m-d' }}</td>
+                                            <td>{{ akt.client.compony }}</td>
+                                            <td>{{ akt.stansiya }}</td>
+                                            <td>{{ akt.wagons.all|length }}</td>
+                                            <td>{{ akt.branch.name }}</td>
+                                            <td>{{ akt.price|intcomma }}</td>
+                                            <td>{{ total_netto|intcomma }}</td>
+                                            <td>{{ akt.price|mul:total_netto|intcomma }}</td>
+                                            <td>{{ akt.total|floatformat:2|intcomma }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Chiqimlar ro'yxati</h4>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Chiqim turi</th>
+                                            <th scope="col">Summa</th>
+                                            <th scope="col">Summa (so'm)</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">To'lov qilish</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for vg in akt.outlay.all %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ vg.type.name }}</td>
+                                                <td>{{ vg.summa|floatformat:2 }}</td>
+                                                <td>{{ vg.summa|mul:dollar.sotish_sum|floatformat:2 }}</td>
+                                                {% if vg.status == '1' %}
+                                                <td><span class="badge badge-warning">{{ vg.get_status_display }}</span></td>
+                                                {% else %}
+                                                <td><span class="badge badge-primary">{{ vg.get_status_display }}</span></td>
+                                                {% endif %}
+                                                <td>
+                                                    {% if vg.status == '1' %}
+                                                    <button data-toggle="modal" class="form-control" data-target="#modal-center{{vg.id}}">
+                                                        To'lov
+                                                    </button>
+                                                    {% else %}
+                                                    <button data-toggle="modal" class="form-control">
+                                                        To'landi
+                                                    </button>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+                <!-- Modal -->
+                {% for i in akt.outlay.all %}
+                    <div class="modal center-modal fade" id="modal-center{{i.id}}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">To'lov qilish</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'paymentoutlay' %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group p-3">
+                                                <h4>Rostdan ham <span><b>{{ i.summa }}</b></span> ni tolamoqchimisiz?</h4>
+                                            {% if user.type == 12 or user.type == 1 %}
+                                                <select class="form-control" name="kassa" id="kassa" required>
+                                                    <option value="">Kassa tanlang</option>
+                                                    <option  value="kassa1">Asosiy kassadan</option>
+                                                    <option value="kassa2"> Ikkinchi  kassadan</option>
+                                                    <option value="kassa3"> Qozoq  kassadan</option>
+                                                </select>
+                                            {% endif %}
+                                            <br>
+
+                                                <select name="turi" id="" class="form-control mb-2">
+                                                    <option value="" disabled >Tolov turini tanlang</option>
+                                                    {% if user.type == 2 or user.type == 1 %}
+                                                    <option value="1" selected>Bank</option>
+                                                    {% endif %}
+                                                    {% if user.type == 12 or user.type == 1 %}
+                                                    <option value="2">Plastik</option>
+                                                    <option value="3">Naqd</option>
+                                                    {% endif %}
+                                                </select>
+                                                
+                                                {% if  user.type == 2 or user.type == 1 %}
+                                                    <select name="shot_number"  class="form-control" required>
+                                                        <option value="" disabled selected>Bank hisob raqamni tanlang</option>
+                                                        {% for i in bank_numbers %}
+                                                        <option value="{{i.id}}">{{ i.bank_name }} - {{ i.shot_numbers }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                {% endif %}
+                                                    
+                                                <input type="hidden" name="id" value="{{ i.id }}">
+                                            </div>
+                                            <div class="form-group p-3">
+                                                <button type="button" class="btn btn-rounded btn-secondary"
+                                                        data-dismiss="modal">
+                                                    Yopish
+                                                </button>
+                                                <button type="submit" class="btn btn-rounded btn-primary float-right">To'lov qilish</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                {% endfor %}
+                <!-- /.modal -->
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+{% endblock js %}

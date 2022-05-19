@@ -1,0 +1,72 @@
+<ul class="sidebar-menu" data-widget="tree">
+
+    <li>
+        <a href="{% url 'sotuv_rahbar_dashboard' %}">
+            <i data-feather="pie-chart"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'operator-aktiv-orders' %}">
+            <i data-feather="clipboard"></i>
+            <span>Buyurtmalar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'mijozlar' %}">
+            <i data-feather="users"></i>
+            <span>Mijozlar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sotuv-rahbari-seller-list' %}">
+            <i data-feather="users"></i>
+            <span>Sotuvchilar</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="{% url 'sms' %}">
+            <i data-feather="mail"></i>
+            <span>Sms</span>
+        </a>
+    </li>
+
+
+    <li class="treeview" id="ombor" data-ombor-url="{% url 'ajax_load_ombor'  %}">
+        <a href="">
+            <i data-feather="database"></i>
+            <span>Ombor</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" id="id_ombors">
+         
+        </ul>
+    </li>
+
+    <li>
+        <a href="{% url 'logout' %}">
+            <i data-feather="lock"></i>
+            <span>Chiqish</span>
+        </a>
+    </li>
+
+</ul>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+      var url = $("#ombor").attr("data-ombor-url");
+
+      $.ajax({
+        url: url,
+        success: function (data) {
+          $("#id_ombors").html(data);
+        }
+      });
+
+    });
+  </script>

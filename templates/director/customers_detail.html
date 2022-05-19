@@ -1,0 +1,181 @@
+{% extends 'base/base.html' %} 
+{% load static %} 
+{% load humanize %}
+{% load mathfilters %}
+{% block css %} 
+{% endblock css%} 
+
+
+
+{% block menu %}
+    {% if user.type == 1 %}
+        {% include 'menu/menu_director.html' %}
+    {% elif user.type == 4 %}
+        {% include 'menu/menu_sotuvchi.html' %}
+    {% elif user.type == 2 %}
+        {% include 'menu/menu_bugalter.html' %}
+    {% elif user.type == 18 %}
+        {% include 'menu/menu_operator.html' %}
+    {% else %}
+      {% include 'menu/menu_sotuv_rahbari.html' %}
+    {% endif %}
+{% endblock menu %}
+
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="container-full">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <h3>Buyurtmachi "{{ customer }}" malumotlari </h3>
+    </div>
+    <section class="content">
+      <div class="row" style="padding-top: 10px">
+             <!-- message -->
+             <div class="col-12 " id="message_container">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                            <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                        {% elif message.tags == 'error' %}
+                            <button class="tst3 btn btn-danger btn-block mb-15">{{ message }}</button>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+          </div>
+        <div class="col-12">
+          <div class="box">
+            <div class="box-header with-border d-flex align-center justify-content-between">
+              <div>
+                <h4 class="box-title">Buyurtmalari ro'yxati</h4>
+   
+              </div>
+      
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive-lg">
+                <table class="table mb-0" id="complex_header45">
+                  <thead>
+                    <tr>
+                      <th scope="col">Mahsulotlar</th>
+                      <th scope="col">Summa</th>
+                      <th scope="col">Miqdori</th>
+                      <th scope="col">Jami</th>
+                      <th scope="col">Buyurtma sanasi</th>
+                      <th scope="col">To'lov sanasi</th>
+                      {% if user.type == 18 or user.type == 1  %}
+                        <th>O'zgartirish</th>
+                    {% endif %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for vg in orders %}
+                        {% for basket in vg.baskets.all %}
+                      
+                          <tr>
+                            
+                            <td>{{ basket.product }}</td>
+                            <td>{{ basket.price  }}</td>
+                            <td>{{ basket.hajmi }}</td>
+                            <td>{{ basket.price|mul:basket.hajmi|floatformat:2 }} </td>
+                            <td>{{ vg.date|date:'j-m-Y' }}</td>                      
+                            <td>{{ vg.payment_date|date:'j-m-Y' }}</td>                      
+                            {% if user.type == 18 or user.type == 1  %}
+                            <td>  
+                              <button data-toggle="modal" class="form-control" data-target="#modal-center{{basket.id}}">
+                                <i class="fa fa-edit"></i>
+                              </button>
+                            </td>
+                            {% endif %}
+                          </tr>
+                    
+                        {% endfor %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+
+     <!-- MODAL  -->
+     {% for vg in orders %}
+      {% for i in vg.baskets.all %}
+      <div class="modal center-modal fade" id="modal-center{{i.id}}" tabindex="-1">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                {% if vg.status == '4' %}
+                  <div class="modal-header">
+                    <h5 class="modal-title">Tugalangan buyurtma soni o'zgartirish</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'edit_operator_basket' %}" method="post">
+                        {% csrf_token %}
+                      
+                        <div class="form-group">
+                          <label for="new_qob_soni">Yangi qob soni</label>
+                            <input type="number" id="new_qob_soni"  step="any" min="0" oninput="validity.valid||(value='');" name="hajmi" class="form-control" value="{{i.hajmi}}">
+                            <input type="hidden" name="basket_id" value="{{ i.id }}">
+                        </div>
+                        <div class="form-group">
+                        <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">
+                            Yopish
+                        </button>
+                        <button type="submit" class="btn btn-rounded btn-primary float-right">
+                            Yangilash
+                        </button>
+                        </div>
+                    </form>
+                </div>
+              {% else %}
+              <div class="modal-header">
+                <h5 class="modal-title">Faqat tugalangan buyurtma soni o'zgartirish</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                {% endif %}
+              
+              </div>
+          </div>
+      </div>
+     {% endfor %}
+     {% endfor %}
+
+    </section>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+<script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+  
+<script>
+  $('#complex_header45').DataTable( {
+'dom': 'Blfrtip',
+'buttons': [
+   'excel',
+   'pdf'
+],
+'pageLength':100,
+'lengthChange': true,
+
+} );
+</script>
+
+<!-- Sunny Admin App -->
+{% endblock js %}

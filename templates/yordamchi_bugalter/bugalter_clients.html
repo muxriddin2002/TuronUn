@@ -1,0 +1,336 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block css %}
+    <style>
+    .omadbek td {
+        vertical-align: center;
+    }
+    .omadbek td button {
+        margin: 0px!important;
+        padding: 10px!important;
+    }
+    #table-auto-size{
+        display: block !important;
+    }
+    #make_responsive768{
+        width: 4em !important;
+    }
+    @media (max-width: 768px) {
+      #make_responsive768{
+         width:7em !important;
+       }
+    }
+
+    </style>
+{% endblock css %}
+
+{% block menu %}
+        {% include 'menu/menu_yordamchi_bugalter.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="row" id = "table-auto-size">
+                    <div class="col-12 " id="message_container">
+                        {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'success' %}
+                            <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                            {% elif message.tags == 'error' %}
+                            <button class="tst3 btn btn-danger btn-block mb-15">{{ message }}</button>
+                            {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+  
+                <!-- Button trigger modal -->
+
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h4 class="box-title">Mijozlar hisobi</h4>
+                                </div>
+                                <div class="box-body"  style=" 
+                                overflow-x:scroll;
+                                width:100% !important;
+                                margin:0 auto;
+                                position: relative;">
+                                    <div class="table-responsive"  style="overflow-x: auto;">
+                                        <table id="excel21"  class="table table-striped table-bordered display" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th>Klient nomi</th>
+                                                    <th>Sotuvchisi</th>
+                                                    <th>Hududi</th>
+                                                    <th>Telefon</th>
+                                                    <th>Qo'shimcha raqam</th>
+                                                    <th>Manzil</th>
+                                                    <th>Umumiy qarz (dollarda)</th>
+                                                    <th>Umumiy haqi (dollarda)</th>
+                                                    <th>Limiti</th>
+                                                    <th>To'lov olish</th>
+                                                    <th>Bank malumotlari</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in clients %}
+                                                    <tr>
+                                                        <th  scope="row">{{ forloop.counter }}</th>
+                                                        <td id="make_responsive768" style="position: absolute !important;
+                                                        left:92px !important;
+                                                        height: 55px;
+                                                        background-color:rgb(245, 245, 245) !important;"><a href="{% url 'paymentclients' i.id %}">{{i.name}}</a></td>
+                                                        <td>{{i.employe.first_name}}</td>
+                                                        <td>{{i.get_hudud_display}}</td>
+                                                        <td>{{i.phone}}</td>
+                                                        <td>{{i.extra_phone}}</td>
+                                                        <td>{{i.location}}</td>
+                                                        {% if i.debt > 0 %}
+                                                            <td>{{i.debt|floatformat:2|intcomma}}</td>
+                                                        {% else %}
+                                                            <td>0</td>
+                                                        {% endif %}
+                                                        {% if i.debt < 0 %}
+                                                            <td>{{i.debt|floatformat:2|intcomma}}</td>
+                                                        {% else %}
+                                                            <td>0</td>
+                                                        {% endif %}
+                                                        <td>{{ i.limit }}</td>
+                                                        <td>
+                                                            <button data-toggle="modal" class="form-control" data-target="#modal-center{{i.id}}">
+                                                                Tolov olish
+                                                            </button>
+                                                        </td>
+                                                        <td>
+                                                            <button data-toggle="modal" class="form-control" data-target="#modal-centereye{{i.id}}">
+                                                                <i class="fa fa-eye"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      <!-- kassaga tulov olish kirim  -->
+                    {% for i in clients %}
+                        <div class="modal center-modal fade" id="modal-center{{i.id}}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">To'lov olish</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'paymentclient' %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group p-3">
+
+                                                <select name="currency" id="" class="form-control select1" required>
+                                                    <option value="" disabled selected>Valyuta turini tanlang</option>
+                                                    <option value="usz">So'm</option>
+                                                </select>
+                                                <select name="turi" id="" class="form-control mb-2" required>
+                                                    <option value="" disabled >To'lov turini tanlang</option>
+                                                        <option value="1" selected>Bank orqali</option>
+                                                    </select>
+                                                    <input type="date" name="date" id="timees" class="form-control mx-1 remove-items-margin"  required >
+                                                    <select name="shot_number"  class="form-control" required>
+                                                        <option value="" disabled selected>Bank hisob raqamni tanlang</option>
+                                                        {% for i in bank_numbers %}
+                                                            <option value="{{i.id}}">{{ i.bank_name }} - {{ i.shot_numbers }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                <div class="form-group dollar_narxi1" style="display:none;">
+                                                        <h6 >Dollar kursi</h6>
+                                                        <input class="form-control dollar_narxi1"
+                                                            type="text"
+                                                            placeholder="Доллар курси" name="dollar_narxi1"
+                                                            value="1">
+                                                    </div>
+                                                <input type="number" name="price" class="form-control" placeholder="Summa">
+                                                <input type="text" name="izoh" class="form-control" placeholder="Izoh">
+                                                <input type="hidden" name="id" value="{{ i.id }}">
+                                            </div>
+                                            <div class="form-group p-3">
+                                                <button type="button" class="btn btn-rounded btn-secondary"
+                                                        data-dismiss="modal">
+                                                    Yopish
+                                                </button>
+                                                <button type="submit" class="btn btn-rounded btn-primary float-right">To'lov olish</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                        <!-- bank hisoblar  -->
+                        {% for i in clients %}
+                        <div class="modal center-modal fade" id="modal-centereye{{i.id}}" >
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Bank hisoblari</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                        <div class="box">
+                                            <div class="box-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped omadbek table-bordered display" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Bank nomi</th>
+                                                                <th>Bank nomeri</th>
+                                                                <th>Inn</th>
+                                                                <th>MFO</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>{{i.bank_name|default_if_none:"Yo'q"}}</td>
+                                                                <td>{{i.bank_number}}</td>
+                                                                <td>{{i.inn}}</td>
+                                                                <td>{{i.mfo}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block js %}
+<!-- Vendor JS -->
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    <script>
+        $('#excel21').DataTable( {
+     'dom': 'Blfrtip',
+     'buttons': [
+         'excel',
+         'pdf'
+     ],
+     'pageLength':100,
+     'lengthChange': true,
+     
+ } );
+ </script>
+
+ 
+	<!-- Sunny Admin App -->
+    <script>
+    $(document).ready(function () {
+        $(".select").on("change", function () {
+            let value = $(this).children("option:selected").val();
+            if (value === "usz") {
+                $(".dollar_narxi").show()
+                $(".dollar_narxi").val(parseInt("{{ dollar.olish_sum }}"));
+            } else {
+                $(".dollar_narxi").hide();
+                $(".dollar_narxi").val('0');
+            }
+        })
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".select1").on("change", function () {
+            let value = $(this).children("option:selected").val();
+            if (value === "usz") {
+                
+                $(".dollar_narxi1").show()
+                $(".dollar_narxi1").val(parseInt("{{ dollar.sotish_sum }}"));
+            } else {
+                $(".dollar_narxi1").hide();
+                $(".dollar_narxi1").val('0');
+            }
+        })
+        let value = $(this).children("option:selected").val();
+            if (value === "usz") {
+                
+                $(".dollar_narxi1").show()
+                $(".dollar_narxi1").val(parseInt("{{ dollar.sotish_sum }}"));
+            } else {
+                $(".dollar_narxi1").hide();
+                $(".dollar_narxi1").val('0');
+            }
+    });
+
+</script>
+<script>
+
+    let dollar = {{dollarjs|safe}};
+
+    var lastItem = dollar.pop();
+    $("tbody").find("tr").each(function() { //get all rows in table
+        var ratingTd = $(this).find('td.price-1').text();//Refers to TD element
+        var result = parseFloat(ratingTd) / parseFloat(lastItem.summ)
+        console.log(parseFloat(ratingTd))
+
+        $(this).find('td.result').text(result)
+    });
+
+</script>
+<script>
+
+    var lastItem = dollar.pop();
+
+    console.log($(this).find('td.price-2').text())
+    $("tbody").find("tr").each(function() { //get all rows in table
+        var ratingTd = $(this).find('td.price-2').text();//Refers to TD element
+        var result = parseFloat(ratingTd) / parseFloat(lastItem.summ)
+        console.log(parseFloat(ratingTd))
+
+        $(this).find('td.result1').text(result)
+    });
+
+</script>
+
+<script>
+    $(document).ready( function() {
+        var now = new Date();
+     
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    
+        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+    
+        $('input').filter('[type=date]').val(today);
+        
+    });
+
+</script>
+{% endblock js %}

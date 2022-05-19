@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+{% load humanize %}
+
+{% endblock css %}
+{% block menu %}
+        {% include 'menu/menu_director.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <!-- Button trigger modal -->
+
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h4 class="box-title">Klientlar hisobi</h4>
+                                </div>
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table id="excel" class="table table-striped table-bordered display" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Compony</th>
+                                                    <th>ISM</th>
+                                                    <th>Telefon</th>
+                                                    <th>Manzil</th>
+                                                    <th>Izoh</th>
+                                                    <th>Qarz</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    {% for i in clients %}
+                                                <tr>
+                                                    <td>{{i.compony}}</td>
+                                                    <td>{{i.name}}</td>
+                                                    <td>{{ i.phone }}</td>
+                                                    <td>{{ i.address }}</td>
+                                                    <td>{{ i.comment|default_if_none:"Yo'q" }}</td>
+                                                    <td>{{ i.debt|intcomma }}</td>
+                                                </tr>
+                                                    {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Jami:</th>
+                                                    <th> </th>
+                                                    <th></th>
+                                                    <th> </th>
+                                                    <th> </th>
+                                                    <th> {{ summ|floatformat:2|intcomma }}</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+<!-- Vendor JS -->
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+    
+    <script>
+        $('#excel').DataTable( {
+     'dom': 'Blfrtip',
+     'buttons': [
+         'excel',
+         'pdf'
+     ],
+     'pageLength':100,
+     'lengthChange': true,
+     
+    } );
+    </script>
+{% endblock js %}

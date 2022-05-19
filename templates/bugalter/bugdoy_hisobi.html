@@ -1,0 +1,230 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block menu %}
+    {% include 'menu/menu_bugalter.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="row">
+                     <div class="col-12 " id="message_container">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                        {% elif message.tags == 'error' %}
+                        <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="col-xl-4 col-4 text-center">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Kelgan bugdoylar</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{ new_total }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-4 text-center">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Bugdoy omborda qancha borligi</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{ old_total }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-4 text-center">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Bug’doy rasxodi</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{ expenses|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-12">
+                      <div class="box">
+                        <div class="box-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills rounded nav-justified">
+                                <li class="nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab" aria-expanded="false">Kelgan bugdoylar</a> </li>
+                                <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab" aria-expanded="false">Bugdoy omborda qancha borligi</a> </li>
+                            </ul>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <div class="box">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div id="navpills-1" class="tab-pane active">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Yangi kelgan bug'doylar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive">
+                                                        <table id="complex_header17" class="table table-striped table-bordered display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nomi</th>
+                                                                    <th>Klient</th>
+                                                                    <th>Stansiya</th>
+{#                                                                    <th>branch</th>#}
+{#                                                                    <th>wagons</th>#}
+                                                                    <th>Boshlangan sana</th>
+                                                                    <th>Tugallangan sana</th>
+{#                                                                    <th>outlay</th>#}
+                                                                    <th>Tan narx</th>
+                                                                    <th>Razxodlar bn narxi</th>
+{#                                                                    <th>Status</th>#}
+{#                                                                    <th>O'zgartirilganligi</th>#}
+{#                                                                    <th>comment</th>#}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                    {% for i in bugdoy_new %}
+                                                                <tr>
+                                                                    <td>{{i.name}}</td>
+                                                                    <td>{{i.client}}</td>
+                                                                    <td>{{i.stansiya}}</td>
+{#                                                                    <td>{{i.branch}}</td>#}
+{#                                                                    <td>{{i.wagons}}</td>#}
+                                                                    <td>{{i.date_start|date:"Y-m-d"}}</td>
+                                                                    <td>{{i.date_end|date:"Y-m-d"}}</td>
+{#                                                                    <td>{{i.outlay}}</td>#}
+                                                                    <td>{{i.price|floatformat:2|intcomma}}</td>
+                                                                    <td>{{i.total|floatformat:2|intcomma}}</td>
+{#                                                                    {% if i.status == 1 %}#}
+{#                                                                    <td><span class="badge badge-warning">Buyurtma olindi</span></td>#}
+{#                                                                    {% else %}#}
+{#                                                                    <td><span class="badge badge-success">Bajarildi</span></td>#}
+{#                                                                    {% endif %}#}
+{#                                                                    {% if i.is_edited == True %}#}
+{#                                                                    <td><span class="badge badge-warning">O'zgartirilgan</span></td>#}
+{#                                                                    {% else %}#}
+{#                                                                    <td><span class="badge badge-success">O'zgartilirmagan</span></td>#}
+{#                                                                    {% endif %}#}
+{#                                                                    <td>#}
+{#                                                                        <button data-toggle="modal" class="form-control" data-target="#modal-center{{i.id}}">#}
+{#                                                                            Tolov#}
+{#                                                                        </button>#}
+{#                                                                    </td>#}
+                                                                </tr>
+                                                                    {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="navpills-2" class="tab-pane">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Omborda bor bugdoylar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive">
+                                                        <table id="complex_header18" class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nomi</th>
+                                                                    <th>Klient</th>
+                                                                    <th>Stansiya</th>
+{#                                                                    <th>branch</th>#}
+{#                                                                    <th>wagons</th>#}
+                                                                    <th>Boshlangan sana</th>
+                                                                    <th>Tugallangan sana</th>
+{#                                                                    <th>outlay</th>#}
+                                                                    <th>Tan narx</th>
+                                                                    <th>Razxodlar bn narxi</th>
+{#                                                                    <th>status</th>#}
+{#                                                                    <th>is_edited</th>#}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                    {% for i in bugdoy_in_store %}
+                                                                <tr>
+                                                                    <td><a href="">{{i.name}}</a></td>
+                                                                    <td>{{i.client}}</td>
+                                                                    <td>{{i.stansiya}}</td>
+                                                                    <td>{{i.date_start|date:"Y-m-d"}}</td>
+                                                                    <td>{{i.date_end|date:"Y-m-d"}}</td>
+                                                                    <td>{{i.price|intcomma}}</td>
+                                                                    <td>{{i.total|intcomma}}</td>
+{#                                                                    {% if i.status == 1 %}#}
+{#                                                                    <td><span class="badge badge-warning">Buyurtma olindi</span></td>#}
+{#                                                                    {% else %}#}
+{#                                                                    <td><span class="badge badge-success">Bajarildi</span></td>#}
+{#                                                                    {% endif %}#}
+{#                                                                    {% if i.is_edited == True %}#}
+{#                                                                    <td><span class="badge badge-warning">O'zgartirilgan</span></td>#}
+{#                                                                    {% else %}#}
+{#                                                                    <td><span class="badge badge-success">O'zgartilirmagan</span></td>#}
+{#                                                                    {% endif %}#}
+                                                                </tr>
+                                                                    {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+	<script src="{% static 'main/js/template.js'%}"></script>
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script>
+          $('#complex_header17').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+        
+    } );
+    
+    $('#complex_header18').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+        
+    } );
+    </script>
+{% endblock js %}

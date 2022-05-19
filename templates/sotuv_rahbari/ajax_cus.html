@@ -1,0 +1,97 @@
+{% load static %}
+{% load humanize %}
+<table id="complex_header12_2" class="table table-striped table-bordered display" style="width:100%">
+    <thead>
+        <tr>
+
+            <th scope="col">#</th>
+            <th>Klient nomi</th>
+            <th>Hudud</th>
+            <th>Nomer</th>
+            <th>Depozit</th>
+            <th>Umumiy buyurtmalar summasi</th>
+
+        </tr>
+    </thead>
+    <!-- mijozlar detrail  -->
+    <tbody>
+            
+
+
+        {% for i in cus %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ i.name|title }}</td>
+            {% if i.hudud == 1 %}
+                    <td>Samarqand</td>
+                {% elif i.hudud == 2 %}
+                    <td>Toshkent</td>
+                {% elif i.hudud == 3 %}
+                    <td>Jizzax</td>
+                {% elif i.hudud == 4 %}
+                    <td>Afg'on</td>
+                {% elif i.hudud == 5 %}
+                    <td>Navoiy</td>
+                {% elif i.hudud == 6 %}
+                    <td>Qashqadaryo</td>
+                {% elif i.hudud == 7 %}
+                    <td>Surxondaryo</td>
+                {% elif i.hudud == 8 %}
+                    <td>Qoraqalpogiston</td>
+                {% elif i.hudud == 9 %}
+                    <td>Andijon</td>
+                {% elif i.hudud == 10 %}
+                    <td>Buxoro</td>
+                {% elif i.hudud == 11 %}
+                    <td>Fargona</td>
+                {% elif i.hudud == 12 %}
+                    <td>Xorazm</td>
+                {% elif i.hudud == 13 %}
+                    <td>Namangan</td>
+                {% elif i.hudud == 14 %}
+                    <td>Sirdaryo</td>
+            {% endif %}
+           
+            
+            <td>{{ i.phone }}</td>
+    
+            <td>{% if i.debt > 0 %}
+                    Haqdorlik
+                {{ i.debt|intcomma }}
+            {% else %}
+                    Qarzdorlik
+                {{ i.debt|intcomma }}
+            {% endif %}</td>
+    
+            <td>{{ i.total|intcomma }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="col">Jami:</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{{ total_sums|floatformat:2|intcomma }}</th>
+        </tr>
+    </tfoot>
+</table>
+
+<script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+<script>
+    $('#complex_header12_2').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+        
+    } );
+</script>

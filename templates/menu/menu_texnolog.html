@@ -1,0 +1,99 @@
+<ul class="sidebar-menu" data-widget="tree">
+
+    <li>
+        <a href="{% url 'texnolog-dashboard' %}">
+            <i data-feather="pie-chart"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'texnolog-akt-set-quality' %}">
+            <i data-feather="grid"></i>
+            <span>Bug'doy sifati</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'texnolog-wheats' %}">
+            <i data-feather="hard-drive"></i>
+            <span>Bug'doy ombor</span>
+        </a>
+    </li>
+
+{#    <li>#}
+{#        <a href="{% url 'create_barcodes' %}">#}
+{#            <i data-feather="hard-drive"></i>#}
+{#            <span>Shtix code yasash</span>#}
+{#        </a>#}
+{#    </li>#}
+    <li>
+        <a href="{% url 'akt-hisobot' %}">
+            <i data-feather="layers"></i>
+            <span>Hisobot bo'limi</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sotuvchi-get-order-active' %}">
+            <i data-feather="package"></i>
+            <span>Aktiv buyurtmalar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'clients' %}">
+            <i data-feather="clipboard"></i>
+            <span>Bugdoy taminotchilari</span>
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'clientsun' %}">
+            <i data-feather="clipboard"></i>
+            <span>Un taminotchilari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'statistics' %}">
+            <i data-feather="clipboard"></i>
+            <span>Tazori maxsulotlari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'difference' %}">
+            <i data-feather="clipboard"></i>
+            <span>Farq</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'brak' %}">
+            <i data-feather="clipboard"></i>
+            <span>Brak maxsulotlar</span>
+        </a>
+    </li>
+{#    <li>#}
+{#        <a href="#">#}
+{#            <i data-feather="clipboard"></i>#}
+{#            <span>Ishlab chiqarish hisoboti</span>#}
+{#        </a>#}
+{#    </li>#}
+
+    <li class="treeview">
+        <a href="">
+            <i data-feather="database"></i>
+            <span>Ombor</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" style="">
+            <li><a href="{% url 'un-ombori' %}"><i class="ti-more"></i>Un</a></li>
+            <li><a href="{% url 'yem-ombori' %}"><i class="ti-more"></i>Yem</a></li>
+            <li><a href="{% url 'tarozi-molia-qop-ombor' %}"><i class="ti-more"></i>Qop</a></li>
+          </ul>
+    </li>
+
+    <li>
+        <a href="{% url 'logout' %}">
+            <i data-feather="lock"></i>
+            <span>Chiqish</span>
+        </a>
+    </li>
+</ul>

@@ -1,0 +1,77 @@
+<ul class="sidebar-menu" data-widget="tree">
+
+    <li>
+        <a href="{% url 'tarozi-moliya-dashboard' %}">
+            <i data-feather="pie-chart"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'tarozi-moliya-aktlar' %}">
+            <i data-feather="grid"></i>
+            <span>Aktlar</span>
+        </a>
+
+    </li>
+    <li>
+        <a href="{% url 'tarozi-moliya-unaktlar' %}">
+            <i data-feather="grid"></i>
+            <span>Un Aktlari</span>
+        </a>
+
+    </li>
+
+    <li>
+        <a href="{% url 'akt-hisobot' %}">
+            <i data-feather="layers"></i>
+            <span>Hisobot bo'limi</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sotuvchi-get-order-active' %}">
+            <i data-feather="package"></i>
+            <span>Aktiv buyurtmalar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'clients' %}">
+            <i data-feather="clipboard"></i>
+            <span>Bugdoy taminotchilari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'clientsun' %}">
+            <i data-feather="clipboard"></i>
+            <span>Un taminotchilari</span>
+        </a>
+    </li>
+{#    <li>#}
+{#        <a href="#">#}
+{#            <i data-feather="clipboard"></i>#}
+{#            <span>Ishlab chiqarish hisoboti</span>#}
+{#        </a>#}
+{#    </li>#}
+    <li class="treeview">
+        <a href="">
+            <i data-feather="database"></i>
+            <span>Ombor</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" style="">
+            <li><a href="{% url 'un-ombori' %}"><i class="ti-more"></i>Un</a></li>
+            <li><a href="{% url 'yem-ombori' %}"><i class="ti-more"></i>Yem</a></li>
+            <li><a href="{% url 'tarozi-molia-qop-ombor' %}"><i class="ti-more"></i>Qop</a></li>
+            <li><a href="{% url 'tarozi-molia-qop-ombor-active' %}"><i class="ti-more"></i>Active Qoplar</a></li>
+          </ul>
+    </li>
+
+    <li>
+        <a href="{% url 'logout' %}">
+            <i data-feather="lock"></i>
+            <span>Chiqish</span>
+        </a>
+    </li>
+
+</ul>

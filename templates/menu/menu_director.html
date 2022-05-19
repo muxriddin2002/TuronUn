@@ -1,0 +1,92 @@
+<ul class="sidebar-menu" data-widget="tree">
+
+    <li>
+        <a href="{% url 'director-dashboard' %}">
+            <i data-feather="pie-chart"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'client' %}">
+            <i data-feather="users"></i>
+            <span>Bugdoy taminotchilari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'clientun' %}">
+            <i data-feather="users"></i>
+            <span>Un taminotchilari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'qop_clients' %}">
+            <i data-feather="users"></i>
+            <span>Qop taminotchilari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'operator-aktiv-orders' %}">
+            <i data-feather="clipboard"></i>
+            <span>Buyurtmalar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sotuv-rahbari-seller-list' %}">
+            <i data-feather="users"></i>
+            <span>Sotuvchilar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'customers' %}">
+            <i data-feather="users"></i>
+            <span>Mijozlar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'brak' %}">
+            <i data-feather="clipboard"></i>
+            <span>Brak maxsulotlar</span>
+        </a>
+    </li>
+    <li class="treeview active" style="background: none; color: #000000;">
+        <a href="" style="background: none; box-shadow: none;">
+            <span class="iconify" data-icon="fluent:payment-16-filled" style="font-size: 28px;"></span> 
+            <span>Kassa</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" >
+            <li><a href="{% url 'kassa' %}"><i class="ti-more"></i>Kassa</a></li>
+            <li><a href="{% url 'bank-kassa' %}"><i class="ti-more"></i>Bank kassa</a></li>
+          </ul>
+    </li>
+    <li>
+        <a href="{% url 'sms' %}">
+            <i data-feather="mail"></i>
+            <span>Sms</span>
+        </a>
+    </li>
+    <li class="treeview active" style="background: none;color: #8a99b5;">
+        <a href="" style="background: none; box-shadow: none; color: #8a99b5;">
+            <i data-feather="database"></i>
+            <span>Ombor</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" >
+            <li><a href="{% url 'un-ombori' %}"><i class="ti-more"></i>Un</a></li>
+            <li><a href="{% url 'yem-ombori' %}"><i class="ti-more"></i>Yem</a></li>
+            <li><a href="{% url 'tarozi-molia-qop-ombor' %}"><i class="ti-more"></i>Qop</a></li>
+          </ul>
+    </li>
+
+    <li>
+        <a href="{% url 'logout' %}">
+            <i data-feather="lock"></i>
+            <span>Chiqish</span>
+        </a>
+    </li>
+
+</ul>

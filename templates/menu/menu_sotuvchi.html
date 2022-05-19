@@ -1,0 +1,81 @@
+<ul class="sidebar-menu" data-widget="tree">
+
+    <li>
+        <a href="{% url 'sotuvchi_dashboard' %}">
+            <i data-feather="pie-chart"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sotuvchi-get-order' %}">
+            <i data-feather="grid"></i>
+            <span>Buyurtma olish</span>
+        </a>
+
+    </li>
+    <li>
+        <a href="{% url 'sotuvchi-get-qaytuv' %}">
+            <i data-feather="grid"></i>
+            <span>Qaytib olish</span>
+        </a>
+
+    </li>
+{#    <li>#}
+{#        <a href="{% url 'akt-hisobot' %}">#}
+{#            <i data-feather="layers"></i>#}
+{#            <span>Hisobot bo'limi</span>#}
+{#        </a>#}
+{#    </li>#}
+    <li>
+        <a href="{% url 'sotuvchi-get-order-active' %}">
+            <i data-feather="package"></i>
+            <span>Aktiv buyurtmalar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sotuvchi-get-order-passive' %}">
+            <i data-feather="package"></i>
+            <span>Muvofaqiyatli buyurtmalar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'customers' %}">
+            <i data-feather="users"></i>
+            <span>Mijozlar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'residual-branches' %}">
+            <i data-feather="clipboard"></i>
+            <span>Savdo filiallari</span>
+        </a>
+    </li>
+{#    <li>#}
+{#        <a href="#">#}
+{#            <i data-feather="clipboard"></i>#}
+{#            <span>Ishlab chiqarish hisoboti</span>#}
+{#        </a>#}
+{#    </li>#}
+
+    <li class="treeview">
+        <a href="">
+            <i data-feather="database"></i>
+            <span>Ombor</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" >
+            <li><a href="{% url 'un-ombori' %}"><i class="ti-more"></i>Un</a></li>
+            <li><a href="{% url 'yem-ombori' %}"><i class="ti-more"></i>Yem</a></li>
+          </ul>
+    </li>
+
+    <li>
+        <a href="{% url 'logout' %}">
+            <i data-feather="lock"></i>
+            <span>Chiqish</span>
+        </a>
+    </li>
+
+</ul>

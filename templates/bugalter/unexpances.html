@@ -1,0 +1,102 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block menu %}
+    {% if user.type == 2 %}
+        {% include 'menu/menu_bugalter.html' %}
+    {% endif %}
+    {% if user.type == 12 %}
+        {% include 'menu/menu_kassir.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="row">
+                     <div class="col-12 " id="message_container">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                        {% elif message.tags == 'error' %}
+                        <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="col-xl-12 col-12 text-center">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Un rasxodi</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{ expenses|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">Un uchun chiqimlar</h4>
+                            </div>
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table id="complex_header24" class="table table-striped table-bordered display" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Akt nomi</th>
+                                                <th>Klient</th>
+                                                <th>Stansiya</th>
+                                                <th>Boshlangan sana</th>
+                                                <th>Tugallangan sana</th>
+                                                <th>Vagon soni</th>
+                                                <th>Kimga</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                {% for akt in akts %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td><a href="{% url 'un_akt' akt.id %} ">{{ akt.product.name }}</a></td>
+                                                <td>{{ akt.client.compony }}</td>
+                                                <td>{{ akt.stansiya }}</td>
+                                                <td>{{ akt.date_start|date:'Y-m-d' }}</td>
+                                                <td>{{ akt.date_end|date:'Y-m-d' }}</td>
+                                                <td>{{ akt.wagons.all|length }}</td>
+                                                <td>{{ akt.branch.name }}</td>
+                                            </tr>
+                                                {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+	<script src="{% static 'main/js/template.js'%}"></script>
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script>
+        $('#complex_header24').DataTable( {
+     'dom': 'Blfrtip',
+     'buttons': [
+         'excel',
+         'pdf'
+     ],
+     'pageLength':100,
+     'lengthChange': true,
+     
+ } );
+ </script>
+{% endblock js %}

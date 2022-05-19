@@ -1,0 +1,102 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+
+{% if user.type == 12 %}
+{% include 'menu/menu_kassir.html' %}
+    
+{% endif %}
+    
+
+{% if user.type == 1 %}
+{% include 'menu/menu_director.html' %}
+    
+{% endif %}
+    
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <section class="content">
+  
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Tashqi chiqimlar ro'yxati</h4>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table id="excel33" class="table table-striped table-bordered display" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Turi</th>
+                                                    <th>Summa</th>
+                                                    <th>Sana</th>
+                                                    <th>Izoh</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in expance %}
+                                                <tr>
+                                                    <th>{{ i.type.name }}</th>
+                                                    <th>{{ i.summa }}</th>
+                                                    <th>{{ i.date|date:"d-m-Y H:i" }}</th>
+                                                    <th>{{ i.izoh }}</th>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+        <script>
+    $(document).ready(function () {
+        $(".select1").on("change", function () {
+            let value = $(this).children("option:selected").val();
+            if (value === "usz") {
+                console.log(value, '1')
+                $(".dollar_narxi1").show()
+                $(".dollar_narxi1").val(parseInt("{{ dollar.sotish_sum }}"));
+            } else {
+                $(".dollar_narxi1").hide();
+                $(".dollar_narxi1").val('1');
+            }
+        })
+    });
+
+</script>
+
+<script>
+    $('#excel33').DataTable( {
+ 'dom': 'Blfrtip',
+ 'buttons': [
+     'excel',
+     'pdf'
+ ],
+ 'pageLength':100,
+ 'lengthChange': true,
+ 
+} );
+</script>
+{% endblock js %}

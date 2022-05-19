@@ -1,0 +1,670 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+{% block css %}
+    
+    <style>
+     
+    
+      @media (max-width:768px) {
+        .parrents{
+          position: relative;
+        }
+        .cureentTable{
+          overflow-x: scroll;
+          width:600px;
+          margin: 0 auto;
+        }
+
+        .fixedColl-counter{
+          position: absolute;
+          background-color:#fafafa !important;
+        }
+
+        .fixedColl-product{
+          position: absolute;
+          left: 22px;
+          width: 12em;
+          background-color:#fafafa !important;
+        }
+
+        .vg_move{
+          padding-left: 200px !important;
+        }
+       
+      }
+
+
+      @media (max-width:570px) {
+        .parrents{
+          position: relative;
+        }
+       .ddkk{
+         text-align: left !important;
+       }
+      
+
+       .curredf>h3{
+         font-size: 15px;
+       }
+
+        .cureentTable{
+          overflow-x: scroll;
+          width:100% !important;
+          margin:0 auto;
+          position: relative;
+        }
+
+        .fixedColl-counter{
+          position: absolute;
+          background-color:#fafafa;
+        }
+
+        .fixedColl-product{
+          position: absolute;
+          left: 37px !important;
+          width: 10em !important;
+          background-color:#fafafa;
+          padding-left: 0% !important;
+
+        }
+
+        .jspython{
+          width:70px;
+        }
+        .rubyLang{
+          width:100px;
+        }
+       
+      }
+
+
+
+        @media(max-width: 400px) {
+             .omadbek .form-group {
+                 width: 100%!important;;
+                 padding: 0px!important;
+                 display: flex;
+                 justify-content: center;
+             }
+            .omadbek {
+                display: flex; flex-direction: column
+            }
+            .omadbekhop .form-control {
+                width: 100%!important;
+            }
+            .omadbeknorm {
+                display: flex!important;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .omadbeknorm .omadbekhop {
+                padding-left: 0px!important;
+            }
+            .omadbeknorm .form-group {
+                width: 100%;
+                padding-left: 0px!important;
+            }
+            .omadbeknorm button {
+                width: 100%!important;
+                margin-left: 0px!important;
+            }
+            .omadbek .form-group .form-control {
+                width: 100%!important;
+            }
+
+            
+
+        }
+
+    </style>
+
+{% endblock css %}
+
+{% block menu %}
+    {% include 'menu/menu_sotuvchi.html' %}
+{% endblock menu %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+          
+            <div class="row">
+                <div class="col-12 " id="message_container">
+                   {% if messages %}
+                    {% for message in messages %}
+                      {% if message.tags == 'success' %}
+                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                      {% elif message.tags == 'error' %}
+                        <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                      {% endif %}
+                    {% endfor %}
+                   {% endif %}
+               </div>
+           </div>
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 text-center curredf">
+                        <h3>Buyurtmachi : {{ order.customer.name }}</h3>
+                    </div>
+                    <div class="col-lg-4 col-md-4 text-center curredf">
+                        <h3>Mijoz limiti : {{ order.customer.limit }}</h3>
+                    </div>
+                    <div class="col-lg-4 col-md-4 text-center curredf">
+                        <h3>Ortiqcha miqdor : {{ order.customer.debt|sub:order.customer.limit|floatformat:2 }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <section class="content ccqa p-0">
+                <div class="row ddkk" style="justify-content: center;">
+
+                    <!-- {% if order.bonus %}
+
+                        <div class="omadbeknorm" style="display: flex;">
+                            <div class="form-group omadbekhop pl-3">
+                                <select class="form-control " style="width: 220px" name="type" required disabled>
+                                    <option value="" disabled selected>{{ order.get_type_bonus_display }}</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group omadbekhop pl-3">
+                                <input type="number" style="width: 220px" class="form-control " name="bonus" placeholder="{{ order.bonus }}" required
+                                        disabled>
+                            </div>
+
+                            <div class="form-group pl-3">
+                                <button type="submit" class="btn btn-success" disabled
+                                        style="width: 200px; height: 36px; padding: 3px">Bonus biriktirish
+                                </button>
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                      <form action="{% url 'add-bonus' %}" method="post" class="form-inline omadbeknorm" style="justify-content: center;" >
+                          {% csrf_token %}
+                          <input type="hidden"  value="{{ order.customer.id }}" name="client_id">
+                          <div class="form-group omadbekhop pl-3">
+                              <select class="form-control " style="width: 220px" name="type" required>
+                                  <option value="" disabled selected>Bonus turi</option>
+                                  <option value="1">Foiz</option>
+                                  <option value="2">Dollar</option>
+                              </select>
+                          </div>
+                          <div class="form-group omadbekhop pl-3">
+                              <input type="number" style="width: 220px" class="form-control " name="bonus" placeholder="bonus" required>
+                          </div>
+                          <input type="hidden" value="{{ order.id }}" name="order_id">
+                          <div class="form-group">
+                              <button type="submit" class="btn btn-success ml-2"
+                                      style="width: 200px; height: 36px; padding: 3px">Bonus biriktirish
+                              </button>
+                          </div>
+
+                      </form>
+
+                    {% endif %} -->
+
+                </div>
+
+                <div class="row cureentTable  p-0 ccqa" style="padding-top:10px; justify-content: center;" >
+                    <div class="col-12 mt-2 qazxswe">
+                        <div class="box">
+                            <div class="box-header with-border " style="display: flex; flex-direction: row; flex-wrap: nowrap; align-content: space-between; justify-content: space-between; align-items: baseline;">
+                                <h4 class="box-title">Mahsulotlar ro'yxati</h4>
+                            </div>
+
+                            {% comment %}
+                              {% if order.customer.debt > order.customer.limit %} 
+
+                                <h4 class="text-center p-3">Qarzdorlik limitdan oshib ketdi</h4>
+
+                              {% else %}
+                            {% endcomment %}
+                            {% if order.customer.is_active == False%} 
+
+                            <h4 class="text-center p-3">Qarzdorlik limitdan oshib ketdi</h4>
+
+                          {% else %}
+                              <!-- /.box-header -->
+                              <div class="box-body parrents  p-0 ">
+                                  <div class="table-responsive-lg" >
+                            
+                                      <!-- start -->
+                                      <table class="table mb-0">
+                                          <thead>
+                                          <tr>
+                                              <th scope="col" class="fixedColl-counter">#</th>
+                                              <th scope="col" class="fixedColl-product">Maxsulot</th>
+                                              <th scope="col" class="vg_move">Omborda mavjud</th>
+                                              <th scope="col">Narxi</th>
+                                              <th scope="col">Miqdor</th>
+                                              <th scope="col">Jami summa</th>
+                                              <th scope="col">Saqlash</th>
+                                              <th scope="col">Tahrirlash</th>
+                                          </tr>
+                                          </thead>
+                                          
+                                          <!-- mahsulotlar ruyhati keladi  -->
+                                          <tbody id="id_products">
+
+
+                                          </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+
+                                {% endif %}
+                                <a href="{% url 'sotuvchi-get-order' %}" class="btn btn-primary">Buyurtmani yakunlash    <i class=" fa fa-arrow-left" aria-hidden="true"></i></a>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+
+
+<!-- Modal -->
+    <div>
+        
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document" style="max-width: 1100px">
+            <div class="modal-content" style="background-color: #fafafa">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{order.seller|capfirst}}ning    {{order.customer|capfirst}}ga sotgan mahsulotlar ro'yhati</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="table-responsive-lg">
+                    <!-- start -->
+                    <table class="table mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Maxsulot</th>
+                          <th scope="col">Narxi</th>
+                          <th scope="col">Miqdor</th>
+                          <th scope="col">Jami summa</th>
+                          <th scope="col">Tahrirlash</th>
+                          <th scope="col">O'chirish</th>
+                        </tr>
+                      </thead>
+      
+                      <!--shu sellerni mahsulotlar ruyhati keladi  -->
+                      <tbody id="id_model_datas">
+                       
+
+
+
+                        <script>
+                        let priceEdit = document.querySelectorAll(".narxi_edit");
+                        let amount = document.querySelectorAll(".qop_soni_edit");
+                        let order_id = window.location.pathname.split("/").pop();
+
+                        priceEdit.forEach((eachPrice) => {
+                            console.log(eachPrice)
+                            let priceValue = 0;
+                            let amountValue = 0;
+                            let pro_id =
+                            eachPrice.parentElement.previousElementSibling.previousElementSibling
+                                .previousElementSibling.previousElementSibling.value;
+                            
+                            let b =
+                            eachPrice.parentElement.nextElementSibling.nextElementSibling
+                                .nextElementSibling.children[0];
+                    
+                            let amount = eachPrice.parentElement.nextElementSibling.children[0];
+                    
+                            eachPrice.addEventListener("keyup", (e) => {
+                            priceValue = e.target.value;
+                            console.log(priceValue)
+                            console.log(amountValue, "check");
+                            if (!priceValue || !amountValue) {
+                                b.style.pointerEvents = "none";
+                            } else {
+                                b.style.pointerEvents = "fill";
+
+                                b.setAttribute(
+                                "name",
+                                "{% url 'sotuvchi-edit-basket' %}/" +
+                                    order_id +
+                                    "/" +
+                                    pro_id +
+                                    "/" +
+                                    priceValue +
+                                    "/" +
+                                    amountValue
+                                );
+                    
+                                
+                    
+                                b.addEventListener("click", (e) => {
+                                console.log(
+                                    "{% url 'sotuvchi-edit-basket' %}/" +
+                                    order_id +
+                                    "/" +
+                                    pro_id +
+                                    "/" +
+                                    priceValue +
+                                    "/" +
+                                    amountValue
+                                );
+                                });
+                            }
+                            });
+                    
+                            amount.addEventListener("change", (e) => {
+                            amountValue = e.target.value;
+                    
+                            if (!priceValue || !amountValue) {
+                                b.style.pointerEvents = "none";
+                            } else {
+                                b.style.pointerEvents = "fill";
+                    
+                                
+                    
+                                b.setAttribute(
+                                "name",
+                                "{% url 'sotuvchi-edit-basket' %}/" +
+                                    order_id +
+                                    "/" +
+                                    pro_id +
+                                    "/" +
+                                    priceValue +
+                                    "/" +
+                                    amountValue
+                                );
+                    
+                                b.addEventListener("click", (e) => {
+                                console.log(
+                                    "{% url 'sotuvchi-edit-basket' %}/" +
+                                    order_id +
+                                    "/" +
+                                    pro_id +
+                                    "/" +
+                                    priceValue +
+                                    "/" +
+                                    amountValue
+                                );
+                                });
+                            }
+                            });
+                        });
+                    
+                    
+                        </script>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                  <i class="fa fa-angle-left"></i>
+                </button>
+                <button type="button" class="btn btn-success" id="yangila">
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+
+<!-- ajax for smart select -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+      var url = "{% url 'ajax_load_products' %}";
+      var tegirmonId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'order_id': order_id
+        },
+        success: function (data) {
+          $("#id_products").html(data);
+        }
+      });
+
+    });
+  </script>
+
+<script>
+  $("table").on("click", "button", function () {
+      var url = "{% url 'ajax_load_products' %}";
+      
+      $.ajax({
+        url: url,
+        data: {
+          'order_id': order_id
+        },
+        success: function (data) {
+          $("#id_products").html(data);
+        }
+      });
+
+    });
+  </script>
+
+<script>
+  $("#yangila").click(function () {
+    var url ="{% url 'ajax_load_modal'  %}" ;
+    $.ajax({
+      url: url,
+      data: {
+        'order_id': order_id,
+
+      },
+      success: function (data) {
+        $("#id_model_datas").html(data);
+
+      }
+    });
+
+    });
+  </script>
+
+  
+<!-- ajax for smart select -->
+<script>
+  $("table").on("click", "button", function () {
+    
+      var url ="{% url 'ajax_load_modal'  %}" ;
+      $.ajax({
+        url: url,
+        data: {
+          'order_id': order_id,
+
+        },
+        success: function (data) {
+          $("#id_model_datas").html(data);
+
+        }
+      });
+      
+
+    });
+  </script>
+
+
+<!-- for only numbers -->
+<script>
+$(".myField").keyup(function() {
+    $(".myField").val(this.value.match(/[0-9, .]*/));
+});
+</script>
+
+
+
+{% endblock js %}
+
+
+
+
+<script>
+    (function () {
+      "use strict";
+  
+      $("table").on("change", "input", function () {
+        var row = $(this).closest("tr");
+        var qty = parseFloat(row.find(".qop_soni_edit").val());
+        var price = parseFloat(row.find(".narxi_edit").val());
+        var total = qty * price;
+        row.find(".total_edit").val(isNaN(total) ? "" : total);
+      });
+  
+      let priceEdit = document.querySelectorAll(".narxi_edit");
+      let amount = document.querySelectorAll(".qop_soni_edit");
+      let order_id = window.location.pathname.split("/").pop();
+  
+      priceEdit.forEach((eachPrice) => {
+        let priceValue = 0;
+        let amountValue = 0;
+        let pro_id =
+          eachPrice.parentElement.previousElementSibling.previousElementSibling
+            .previousElementSibling.previousElementSibling.value;
+        let b =
+          eachPrice.parentElement.nextElementSibling.nextElementSibling
+            .nextElementSibling.children[0];
+  
+        let amount = eachPrice.parentElement.nextElementSibling.children[0];
+        amount.addEventListener("keyup", (e) => {
+          amountValue = e.target.value;
+          if (!priceValue || !amountValue) {
+            b.style.pointerEvents = "none";
+          } else {
+            b.style.pointerEvents = "fill";
+  
+            b.setAttribute(
+              "name",
+              "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+  
+  
+            b.addEventListener("click", (e) => {
+              console.log(
+                "{% url 'sotuvchi-edit-basket' %}/" +
+                  order_id +
+                  "/" +
+                  pro_id +
+                  "/" +
+                  priceValue +
+                  "/" +
+                  amountValue
+              );
+            });
+          }
+        });
+  
+        eachPrice.addEventListener("keyup", (e) => {
+          priceValue = e.target.value;
+          if (!priceValue || !amountValue) {
+            b.style.pointerEvents = "none";
+          } else {
+            b.style.pointerEvents = "fill";
+  
+            b.setAttribute(
+              "name",
+              "{% url 'sotuvchi-edit-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+  
+  
+            b.addEventListener("click", (e) => {
+              console.log(
+                "{% url 'sotuvchi-edit-basket' %}/" +
+                  order_id +
+                  "/" +
+                  pro_id +
+                  "/" +
+                  priceValue +
+                  "/" +
+                  amountValue
+              );
+            });
+          }
+        });
+      });
+  
+      
+    })();
+</script> 
+
+<script>
+(function () {
+    "use strict";
+
+    $("table").on("change", "input", function () {
+    var row = $(this).closest("tr");
+    var qty = parseFloat(row.find(".qop_soni_edit").val());
+    var price = parseFloat(row.find(".narxi_edit").val());
+    var total = qty * price;
+    row.find(".total_edit").val(isNaN(total) ? "" : total);
+    });
+
+    $(".btn_sub_edit").click(function (e) {
+    e.preventDefault();
+    var targetUrl = $(this).attr("name");
+    console.log(targetUrl);
+    
+    });
+})();
+</script>

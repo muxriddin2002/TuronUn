@@ -1,0 +1,254 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% if user.type == 8 %}
+        {% include 'menu/menu_tarozi_hisobchi.html' %}
+    {% else %}
+        {% include 'menu/menu_tarozi_moliya.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="row" style="margin: 10px;">
+                                <div class="col-xl-4">
+                                    <button type="button" data-toggle="modal" data-target="#modal-center-add-chiqim" class="btn btn-danger">Chiqim qo'shish</button>
+                                </div>
+                                <div class="col-xl-4">
+                                    <button type="button" data-toggle="modal" data-target="#modal-center-set-price"
+                                            class="btn btn-success">Narx belgilash
+                                    </button>
+                                </div>
+                                <div class="col-xl-4">
+                                    <button type="button" data-toggle="modal" data-target="#modal-center"
+                                            class="btn btn-primary">Chiqim turini qo'shish
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Akt nomi</th>
+                                            <th scope="col">Sana</th>
+                                            <th scope="col">Klient</th>
+                                            <th scope="col">Stansiya</th>
+                                            <th scope="col">Vagon soni</th>
+                                            <th scope="col">Kimga</th>
+                                            <th scope="col">Narxi</th>
+                                            <th scope="col">Umumiy netto</th>
+                                            <th scope="col">Summa</th>
+                                            <th scope="col">Umumiy tan narx</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>{{ akt.product.name }}</td>
+                                            <td>{{ akt.date_start }}</td>
+                                            <td>{{ akt.client.compony }}</td>
+                                            <td>{{ akt.stansiya }}</td>
+                                            <td>{{ akt.wagons.all|length }}</td>
+                                            <td>{{ akt.branch.name }}</td>
+                                            <td>{{ akt.price }}</td>
+                                            <td>{{ total_netto|intcomma }}</td>
+                                            <td>{{ akt.price|mul:total_netto|intcomma }}</td>
+                                            <td>{{ akt.total|intcomma }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Chiqimlar ro'yxati</h4>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Chiqim turi</th>
+                                            <th scope="col">Summa</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for vg in akt.outlay.all %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ vg.type.name }}</td>
+                                                <td>{{ vg.summa }}</td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chiqim turini qo'shish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-group" action="{% url 'tarozi-molia-add-untype-outlay' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group p-3">
+                                        <input type="text" class="form-control" name="name" placeholder="Chiqim turi"
+                                               required>
+                                    </div>
+                                    <input type="hidden" name="akt_id" value="{{ akt.id }}">
+                                    <div class="form-group p-3">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Qo'shish
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal center-modal fade" id="modal-center-set-price" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Narxni belgilash</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-group" action="{% url 'tarozi-molia-set-unprice' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group p-3">
+                                        <input type="number" class="form-control" name="price" step="0.00"
+                                               placeholder="Narx"
+                                               required>
+                                    </div>
+                                    <input type="hidden" name="akt_id" value="{{ akt.id }}">
+                                    <div class="form-group p-3">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Belgilash
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal center-modal fade" id="modal-center-add-chiqim" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chiqim qo'shish</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-group" action="{% url 'tarozi-molia-add-unoutlay' %}" method="post">
+                                {% csrf_token %}
+                                    <div class="form-group p-3">
+                                        <select class="form-control" name="type_id" required>
+                                            <option value="">Chiqim turi</option>
+                                            {% for ty in types %}
+                                                <option value="{{ ty.id }}">{{ ty.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select name="currency" id="" class="form-control select1">
+                                            <option value="" disabled selected>Valyuta turini tanlang</option>
+                                            <option value="usd">Dollar</option>
+                                            <option value="usz">So'm</option>
+                                        </select>
+                                        <div class="form-group dollar_narxi1" style="display:none;">
+                                            <h6 >Dollar kursi</h6>
+                                            <input class="form-control dollar_narxi1"
+                                                   type="text"
+                                                   placeholder="Доллар курси" name="dollar_narxi1"
+                                                   value="1">
+                                        </div>
+                                    </div>
+                                <input type="hidden" value="{{ akt.id }}" name="akt_id">
+                                    <div class="form-group p-3">
+                                        <input type="number" class="form-control" name="summa" step="0.00"
+                                               placeholder="Summa"
+                                               required>
+                                    </div>
+                                    <div class="form-group p-3">
+                                        <button type="button" class="btn btn-rounded btn-secondary"
+                                                data-dismiss="modal">
+                                            Yopish
+                                        </button>
+                                        <button type="submit" class="btn btn-rounded btn-primary float-right">Belgilash
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal -->
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+        <script>
+    $(document).ready(function () {
+        $(".select1").on("change", function () {
+            let value = $(this).children("option:selected").val();
+            if (value === "usz") {
+                console.log(value, '1')
+                $(".dollar_narxi1").show()
+                $(".dollar_narxi1").val(parseInt("{{ dollar.sotish_sum }}"));
+            } else {
+                $(".dollar_narxi1").hide();
+                $(".dollar_narxi1").val('0');
+            }
+        })
+    });
+
+</script>
+{% endblock js %}

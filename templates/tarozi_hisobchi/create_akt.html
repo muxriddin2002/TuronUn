@@ -1,0 +1,157 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% include 'menu/menu_tarozi_hisobchi.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <h3>Akt : {{ akt.name }}</h3>
+            </div>
+            <section class="content">
+
+                <div class="row">
+                    <div id="akt_add">
+                        <form action="{% url 'akt-detail-post' %}" method="post" class="form-inline">
+                            {% csrf_token %}
+                            <div class="form-group p-3">
+                                <input type="number" class="form-control" name="number" placeholder="vagon raqami"
+                                       required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" class="form-control" name="brutto" placeholder="Brutto" required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" class="form-control" name="tara" placeholder="Tara" required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" class="form-control" name="netto" placeholder="Netto" required
+                                       style="width: 220px;">
+                            </div>
+                            <input type="hidden" name="akt" value="{{ akt.id }}">
+                            <div class="form-group p-3">
+                                <button type="submit" class="btn btn-success"
+                                        style="width: 36px; height: 36px; padding: 3px"><i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="akt_edit" style="display: none">
+                        <form action="{% url 'akt-detail-edit' %}" method="post" class="form-inline">
+                            {% csrf_token %}
+                            <div class="form-group p-3">
+                                <input type="number" id="e_vg_raqami" class="form-control" name="number_edit" placeholder="vagon raqami"
+                                       required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" id="e_brutto" class="form-control" name="brutto_edit" placeholder="Brutto"
+                                       required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" id="e_tara" class="form-control" name="tara_edit" placeholder="Tara" required
+                                       style="width: 220px;">
+                            </div>
+                            <div class="form-group p-3">
+                                <input type="number" id="e_netto" class="form-control" name="netto_edit" placeholder="Netto" required
+                                       style="width: 220px;">
+                            </div>
+                            <input type="hidden" name="akt" value="{{ akt.id }}">
+                            <input type="hidden" id="e_id" name="vg_id">
+                            <div class="form-group p-3">
+                                <button type="submit" class="btn btn-warning"
+                                        style="width: 36px; height: 36px; padding: 3px"><i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Vagonlar ro'yxati</h4>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Vagon raqami</th>
+                                            <th scope="col">Brutto</th>
+                                            <th scope="col">Tara</th>
+                                            <th scope="col">Netto</th>
+                                            <th scope="col">Tahrirlash</th>
+                                            <th scope="col">O'chirish</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for vg in akt.wagons.all %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ vg.number }}</td>
+                                                <td>{{ vg.brutto_akt }}</td>
+                                                <td>{{ vg.tara_akt }}</td>
+                                                <td>{{ vg.netto_akt }}</td>
+                                                <td>
+                                                    <button class="btn btn-warning"
+                                                            onclick="edit_open(
+                                                                    {{ vg.id }},
+                                                                    {{ vg.number }},
+                                                                    {{ vg.brutto_akt }},
+                                                                    {{ vg.tara_akt }},
+                                                                    {{ vg.netto_akt }}
+                                                                    )"
+                                                            style="width: 30px; height: 30px; padding: 3px"><i
+                                                            class="fa fa-pencil"></i></button>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger"
+                                                            href="{% url 'akt-detail-delete' %}?akt_id={{ akt.id }}&vg_id={{ vg.id }}"
+                                                            style="width: 30px; height: 30px; padding: 3px"><i
+                                                            class="fa fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    <script>
+        function edit_open(id, vg_raqami, brutto,tara, netto){
+            document.getElementById("akt_edit").style.display="unset"
+            document.getElementById("e_vg_raqami").value = vg_raqami;
+            document.getElementById("e_brutto").value = brutto;
+            document.getElementById("e_tara").value = tara;
+            document.getElementById("e_netto").value = netto;
+            document.getElementById("e_id").value = id;
+        }
+    </script>
+{% endblock js %}

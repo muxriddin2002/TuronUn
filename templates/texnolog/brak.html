@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% if user.type == 10 %}
+        {% include 'menu/menu_texnolog.html' %}
+    {% elif user.type == 1 %}
+        {% include 'menu/menu_director.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+            </div>
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <h4 class="box-title">Brak maxsulotlar</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table id="complex_header" class="table table-striped table-bordered display" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Maxsulot</th>
+                                            <th scope="col">Sana</th>
+                                            <th scope="col">Izoh</th>
+                                            <th scope="col">Tegirmon nomi</th>
+                                            <th scope="col">Hajmi</th>
+                                            <th scope="col">Rasm</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for bg in products %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ bg.product }}</td>
+                                                <td>{{ bg.date|date:"Y-m-d" }}</td>
+                                                <td>{{ bg.izoh }}</td>
+                                                <td>{{ bg.tegirmon.name }}</td>
+                                                <td>{{ bg.qopsoni }}</td>
+                                                {% if bg.image %}
+                                                <td>{{ bg.image.url }}</td>
+                                                {% else %}
+                                                <td>Rasm kiritilmadi</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    <script>
+   function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+        }
+    </script>
+
+<script>
+    $('#complex_header').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+    } );
+</script>
+{% endblock js %}

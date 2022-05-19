@@ -1,0 +1,80 @@
+{% load static %}
+<table id="excel1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Xaridor</th>
+            <th scope="col">Hudud</th>
+            <th scope="col">Qabul qilgan inson</th>
+            <th scope="col">Summa</th>
+            <th scope="col">Status</th>
+            <th>Bank hisob</th>
+            <th scope="col">Sana</th>
+            
+        </tr>
+    </thead>
+    <tbody >
+        {% for ord in shotlar %}
+    <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        {% if ord.clienttin.name %}
+        <td>
+            <a href="#">{{ ord.clienttin.name }}</a>
+        </td>
+    {% elif ord.clientun.name %}
+        <td>
+            <a href="#">{{ ord.clientun.name }}</a>
+        </td>
+    {% elif ord.client.name %}
+        <td>
+            <a href="#">{{ ord.client.name }}</a>
+        </td>
+    {% else %}
+        <td>
+            <a href="#">Tashqi chiqim</a>
+        </td>
+    {% endif %}
+    {% if ord.clienttin.address %}
+    <td>
+        <a href="#">{{ ord.clienttin.address }}</a>
+    </td>
+{% elif ord.clientun.address %}
+    <td>
+        <a href="#">{{ ord.clientun.address }}</a>
+    </td>
+{% elif ord.client.address %}
+    <td>
+        <a href="#">{{ ord.client.address }}</a>
+    </td>
+{% else %}
+    <td>
+        <a href="#">No Aniq</a>
+    </td>
+{% endif %}
+        <td>{{ ord.by_user }}</td>
+        <td>{{ ord.payment }}</td>
+       <td>{{ ord.get_turi_display }}</td>
+       <td>{{ ord.bank_shot|default_if_none:'-' }}</td>
+        <td>{{ ord.date|date:'j-m-Y H:i' }}</td>
+     
+    </tr>
+{% endfor %}
+    </tbody>
+    
+</table>
+
+
+<script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+<script>
+    $('#excel1').DataTable( {
+        'dom': 'Blfrtip',
+        'buttons': [
+            'excel',
+            'pdf'
+        ],
+        'pageLength':100,
+        'lengthChange': true,
+        
+    } );
+</script>

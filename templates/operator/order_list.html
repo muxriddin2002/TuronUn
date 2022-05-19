@@ -1,0 +1,374 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+
+{% if user.type == 18 %}
+    {% include 'menu/menu_operator.html' %}
+{% elif user.type == 17 %}
+    {% include 'menu/menu_sotuv_rahbari.html' %}
+{% elif user.type == 21 %}
+    {% include 'menu/menu_yordamchi_bugalter.html' %}
+{% else %}
+    {% include 'menu/menu_director.html' %}
+{% endif %}
+    
+    
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+
+                <div class="row">
+
+                    <div class="col-12">
+                      <div class="box">
+
+                           <div class="box-header with-border">
+                                <div class="row">
+
+                                    <div class="col-xl-4">
+                                        <h4 class="box-title">Buyurtmalar ro'yxati</h4> 
+                                    </div>
+
+                                    <div class="col-xl-4">
+
+                                    </div>
+                                        <div class="col-xl-4">
+                                            <div class="input-group">
+                                                <input type="text" style="border: 1px solid blue;" onchange="filterdate(this)"
+                                                    class="form-control pull-right" id="reservation">
+                                                <a href="" id="date_f">
+                                                    <div class="input-group-addon"
+                                                        style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </a>
+
+                                            </div>
+                                        
+                                        </div>
+                                </div>
+                                
+                            </div>
+
+                        <div class="box-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills rounded nav-justified">
+                                <li class="nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab" aria-expanded="false"> Aktive buyurtmalar </a> </li>
+                                <li class="nav-item"> <a href="#navpills-2" class="nav-link" style="background-color: rgb(241, 241, 241);" data-toggle="tab" aria-expanded="false">Muvaffaqiyatli buyurtmalar</a> </li>
+                            </ul>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <div class="box">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div id="navpills-1" class="tab-pane active">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Aktive buyurtmalar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive">
+                                                        <table id="excel21" class="table table-striped table-bordered display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Xaridor</th>
+                                                                    <th>Hudud</th>
+                                                                    <th>Sotuvchi</th>
+                                                                    <th>Summa</th>
+                                                                    <th>Status</th>
+                                                                    <th>Sana</th>
+                                                                    {% comment %}
+                                                                        
+                                                                        {% if user.type == 18 or user.type == 1 %}
+                                                                        <th>O'zgartirish</th>
+                                                                        {% endif %}
+                                                                            
+                                                                    {% endcomment %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for ord in orders %}
+                                                                <tr>
+                                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                                    <td>
+                                                                        <a href="{% url 'operator-active-orders-detail' ord.id %}">{{ ord.customer.name }}</a>
+                                                                    </td>
+                                                                    <td>{{ ord.customer.get_hudud_display }}</td>
+                                                                    <td>{{ ord.seller.username }} {{ ord.seller.last_name }} {{ ord.seller.first_name }}</td>
+                                                                    <td>{{ ord.summa_total|intcomma }}</td>
+                                                                    {% if ord.status == '1' %}
+                                                                        <td><span class="badge badge-warning">Buyurtma olindi</span></td>
+                                                                    {% elif ord.status == '2' %}
+                                                                        <td><span class="badge badge-primary">Yuklanmoqda</span></td>
+                                                                    {% elif ord.status == '3' %}
+                                                                        <td><span class="badge badge-primary">Yuklanmoqda</span></td>
+                                                                    {% elif ord.status == '4' %}
+                                                                        <td><span class="badge badge-success">Bajarildi</span></td>
+                                                                    {% endif %}
+                                                                    <td>{{ ord.date|date:'j-m-Y' }}</td>
+                                                                    {% comment %}
+                                                                        {% if user.type == 18 or user.type == 1 %}
+                                                                        <td>
+                                                                            <button data-toggle="modal" class="form-control" data-target="#modal-centeredit{{ord.id}}">
+                                                                                <i class="fa fa-edit"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                        {% endif %}
+                                                                    {% endcomment %}
+                                                                        
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th scope="col">Jami:</th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                    <th>{{ orders_total_sum|floatformat:2|intcomma }}</th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                   
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="navpills-2" class="tab-pane">
+                                    <div class="row" style="padding-top:10px;">
+                                        <div class="col-12">
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h4 class="box-title">Muvaffaqiyatli buyurtmalar</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="table-responsive">
+                                                        <table id="excel1" class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th scope="col">Xaridor</th>
+                                                                    <th scope="col">Hudud</th>
+                                                                    <th scope="col">Sotuvchi</th>
+                                                                    <th scope="col">Summa</th>
+                                                                    <th scope="col">Status</th>
+                                                                    <th scope="col">Sana</th>
+                                                                    <th scope="col">Mashina yuka kelgan vaqt</th>
+                                                                    <th scope="col">Mashina yukga  kirgan ketgan vaqt</th>
+                                                                    <th scope="col">Mashina yukdana chiqib ketgan vaqt</th>
+                                                                    <th scope="col">Rasm</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for ord in passive_orders %}
+                                                                <tr>
+                                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                                    <td>
+                                                                        <a href="{% url 'operator-active-orders-detail' ord.id %}">{{ ord.customer.name }}</a>
+                                                                    </td>
+                                                                    <td>{{ ord.customer.get_hudud_display }}</td>
+                                                                    <td>{{ ord.seller.username }} {{ ord.seller.last_name }} {{ ord.seller.first_name }}</td>
+                                                                    <td>{{ ord.summa_total|intcomma }}</td>
+                                                                    {% if ord.status == '1' %}
+                                                                        <td><span class="badge badge-warning">Buyurtma olindi</span></td>
+                                                                    {% elif ord.status == '2' %}
+                                                                        <td><span class="badge badge-primary">Yuklanmoqda</span></td>
+                                                                    {% elif ord.status == '3' %}
+                                                                        <td><span class="badge badge-primary">Yuklanmoqda</span></td>
+                                                                    {% elif ord.status == '4' %}
+                                                                        <td><span class="badge badge-success">Bajarildi</span></td>
+                                                                    {% endif %}
+                                                                    <td>{{ ord.date|date:'j-m-Y' }}</td>
+                                                                    <td>{{ ord.turned_date|date:'j-m-Y H:i'|default_if_none:'Yo\'q' }}</td>
+                                                                    <td>{{ ord.entered_date|date:'j-m-Y H:i'|default_if_none:'Yo\'q' }}</td>
+                                                                    <td>{{ ord.left_date|date:'j-m-Y H:i'|default_if_none:'Yo\'q' }}</td>
+                                                                    <td>
+                                                                        <button data-toggle="modal" class="form-control" data-target="#modal-centereye{{ord.id}}">
+                                                                            <i class="fa fa-eye"></i>
+                                                                        </button>
+                                                                    </td>    
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th scope="col">Jami:</th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                    <th>{{ passive_orders_total_sum|floatformat:2|intcomma }}</th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                    <th> </th>
+                                                                   
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </div>
+    {% for i in passive_orders %}
+    <div class="modal center-modal fade" id="modal-centereye{{i.id}}" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i.customer.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="box">
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table  class="table table-striped omadbek table-bordered display" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ i.customer.name }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                            {% if i.img %}
+                                               <img src="{{ i.img.url }}" alt="rasm">
+                                               {% else %}
+                                               Rasm mavjud emas
+                                            {% endif %}
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">
+                        Yopish
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}   
+
+
+ 
+    
+    <!-- <script>
+        $('#excel21').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+             'excel','pdf'
+            ],
+            
+            
+        } );
+    
+
+    </script> -->
+   
+
+
+
+{% endblock content %}
+
+{% block js %}
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+
+
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+    <!-- lBfrtip -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#excel21').DataTable({
+                'pageLength': 100,
+                dom: 'Blfrtip',
+                
+                buttons: [
+                    'excel',
+                    'pdf'
+                ],
+            });
+
+            
+
+            $('#excel1').DataTable({
+                'pageLength': 100,
+                dom: 'Blfrtip',
+                buttons: [
+                    'excel',
+                    'pdf'
+                ],
+            });
+           
+        });
+   
+    </script>
+
+    
+<script>
+    function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+    }
+</script>
+   
+
+{% endblock js %}
+

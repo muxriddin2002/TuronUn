@@ -1,0 +1,171 @@
+{% load humanize %}
+{% load static %}
+{% load mathfilters %}
+
+
+
+<tr>
+    <td class=" fixedColl-product">Summalar:</td>
+    <td colspan="2" class="" >
+        <span id="toshkent"style="padding-left: 90px;" > {{ toshkent_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="sirdaryo"> {{ sirdaryo_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="jizzax"> {{ jizzax_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td colspan="2">
+    <td colspan="2">
+        <span id="samarqand"> {{ samarqand_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="buxora"> {{ buxora_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="navoiy"> {{ navoiy_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="xorazm"> {{ xorazm_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="qoraqalpoq"> {{ qoraqalpoq_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="fargona"> {{ fargona_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="namangan"> {{ namangan_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="andijon"> {{ andijon_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td colspan="2">
+    <td colspan="2">
+        <span id="afgon"> {{ afgon_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+ 
+    <td colspan="2">
+        <span id="qashqadaryo"> {{ qashqadaryo_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span id="surxondaryo"> {{ surxondaryo_total_sum.summa_total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+    <td colspan="2">
+        <span> {{ total|default_if_none:"0"|floatformat:2|intcomma }} </span>
+    </td>
+</tr>
+
+
+    <tr>
+      <!-- this cell will occupy 3 columns -->
+      <td colspan=32 style="text-align:center">SKU tahlil</td>
+    </tr>
+    <tr>
+        <td>Nomi</td>
+        <td  style="padding-left: 100px;" class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+        <td  class="border">Dona</td>
+        <td  class="border">50kg</td>
+  
+    </tr>
+    {% for dat in data %}
+    <tr>
+      <td  
+      style="position: absolute !important;
+      left: 20px !important;
+      width: 12em !important;
+      background-color:rgb(245, 245, 245) !important;" >{{ dat.name }} </td>
+      <td class="border" style="padding-left: 100px;">{{ dat.data.tos_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.tos_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.sir_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.sir_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.jiz_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.jiz_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.sam_hajmi|default_if_none:"0"|floatformat:2|intcomma }} </td>
+      <td  class="border">{{ dat.data.sam_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.bux_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.bux_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.nav_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.nav_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.xor_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.xor_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.qor_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.qor_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.far_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.far_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.nam_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.nam_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.and_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.and_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.afg_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.afg_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.qas_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.qas_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.sur_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.sur_kg|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.total_hajmi|default_if_none:"0"|floatformat:2|intcomma }}</td>
+      <td  class="border">{{ dat.data.total_hajmi_kg|default_if_none:"0"|floatformat:2|intcomma }} </td>
+
+    </tr>
+    
+    {% endfor %}
+
+   <tr>
+
+        <td>Jami:</td>
+        <td  style="padding-left: 100px;" class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+        <td  class="border">0</td>
+   </tr>

@@ -1,0 +1,557 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block menu %}
+    {% include 'menu/menu_bugalter.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-12 py-4">
+                        <div class="row" style="margin: 0 auto">
+                            <div class="offset-lg-3 col-lg-2 py-1 text-center">
+                                <input type="date" id="start" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-2 py-1 text-center">
+                                <input type="date" id="end" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-1 py-1 text-center">
+                                <button onclick="myFunction()" class="btn btn-primary">Filtrlash</button>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="col-12 " id="message_container">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                        {% elif message.tags == 'error' %}
+                        <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+
+               
+
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-currency-usd"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Kassa(So'm)</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ cash.naqd_pull_sum|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-currency-usd"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Kassa(Dollor)</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ cash.naqd_pull_dollor|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Un taminotchilardan qarzlar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ akt_debt_un|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Bug'doy taminotchilardan qarzlar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ akt_debt_bug|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-warning-light rounded w-60 h-60">
+                                    <i class="text-warning mr-0 font-size-24 mdi mdi-car"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Mijozlar qarzdorligi</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ customer_debt|floatformat:2|intcomma }} </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-info-light rounded w-60 h-60">
+                                    <i class="text-info mr-0 font-size-24 mdi mdi-sale"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Mijozlar haqdorlik</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ our_debt|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-12">
+					    <div class="box">
+						    <div class="box-body">
+                                <h4 class="box-title">Kirim Turlari</h4>
+                                <div>
+                                    <canvas id="doughnut-chart" height="200"></canvas>
+                                </div>
+                            </div>
+					    </div>
+                    </div>
+                    <div class="col-xl-6 col-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <h4 class="box-title">Chiqim Turlari</h4>
+                                <div>
+                                    <canvas id="doughnut-chart1" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+
+                <div class="row">
+                    <div class="col-xl-6 col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Un va Yem grafigi
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12 py-4">
+                                        <div class="box no-shadow mb-0">
+                                            <select class="form-control" id="customer">
+                                                {% for cus in customers %}
+                                                <option value="{{ cus.id }}">{{ cus.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="charts_widget_43_chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Bug'doy grafigi
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12 py-4">
+                                        <div class="box no-shadow mb-0">
+                                            <select class="form-control" id="client">
+                                                {% for cus in clients %}
+                                                <option value="{{ cus.id }}">{{ cus.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="charts_widget_43_chart1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'assets/vendor_components/easypiechart/dist/jquery.easypiechart.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/irregular-data-series.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/dist/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/chart.js-master/Chart.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/dashboard.js' %}"></script>
+    <script src="{% static 'main/js/template.js' %}"></script>
+
+    <script>
+		var ctx7 = document.getElementById("doughnut-chart").getContext("2d");
+		var data7 = {
+			 labels: [
+			"Naqd",
+			"Bank",
+			"Plastik"
+		],
+		datasets: [
+			{
+				data: [parseInt({{ incomenaqd }}), parseInt({{ incomebank }}), parseInt({{ incomeplastik }})],
+				backgroundColor: [
+					"#389f99",
+					"#ee1044",
+					"#ff8f00"
+				],
+				hoverBackgroundColor: [
+					"#18625e",
+					"#b31338",
+					"#c0720f"
+				]
+			}]
+		};
+
+		var doughnutChart = new Chart(ctx7, {
+			type: 'doughnut',
+			data: data7,
+			options: {
+				animation: {
+					duration:	3000
+				},
+				responsive: true,
+				legend: {
+					labels: {
+					fontFamily: "Nunito Sans",
+					fontColor:"#878787"
+					}
+				},
+				tooltip: {
+					backgroundColor:'rgba(33,33,33,1)',
+					cornerRadius:0,
+					footerFontFamily:"'Nunito Sans'"
+				},
+				elements: {
+					arc: {
+						borderWidth: 0
+					}
+				}
+			}
+		});
+
+    </script>
+    <script>
+		var ctx7 = document.getElementById("doughnut-chart1").getContext("2d");
+		var data7 = {
+			 labels: [
+			"Naqd",
+			"Bank",
+			"Plastik"
+		],
+		datasets: [
+			{
+				data: [parseInt({{ expansenaqd }}), parseInt({{ expansebank }}), parseInt({{ expanseplastik }})],
+				backgroundColor: [
+					"#389f99",
+					"#ee1044",
+					"#ff8f00"
+				],
+				hoverBackgroundColor: [
+					"#18625e",
+					"#b31338",
+					"#c0720f"
+				]
+			}]
+		};
+
+		var doughnutChart = new Chart(ctx7, {
+			type: 'doughnut',
+			data: data7,
+			options: {
+				animation: {
+					duration:	3000
+				},
+				responsive: true,
+				legend: {
+					labels: {
+					fontFamily: "Nunito Sans",
+					fontColor:"#878787"
+					}
+				},
+				tooltip: {
+					backgroundColor:'rgba(33,33,33,1)',
+					cornerRadius:0,
+					footerFontFamily:"'Nunito Sans'"
+				},
+				elements: {
+					arc: {
+						borderWidth: 0
+					}
+				}
+			}
+		});
+
+    </script>
+    <script>
+        $(function (){
+            var options = {
+                series: [{
+                    name: "Order",
+                    data: [parseInt('{{jank}}'), parseInt('{{febk}}'), parseInt('{{mark}}'), parseInt('{{aprk}}'), parseInt('{{mayk}}'), parseInt('{{junk}}'), parseInt('{{julk}}'), parseInt('{{augk}}'), parseInt('{{sepk}}'), parseInt('{{octk}}'), parseInt('{{novk}}'), parseInt('{{deck}}')]
+                },
+                {   name: "Qaytuv",
+                    data: [parseInt('{{janch}}'), parseInt('{{febch}}'), parseInt('{{march}}'), parseInt('{{aprch}}'), parseInt('{{maych}}'), parseInt('{{junch}}'), parseInt('{{julch}}'), parseInt('{{augch}}'), parseInt('{{sepch}}'), parseInt('{{octch}}'), parseInt('{{novch}}'), parseInt('{{decch}}')]
+                }],
+                chart: {
+                foreColor:"#bac0c7",
+                  height: 385,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                colors:['#0F5EF7', '#ff0000'],
+                dataLabels: {
+                  enabled: false,
+                },
+                stroke: {
+                    show: true,
+                    curve: 'smooth',
+                    lineCap: 'butt',
+                    colors: undefined,
+                    width: 5,
+                    dashArray: 0,
+                },
+                markers: {
+                    size: 5,
+                    colors: '#ffffff',
+                    strokeColors: ['#0F5EF7', '#ff0000'],
+                    strokeWidth: 3,
+                    strokeOpacity: 0.9,
+                    strokeDashArray: 0,
+                    fillOpacity: 1,
+                    discrete: [],
+                    shape: "circle",
+                    radius: 5,
+                    offsetX: 0,
+                    offsetY: 0,
+                    onClick: undefined,
+                    onDblClick: undefined,
+                    hover: {
+                      size: undefined,
+                      sizeOffset: 3
+                    }
+                },
+                grid: {
+                    borderColor: '#f7f7f7',
+                  row: {
+                    colors: ['transparent'], // takes an array which will be repeated on columns
+                    opacity: 0
+                  },
+                  yaxis: {
+                    lines: {
+                      show: true,
+                    },
+                  },
+                },
+                xaxis: {
+                  categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                  labels: {
+                    show: true,
+                  },
+                  axisBorder: {
+                    show: true
+                  },
+                  axisTicks: {
+                    show: true
+                  },
+                  tooltip: {
+                    enabled: true,
+                  },
+                },
+                yaxis: {
+                  labels: {
+                    show: true,
+                    formatter: function (val) {
+                      return val + " sum";
+                    }
+                  },
+                },
+              };
+            const chart = new ApexCharts(document.querySelector("#charts_widget_43_chart"), options);
+            chart.render();
+            if ( $("#customer").change(function ()  {
+                customer = document.getElementById('customer').value;
+                var data = {
+                        'customer': String(customer),
+                    }
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "get-changechart" %}',
+                    data: data,
+                    success: function (dt) {
+                        chart.updateSeries([{
+                            name: "Buyurtma",
+                            data: [parseInt(dt.jank), parseInt(dt.febk), parseInt(dt.mark), parseInt(dt.aprk), parseInt(dt.mayk), parseInt(dt.junk), parseInt(dt.julk), parseInt(dt.augk), parseInt(dt.sepk), parseInt(dt.octk), parseInt(dt.novk), parseInt(dt.deck)]
+                        },
+                        {   name: "Qaytuv",
+                            data: [parseInt(dt.janch), parseInt(dt.febch), parseInt(dt.march), parseInt(dt.aprch), parseInt(dt.maych), parseInt(dt.junch), parseInt(dt.julch), parseInt(dt.augch), parseInt(dt.sepch), parseInt(dt.octch), parseInt(dt.novch), parseInt(dt.decch)]
+                        }])
+                    }
+                })
+                }));
+            });
+    </script>
+    <script>
+        $(function (){
+
+        var options = {
+            series: [{
+                name: "Bugdoy",
+                data: [parseInt('{{janb}}'), parseInt('{{febb}}'), parseInt('{{marb}}'), parseInt('{{aprb}}'), parseInt('{{mayb}}'), parseInt('{{junb}}'), '{{julb}}', parseInt('{{augb}}'), parseInt('{{sepb}}'), parseInt('{{octb}}'), parseInt('{{novb}}'), parseInt('{{decb}}')]
+            }],
+            chart: {
+            foreColor:"#bac0c7",
+              height: 385,
+              type: 'line',
+              zoom: {
+                enabled: false
+              }
+            },
+            colors:['#0F5EF7'],
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'butt',
+                colors: undefined,
+                width: 5,
+                dashArray: 0,
+            },
+            markers: {
+                size: 5,
+                colors: '#ffffff',
+                strokeColors: '#0F5EF7',
+                strokeWidth: 3,
+                strokeOpacity: 0.9,
+                strokeDashArray: 0,
+                fillOpacity: 1,
+                discrete: [],
+                shape: "circle",
+                radius: 5,
+                offsetX: 0,
+                offsetY: 0,
+                onClick: undefined,
+                onDblClick: undefined,
+                hover: {
+                  size: undefined,
+                  sizeOffset: 3
+                }
+            },
+            grid: {
+                borderColor: '#f7f7f7',
+              row: {
+                colors: ['transparent'], // takes an array which will be repeated on columns
+                opacity: 0
+              },
+              yaxis: {
+                lines: {
+                  show: true,
+                },
+              },
+            },
+            xaxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              labels: {
+                show: true,
+              },
+              axisBorder: {
+                show: true
+              },
+              axisTicks: {
+                show: true
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+            yaxis: {
+              labels: {
+                show: true,
+                formatter: function (val) {
+                  return val + " sum";
+                }
+              },
+            },
+          };
+          var chart = new ApexCharts(document.querySelector("#charts_widget_43_chart1"), options);
+          chart.render(false);
+          if ( $("#client").change(function ()  {
+                client = document.getElementById('client').value;
+                var data = {
+                        'client': String(client),
+                    }
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "getchangechartdashbug" %}',
+                    data: data,
+                    success: function (dt) {
+                        chart.updateSeries([{
+                            name: "Bugdoy",
+                            data: [parseInt(dt.janb), parseInt(dt.febb), parseInt(dt.marb), parseInt(dt.aprb), parseInt(dt.mayb), parseInt(dt.junb), parseInt(dt.julb), parseInt(dt.augb), parseInt(dt.sepb), parseInt(dt.octb), parseInt(dt.novb), parseInt(dt.decb)]
+                        }])
+                    }
+                })
+                }));
+
+        })
+
+    </script>
+    <script>
+    function myFunction() {
+        start = document.getElementById('start').value;
+        end = document.getElementById('end').value;
+        var data = {
+            'start': String(start),
+            'end': String(end),
+        }
+        $.ajax({
+            type: 'GET',
+            url: '{% url "get-dashdetailbug" %}',
+            data: data,
+            success: function (dt){
+                document.getElementById('neworder').innerText = dt.neworder;
+                document.getElementById('oldorder').innerText = dt.oldorder;
+                document.getElementById('newqaytuv').innerText = dt.newqaytuv;
+                document.getElementById('oldqaytuv').innerText = dt.oldqaytuv;
+            }
+        });
+    }
+    </script>
+
+
+
+{% endblock js %}

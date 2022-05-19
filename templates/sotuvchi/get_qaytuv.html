@@ -1,0 +1,228 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+{% load humanize %}
+
+<style>
+    @media (max-width: 1200px) {
+        .change-item-formss-in{
+            margin:15px 0px;
+        }
+        .secondss-item1{
+            max-width: 270px;
+        }
+    }
+
+    @media (max-width: 802px) {
+        .excel-movings{
+            display: block !important;
+            width: 100% !important;
+            text-align: left !important;
+            margin-top: 15px !important;
+            margin-bottom: 15px !important;
+
+        }
+
+        .filesIcosls{
+            text-align: left !important;
+        }
+    }
+        
+
+    @media (max-width: 352px) {
+        .check-ipdsa{
+          padding: 18px 5px 0px 5px !important;
+        }
+        .change-item-formss-in{
+            margin:15px 0px;
+            width: 100% !important;
+            padding: 5px 0px !important;
+        }
+
+        .parent-second-itemsaa{
+            padding: 5px 0px !important;
+        }
+
+        .myffs{
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+
+        
+
+        .sqwets{
+            width:65% !important;
+            position: static !important;
+        }
+
+        .sqwets select{
+            width: 100% !important;
+        }
+        
+        .tech-grs{
+            width:30% !important;
+            margin: 0 !important;
+            display: block !important;
+            position: relative !important;
+            top: -9px !important;
+        }
+        
+        .secondss-item1{
+            max-width: 270px;
+        }
+
+        .letmeCheck{
+            padding-left: 0px !important;
+        }
+
+    }
+        
+</style>
+
+{% endblock css %}
+{% block menu %}
+    {% include 'menu/menu_sotuvchi.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content check-ipdsa">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <h4 class="box-title">Qaytib olish ro'yxati</h4>                                         
+                                    </div>
+                                    <div class="col-xl-4 change-item-formss-in">
+                                        <form action="{% url 'sotuvchi-create-qaytuv' %}" method="post" class="form-inline myffs">
+                                        {% csrf_token %}
+                                            <div class="form-group  sqwets">
+                                                <select class="form-control" name="customer" style="width: 220px;"
+                                                        required>
+                                                    <option value="">Xaridor</option>
+                                                    {% for client in customers %}
+                                                        <option value="{{ client.id }}">{{ client.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group tech-grs" style="position: relative;left:15px;">
+                                                <button type="submit"
+                                                        style="width: 32px; height: 32px; padding: 2px;"
+                                                        class="btn btn-success"><i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div class="col-xl-4 parent-second-itemsaa">
+                                        <div class="input-group secondss-item1">
+                                            <input type="text" onchange="filterdate(this)"
+                                                   class="form-control pull-right" id="reservation">
+                                            <a href="" id="date_f">
+                                                <div class="input-group-addon"
+                                                     style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body letmeCheck">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0" class="table table-striped table-bordered display filter-table" id="excel">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Xaridor</th>
+                                            <th scope="col">Sotuvchi</th>
+                                            <th scope="col">Summa</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Sana</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for ord in orders %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>
+                                                    <a href="{% url 'sotuvchi-qaytuv-detail' ord.id %}">{{ ord.customer.name }}</a>
+                                                </td>
+                                                <td>{{ ord.seller.username }}</td>
+                                                <td>{{ ord.summa_total|intcomma }}</td>
+                                                {% if ord.status == 1 %}
+                                                    <td><span class="badge badge-warning">Buyurtma olindi</span></td>
+                                                {% else %}
+                                                    <td><span class="badge badge-success">Bajarildi</span></td>
+                                                {% endif %}
+                                                <td>{{ ord.date }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+    <script>
+        // $('#excel').DataTable( {
+        //     dom: 'Bfrtip',
+        //     buttons: [
+        //      'excel','pdf'
+        //     ]
+        // } );
+
+        $('#excel').DataTable( {
+            'dom': 'Blfrtip',
+            'buttons': [
+            { extend: 'excel', className: 'excelButton' },
+            { extend: 'pdf', className: 'pdfButton' }
+            ],
+            'pageLength':100,
+            'lengthChange': true,
+            
+        } );
+
+        document.querySelector("#excel_filter").classList.add("excel-movings");
+        document.querySelector(".dt-buttons").classList.add("filesIcosls");
+    </script>
+
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    <script>
+      function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+        }
+    </script>
+{% endblock js %}

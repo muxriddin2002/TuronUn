@@ -1,0 +1,456 @@
+{% load humanize %}
+{% for vg in products %}
+
+<tr>
+
+  <input type="hidden" id="pro_id" value="{{vg.id}}" />
+
+  <th scope="row" class="fixedColl-counter">{{ forloop.counter }}</th>
+
+  <td class="fixedColl-product">{{ vg.product }}</td>
+
+  <td class="vg_move text-center">{{vg.miqdori|floatformat:2}}</td>
+
+  <td>
+    <input
+      type="text"
+      placeholder="Narxi"
+      id="narxi"
+      class="narxi myField jspython"
+      name="narxi"
+      required
+    />
+  </td>
+
+  <td>
+    <input
+      type="text"
+      name="qop_soni"
+      placeholder="Hajmi"
+      id="miqdori"
+      class="miqdori myField jspython"
+      name="miqdor"
+      required
+    />
+  </td>
+
+  <td id="total_expenses">
+    <input type="text" class="total rubyLang" placeholder="Jami summa" disabled />
+  </td>
+
+  <td>
+    <a id="save_a" class="links d-none save_it btn btn-primary"
+      ><i class="fa fa-save"></i
+    ></a>
+    <button class="btn_sub btn btn-primary">
+      <i class="fa fa-save btn_sub"></i>
+    </button>
+    <a id="edit_a" style="display: none" class="edit_it btn btn-primary"
+      ><i class="fa fa-edit"></i
+    ></a>
+  </td>
+
+  <td>
+    <!-- ajax send -->
+    <form id='modelForm' data-modal-url="{% url 'ajax_load_modal'  %}"  >
+      <input type="hidden" value="" class="hidden_order">
+
+      <button
+      id="id_model_products"
+      type="button"
+      class="btn btn-primary"
+      data-toggle="modal"
+      data-target="#exampleModal"
+    >
+       <i class="fa fa-pencil"></i>
+    </button>
+    </form>
+
+  </td>
+
+<script>
+  let price = document.querySelectorAll(".narxi");
+  let amount = document.querySelectorAll(".miqdori");
+  let pro_ID = document.querySelector(".pro_ID");
+
+  let order_id = window.location.pathname.split("/").pop();
+  
+
+  price.forEach((eachPrice) => {
+    
+    let priceValue = 0;
+    let amountValue = 0;
+    let pro_id =
+      eachPrice.parentElement.previousElementSibling.previousElementSibling
+        .previousElementSibling.previousElementSibling.value;
+    let a =
+      eachPrice.parentElement.nextElementSibling.nextElementSibling
+        .nextElementSibling.children[0];
+
+    let b =
+      eachPrice.parentElement.nextElementSibling.nextElementSibling
+        .nextElementSibling.children[1];
+
+    let amount = eachPrice.parentElement.nextElementSibling.children[0];
+
+    eachPrice.addEventListener("keyup", (e) => {
+      priceValue = e.target.value;
+      console.log(amountValue, "check");
+      if (!priceValue || !amountValue) {
+        a.style.pointerEvents = "none";
+      } else {
+        a.style.pointerEvents = "fill";
+
+        a.setAttribute(
+          "href",
+          "{% url 'sotuvchi-add-basket' %}/" +
+            order_id +
+            "/" +
+            pro_id +
+            "/" +
+            priceValue +
+            "/" +
+            amountValue
+        );
+
+        b.setAttribute(
+          "name",
+          "{% url 'sotuvchi-add-basket' %}/" +
+            order_id +
+            "/" +
+            pro_id +
+            "/" +
+            priceValue +
+            "/" +
+            amountValue
+        );
+
+        a.addEventListener("click", (e) => {
+          console.log(
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+        });
+
+        b.addEventListener("click", (e) => {
+          console.log(
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+        });
+      }
+    });
+
+    amount.addEventListener("change", (e) => {
+      amountValue = e.target.value;
+
+      if (!priceValue || !amountValue) {
+        a.style.pointerEvents = "none";
+        b.style.pointerEvents = "none";
+      } else {
+        a.style.pointerEvents = "fill";
+        b.style.pointerEvents = "fill";
+
+        a.setAttribute(
+          "href",
+          "{% url 'sotuvchi-add-basket' %}/" +
+            order_id +
+            "/" +
+            pro_id +
+            "/" +
+            priceValue +
+            "/" +
+            amountValue
+        );
+
+        b.setAttribute(
+          "name",
+          "{% url 'sotuvchi-add-basket' %}/" +
+            order_id +
+            "/" +
+            pro_id +
+            "/" +
+            priceValue +
+            "/" +
+            amountValue
+        );
+
+        a.addEventListener("click", (e) => {
+          console.log(
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+        });
+
+        b.addEventListener("click", (e) => {
+          console.log(
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+        });
+      }
+    });
+  });
+
+
+</script>
+  
+</tr>
+
+{% endfor %}
+
+<!-- jami sum  -->
+<script>
+  (function () {
+    "use strict";
+
+    $("table").on("change", "input", function () {
+      var row = $(this).closest("tr");
+      var qty = parseFloat(row.find(".miqdori").val());
+      var price = parseFloat(row.find(".narxi").val());
+      var total = qty * price;
+      row.find(".total").val(isNaN(total) ? "" : total);
+    });
+
+    let price = document.querySelectorAll(".narxi");
+    let amount = document.querySelectorAll(".miqdori");
+    let pro_ID = document.querySelector(".pro_ID");
+
+    let order_id = window.location.pathname.split("/").pop();
+
+    price.forEach((eachPrice) => {
+      let priceValue = 0;
+      let amountValue = 0;
+      let pro_id =
+        eachPrice.parentElement.previousElementSibling.previousElementSibling
+          .previousElementSibling.previousElementSibling.value;
+      let a =
+        eachPrice.parentElement.nextElementSibling.nextElementSibling
+          .nextElementSibling.children[0];
+      let b =
+        eachPrice.parentElement.nextElementSibling.nextElementSibling
+          .nextElementSibling.children[1];
+
+      let amount = eachPrice.parentElement.nextElementSibling.children[0];
+      amount.addEventListener("keyup", (e) => {
+        amountValue = e.target.value;
+        if (!priceValue || !amountValue) {
+          a.style.pointerEvents = "none";
+          b.style.pointerEvents = "none";
+        } else {
+          a.style.pointerEvents = "fill";
+          b.style.pointerEvents = "fill";
+
+          a.setAttribute(
+            "href",
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+
+          b.setAttribute(
+            "name",
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+
+          a.addEventListener("click", (e) => {
+            console.log(
+              "{% url 'sotuvchi-add-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+          });
+
+          b.addEventListener("click", (e) => {
+            console.log(
+              "{% url 'sotuvchi-add-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+          });
+        }
+      });
+
+      eachPrice.addEventListener("keyup", (e) => {
+        priceValue = e.target.value;
+        if (!priceValue || !amountValue) {
+          a.style.pointerEvents = "none";
+          b.style.pointerEvents = "none";
+        } else {
+          a.style.pointerEvents = "fill";
+          b.style.pointerEvents = "fill";
+
+          a.setAttribute(
+            "href",
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+
+          b.setAttribute(
+            "name",
+            "{% url 'sotuvchi-add-basket' %}/" +
+              order_id +
+              "/" +
+              pro_id +
+              "/" +
+              priceValue +
+              "/" +
+              amountValue
+          );
+
+          a.addEventListener("click", (e) => {
+            console.log(
+              "{% url 'sotuvchi-add-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+          });
+
+          b.addEventListener("click", (e) => {
+            console.log(
+              "{% url 'sotuvchi-add-basket' %}/" +
+                order_id +
+                "/" +
+                pro_id +
+                "/" +
+                priceValue +
+                "/" +
+                amountValue
+            );
+          });
+        }
+      });
+    });
+
+    $(".save_it").click(function (e) {
+      e.preventDefault();
+      var targetUrl = $(this).attr("href");
+      if (targetUrl) {
+        $.ajax({
+          url: targetUrl,
+          type: "GET",
+          //dataType: "json",
+          success: function () {
+            alert("done");
+            //alert(JSON.parse(response["is_already_created"]));
+            document.querySelector("#save_a").style.display = "none";
+            document.querySelector("#edit_a").style.display = "inline";
+            //document.querySelector("#is_saved").value = true;
+          },
+          error: function () {
+            alert("error");
+            //alert(JSON.stringify(response["responseText"]));
+          },
+        });
+      }
+    });
+  })();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- <script src="sweetalert2.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css" /> -->
+
+<script>
+  (function () {
+    "use strict";
+    let hiddenOrder = document.querySelectorAll(".hidden_order")
+    hiddenOrder.forEach(item=>item.value = window.location.pathname.split("/").pop())
+
+    $("table").on("change", "input", function () {
+      var row = $(this).closest("tr");
+      var qty = parseFloat(row.find(".miqdori").val());
+      var price = parseFloat(row.find(".narxi").val());
+      var total = qty * price;
+      row.find(".total").val(isNaN(total) ? "" : total);
+    });
+
+    $(".btn_sub").click(function (e) {
+      e.preventDefault();
+      var targetUrl = $(this).attr("name");
+      console.log(targetUrl);
+      if (targetUrl) {
+        $.ajax({
+          url: targetUrl,
+          type: "GET",
+          //dataType: "json",
+          success: function () {
+            Swal.fire({
+              position: "top-center",
+              icon: "success",
+              title: "Muvofaqqiyatli saqlandi!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            //alert(JSON.parse(response["is_already_created"]));
+          },
+          error: function (data) {
+            Swal.fire({
+              icon: "error",
+              title: "",
+              text: data.responseJSON.message,
+            });
+            //alert(JSON.stringify(response["responseText"]));
+          },
+        });
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,66 @@
+<ul class="sidebar-menu" data-widget="tree">
+
+    <!-- <li>
+        <a href="{% url 'kassir-dashboard' %}">
+            <i data-feather="pie-chart"></i>
+            <span>Dashboard</span>
+        </a>
+    </li> -->
+    <li>
+        <a href="{% url 'bugdoy_clients' %}">
+            <i data-feather="users"></i>
+            <span>Bugdoy Taminotchilari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'un_clients' %}">
+            <i data-feather="users"></i>
+            <span>Un Taminotchilari</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'bugalter_clients' %}">
+            <i data-feather="users"></i>
+            <span>Mijozlar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'expance' %}">
+            <i data-feather="clipboard"></i>
+            <span>Chiqim</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'wheatexpances' %}">
+            <i data-feather="clipboard"></i>
+            <span>Bugdoy chiqimlar</span>
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'unexpances' %}">
+            <i data-feather="clipboard"></i>
+            <span>Un chiqimlar</span>
+        </a>
+    </li>
+
+    <li class="treeview">
+        <a href="">
+            <span class="iconify" data-icon="fluent:payment-16-filled" style="font-size: 28px;"></span> 
+            <span>Kassa</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" >
+            <li><a href="{% url 'kassa' %}"><i class="ti-more"></i>Kassa</a></li>
+          </ul>
+    </li>
+
+    <li>
+        <a href="{% url 'logout' %}">
+            <i data-feather="lock"></i>
+            <span>Chiqish</span>
+        </a>
+    </li>
+
+</ul>

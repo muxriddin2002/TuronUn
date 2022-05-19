@@ -1,0 +1,117 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% include 'menu/menu_tarozi_moliya.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+            </div>
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <h4 class="box-title">Aktlar ro'yxati</h4>
+                                    </div>
+                                    <div class="col-xl-4">
+{#                                        <div class="input-group">#}
+{#                                            <input type="text" class="form-control" name="search_akt">#}
+{#                                            <div class="input-group-addon">#}
+{#                                                <i class="fa fa-search"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+
+                                    </div>
+                                    <div class="col-xl-4">
+                                        <div class="input-group">
+                                            <input type="text" onchange="filterdate(this)" class="form-control pull-right" id="reservation">
+                                            <a href="" id="date_f">
+                                            <div class="input-group-addon" style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                                </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0" id = "excel35">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Akt nomi</th>
+                                            <th scope="col">Sana</th>
+                                            <th scope="col">Klient</th>
+                                            <th scope="col">Stansiya</th>
+                                            <th scope="col">Vagon soni</th>
+                                            <th scope="col">Kimga</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for akt in akts %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td><a href="{% url 'tarozi-moliya-unaktlar-chiqim' akt.id %} ">{{ akt.product.name }}</a></td>
+                                                <td>{{ akt.date_start }}</td>
+                                                <td><a href="{% url 'tarozi-moliya-unaktlar-chiqim' akt.id %} {{ akt.id }}">{{ akt.client.compony }}</a></td>
+                                                <td>{{ akt.stansiya }}</td>
+                                                <td>{{ akt.wagons.all|length }}</td>
+                                                <td>{{ akt.branch.name }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    
+      <script>
+        $('#excel35').DataTable( {
+     'dom': 'Blfrtip',
+     'buttons': [
+         'excel',
+         'pdf'
+     ],
+     'pageLength':100,
+     'lengthChange': true,
+     
+    } );
+    </script>
+
+    <script>
+        function filterdate(date){
+            var date_str = date.value.split(" - ")
+            var url_f = "?date_start="+date_str[0]+"&date_end="+date_str[1];
+            $("#date_f").attr("href",url_f);
+        }
+    </script>
+{% endblock js %}

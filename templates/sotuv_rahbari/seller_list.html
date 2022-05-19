@@ -1,0 +1,204 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+{% load humanize %}
+ <link rel="stylesheet" href="{% static 'filter/Filter.css' %}">
+{% endblock css %}
+{% block menu %}
+{% if user.type == 1 %}
+    {% include 'menu/menu_director.html' %}
+{% endif %}
+{% if user.type == 2 %}
+    {% include 'menu/menu_bugalter.html' %}
+{% endif %}
+{% if user.type == 4 %}
+    {% include 'menu/menu_sotuvchi.html' %}
+{% endif %}
+{% if user.type == 17 %}
+    {% include 'menu/menu_sotuv_rahbari.html' %}
+{% endif %}
+{% if user.type == 18 %}
+    {% include 'menu/menu_operator.html' %}
+{% endif %}
+
+
+{% endblock menu %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+     
+                <!-- Button trigger modal -->
+
+                    <div class="row" style="padding-top:10px;">
+                    <!-- message -->
+                        <div class="col-12 " id="message_container">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.tags == 'success' %}
+                                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                                    {% elif message.tags == 'error' %}
+                                        <button class="tst3 btn btn-danger btn-block mb-15">{{ message }}</button>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+
+                        <div class="col-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h4 class="box-title">Sotuvchilar hisoboti</h4>
+                                    
+                                    <!-- <div class="col-xl-3" style="margin-left: auto;">
+                                        <div class="input-group">
+                                            <input type="text" onchange="filterdate(this)"
+                                                   class="form-control pull-right" id="reservation">
+                                            <a href="" id="date_f">
+                                                <div class="input-group-addon"
+                                                     style="padding:10px; border-radius: 0px 10px 10px 0px;">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                            </a>
+
+                                        </div>
+                                        <br>  
+                                    </div> -->
+
+                                </div>
+                                
+                                
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table id="excel26" class="table table-striped table-bordered display filter-table" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th>Ismi</th>
+                                                    <th>Raqami</th>
+                                                    <th>Tegirmon</th>
+                                                    <th>Plan qob soni</th>
+                                                    
+                                                    {% if user.type == 17 or user.type == 1  %}
+                                                        <th>Plan belgilash</th>
+                                                    {% endif %}
+                                                        
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+            
+                                                {% for i in sellers %}
+                                                    <tr>
+                                                        <th scope="row">{{ forloop.counter }}</th>
+                                                        <td>
+                                                            <a href="{% url 'sotuv-rahbari-seller-detail' i.id %}">{{i.first_name}}</a>
+                                                        </td>
+                                                        <td>{{i.phone |default_if_none:"Yo'q"}}</td>
+                                                        
+                                                        <td>{{i.tegirmon |default_if_none:"Yo'q"}}</td>
+                                                        <td>
+                                                            {{i.plan.soni|default_if_none:"Yo'q"}}
+                                                        </td>
+                                                        {% if user.type == 17 or user.type == 1  %}
+                                                            <td>  <button data-toggle="modal" class="form-control" data-target="#modal-center{{i.id}}">
+                                                                    Plan qo'shish
+                                                                </button>
+                                                            </td>
+                                                        {% endif %}
+                                                    </tr>
+                                                {% endfor %}
+          
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- MODAL  -->
+                     {% for i in sellers %}
+                     <div class="modal center-modal fade" id="modal-center{{i.id}}" tabindex="-1">
+                         <div class="modal-dialog">
+                             <div class="modal-content">
+                                 <div class="modal-header">
+                                     <h5 class="modal-title">1 oy uchun {{ i }}ga plan belgilash</h5>
+                                     <button type="button" class="close" data-dismiss="modal">
+                                         <span aria-hidden="true">&times;</span>
+                                     </button>
+                                 </div>
+                                 <div class="modal-body">
+                                     <form action="{% url 'set_plan' %}" method="post">
+                                         {% csrf_token %}
+                                       
+                                         <div class="form-group">
+                                             <input type="text" name="plan" class="form-control" placeholder="{{i.plan.soni}}">
+                                             <input type="hidden" name="id" value="{{ i.id }}">
+                                         </div>
+                                         <div class="form-group">
+                                         <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">
+                                             Yopish
+                                         </button>
+                                         <button type="submit" class="btn btn-rounded btn-primary float-right">
+                                             Plan belgilash
+                                         </button>
+                                         </div>
+                                     </form>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     {% endfor %}
+
+            </section>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<!-- Vendor JS -->
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+	<!-- Sunny Admin App -->
+    <script src="{% static 'filter/Filter.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    
+    <script>
+      function filterdate(date) {
+        var date_str = date.value.split(" - ")
+        console.log(date_str)
+        let filter_1 = date_str[0].split("/")
+        let result_1 = `${filter_1[1]}/${filter_1[0]}/${filter_1[2]}`
+
+        let filter_2 = date_str[1].split("/")
+        let result_2 = `${filter_2[1]}/${filter_2[0]}/${filter_2[2]}`
+
+        var url_f = "?date_start=" + result_1 + "&date_end=" + result_2;
+        $("#date_f").attr("href", url_f);
+        }
+    </script>
+
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+      <script>
+        $('#excel26').DataTable( {
+     'dom': 'Blfrtip',
+     'buttons': [
+         'excel',
+         'pdf'
+     ],
+     'pageLength':100,
+     'lengthChange': true,
+     
+ } );
+ </script>
+{% endblock js %}

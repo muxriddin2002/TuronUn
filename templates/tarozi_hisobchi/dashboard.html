@@ -1,0 +1,408 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block menu %}
+    {% include 'menu/menu_tarozi_hisobchi.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-12 py-4">
+                        <div class="row" style="margin: 0 auto">
+                            <div class="offset-lg-3 col-lg-2 py-1 text-center">
+                                <input type="date" id="start" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-2 py-1 text-center">
+                                <input type="date" id="end" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-1 py-1 text-center">
+                                <button onclick="myFunction()" class="btn btn-primary">Filtrlash</button>
+                            </div>
+                        </div>
+                    </div>
+                <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p class="text-center text-mute mt-20 mb-0 font-size-16">Bug'doy Taminotchilar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ client_bugdoy|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p  class="text-center text-mute mt-20 mb-0 font-size-16">Un Taminotchilar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center">{{ client_un|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p  class="text-center text-mute mt-20 mb-0 font-size-16">Kelgan vagonlar soni</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="old_wagons">{{ old_wagons|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-warning-light text-center rounded w-60 h-60">
+                                    <i class="text-warning font-size-24 mdi mdi-car"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Kelayotgan vagonlar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="new_wagons">{{ new_wagons|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-info-light rounded w-60 h-60">
+                                    <i class="text-info mr-0 font-size-24 mdi mdi-sale"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Chiqib ketgan Un</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="total_un">{{ total_un|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-danger-light rounded w-60 h-60">
+                                    <i class="text-danger mr-0 font-size-24 mdi mdi-phone-incoming"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Chiqib ketgan Yem</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="total_yem">{{ total_yem|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Bugdoy
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12 py-4">
+                                        <div class="box no-shadow mb-0">
+                                            <select class="form-control" id="client">
+                                                {% for cus in clients %}
+                                                <option value="{{ cus.id }}">{{ cus.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="charts_widget_43_chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Un
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12 py-4">
+                                        <div class="box no-shadow mb-0">
+                                            <select class="form-control" id="clientun">
+                                                {% for cus in clientun %}
+                                                <option value="{{ cus.id }}">{{ cus.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="charts_widget_43_chart1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'assets/vendor_components/easypiechart/dist/jquery.easypiechart.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/irregular-data-series.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/dist/apexcharts.js' %}"></script>
+
+    <!-- Sunny Admin App -->
+    <script src="{% static 'main/js/template.js' %}"></script>
+    <script src="{% static 'main/js/pages/dashboard.js' %}"></script>
+    <script>
+        $(function (){
+
+        var options = {
+            series: [{
+                name: "Bugdoy",
+                data: [parseInt('{{jan}}'), parseInt('{{feb}}'), parseInt('{{mar}}'), parseInt('{{apr}}'), parseInt('{{may}}'), parseInt('{{jun}}'), '{{jul}}', parseInt('{{aug}}'), parseInt('{{sep}}'), parseInt('{{oct}}'), parseInt('{{nov}}'), parseInt('{{dec}}')]
+            },],
+            chart: {
+            foreColor:"#bac0c7",
+              height: 385,
+              type: 'line',
+              zoom: {
+                enabled: false
+              }
+            },
+            colors:['#0F5EF7'],
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'butt',
+                colors: undefined,
+                width: 5,
+                dashArray: 0,
+            },
+            markers: {
+                size: 5,
+                colors: '#ffffff',
+                strokeColors: '#0F5EF7',
+                strokeWidth: 3,
+                strokeOpacity: 0.9,
+                strokeDashArray: 0,
+                fillOpacity: 1,
+                discrete: [],
+                shape: "circle",
+                radius: 5,
+                offsetX: 0,
+                offsetY: 0,
+                onClick: undefined,
+                onDblClick: undefined,
+                hover: {
+                  size: undefined,
+                  sizeOffset: 3
+                }
+            },
+            grid: {
+                borderColor: '#f7f7f7',
+              row: {
+                colors: ['transparent'], // takes an array which will be repeated on columns
+                opacity: 0
+              },
+              yaxis: {
+                lines: {
+                  show: true,
+                },
+              },
+            },
+            xaxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              labels: {
+                show: true,
+              },
+              axisBorder: {
+                show: true
+              },
+              axisTicks: {
+                show: true
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+            yaxis: {
+              labels: {
+                show: true,
+                formatter: function (val) {
+                  return val + " ta";
+                }
+              },
+            },
+          };
+          var chart = new ApexCharts(document.querySelector("#charts_widget_43_chart"), options);
+          chart.render();
+          if ( $("#client").change(function ()  {
+                client = document.getElementById('client').value;
+                var data = {
+                        'client': String(client),
+                    }
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "getchangechartdashtar" %}',
+                    data: data,
+                    success: function (dt) {
+                        chart.updateSeries([{
+                            name: "Bugdoy",
+                            data: [parseInt(dt.janb), parseInt(dt.febb), parseInt(dt.marb), parseInt(dt.aprb), parseInt(dt.mayb), parseInt(dt.junb), parseInt(dt.julb), parseInt(dt.augb), parseInt(dt.sepb), parseInt(dt.octb), parseInt(dt.novb), parseInt(dt.decb)]
+                        }])
+                    }
+                })
+                }));
+
+        })
+    </script>
+
+    <script>
+        $(function (){
+
+        var options = {
+            series: [{
+                name: "Un",
+                data: [parseInt('{{janc}}'), parseInt('{{febc}}'), parseInt('{{marc}}'), parseInt('{{aprc}}'), parseInt('{{mayc}}'), parseInt('{{junc}}'), '{{julc}}', parseInt('{{augc}}'), parseInt('{{sepc}}'), parseInt('{{octc}}'), parseInt('{{novc}}'), parseInt('{{decc}}')]
+            },],
+            chart: {
+            foreColor:"#bac0c7",
+              height: 385,
+              type: 'line',
+              zoom: {
+                enabled: false
+              }
+            },
+            colors:['#0F5EF7'],
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'butt',
+                colors: undefined,
+                width: 5,
+                dashArray: 0,
+            },
+            markers: {
+                size: 5,
+                colors: '#ffffff',
+                strokeColors: '#0F5EF7',
+                strokeWidth: 3,
+                strokeOpacity: 0.9,
+                strokeDashArray: 0,
+                fillOpacity: 1,
+                discrete: [],
+                shape: "circle",
+                radius: 5,
+                offsetX: 0,
+                offsetY: 0,
+                onClick: undefined,
+                onDblClick: undefined,
+                hover: {
+                  size: undefined,
+                  sizeOffset: 3
+                }
+            },
+            grid: {
+                borderColor: '#f7f7f7',
+              row: {
+                colors: ['transparent'], // takes an array which will be repeated on columns
+                opacity: 0
+              },
+              yaxis: {
+                lines: {
+                  show: true,
+                },
+              },
+            },
+            xaxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              labels: {
+                show: true,
+              },
+              axisBorder: {
+                show: true
+              },
+              axisTicks: {
+                show: true
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+            yaxis: {
+              labels: {
+                show: true,
+                formatter: function (val) {
+                  return val + " ta";
+                }
+              },
+            },
+          };
+          var chart = new ApexCharts(document.querySelector("#charts_widget_43_chart1"), options);
+          chart.render();
+          if ( $("#clientun").change(function ()  {
+                client = document.getElementById('clientun').value;
+                var data = {
+                        'client': String(client),
+                    }
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "getchangechartdashun" %}',
+                    data: data,
+                    success: function (dt) {
+                        chart.updateSeries([{
+                            name: "Un",
+                            data: [parseInt(dt.janb), parseInt(dt.febb), parseInt(dt.marb), parseInt(dt.aprb), parseInt(dt.mayb), parseInt(dt.junb), parseInt(dt.julb), parseInt(dt.augb), parseInt(dt.sepb), parseInt(dt.octb), parseInt(dt.novb), parseInt(dt.decb)]
+                        }])
+                    }
+                })
+                }));
+
+        })
+    </script>
+
+    <script>
+    function myFunction() {
+        start = document.getElementById('start').value;
+        end = document.getElementById('end').value;
+        var data = {
+            'start': String(start),
+            'end': String(end),
+        }
+        $.ajax({
+            type: 'GET',
+            url: '{% url "get-dashdetail" %}',
+            data: data,
+            success: function (dt){
+                document.getElementById('old_wagons').innerText = dt.old_wagons;
+                document.getElementById('new_wagons').innerText = dt.new_wagons;
+                document.getElementById('total_un').innerText = dt.total_un;
+                document.getElementById('total_yem').innerText = dt.total_yem;
+
+
+            }
+        });
+    }
+    </script>
+{% endblock js %}

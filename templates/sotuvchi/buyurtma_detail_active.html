@@ -1,0 +1,79 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock css %}
+{% block menu %}
+    {% if user.type == 8 %}
+    {% include 'menu/menu_tarozi_hisobchi.html' %}
+    {% elif user.type == 10  %}
+    {% include 'menu/menu_texnolog.html' %}
+    {% elif user.type == 4  %}
+    {% include 'menu/menu_sotuvchi.html' %}
+    {% elif user.type == 17  %}
+    {% include 'menu/menu_sotuv_rahbari.html' %}
+    {% else %}
+    {% include 'menu/menu_tarozi_moliya.html' %}
+    {% endif %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <h3>Buyurtmachi : {{ order.customer.name }}</h3>
+            </div>
+            <section class="content">
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Mahsulotlar ro'yxati</h4>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive-lg">
+                                    <table class="table mb-0" id="complex_header">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Maxsulot</th>
+                                            <th scope="col">Hajmi</th>
+                                            <th scope="col">Narxi</th>
+                                          
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for vg in order.baskets.all %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ vg.product.product.name }}</td>
+                                                <td>{{ vg.hajmi }}</td>
+                                                <td>{{ vg.price }}</td>
+                                              
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+	<!-- Sunny Admin App -->
+{% endblock js %}

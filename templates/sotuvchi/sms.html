@@ -1,0 +1,131 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+{% endblock css %}
+{% block menu %}
+    {% include 'menu/menu_bugalter.html' %}
+{% endblock menu %}
+{% block content %}
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <div class="container-full">
+
+            <form action="{% url 'smsgateway' %}" method="post">
+        <section class="content">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger">
+                            {{ message }}</div>
+                    {% endif %}
+                    {% if message.tags == "success" %}
+                        <div class="alert alert-success">
+                            {{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <div class="row">
+{#                <div class="col-md-6 col-lg-6">#}
+{#                    <div class="box" style="border:1px solid #3f7bff; border-radius: 5px;">#}
+{#                        <div class="box-header with-border">#}
+{#                            <h4 class="box-title">Lead status</h4>#}
+{#                        </div>#}
+{#                        <div class="box-body">#}
+{#                            <div class="demo-checkbox">#}
+{#                                {% for lead_status_type in lead_status_types %}#}
+{#                                    <input onchange="checkers(this, {{ lead_status_type.0 }})" type="checkbox"#}
+{#                                           value="{{ lead_status_type }}"#}
+{#                                           id="md_checkbox_{{ lead_status_type.0 }}"#}
+{#                                           class="chk-col-primary">#}
+{#                                    <label for="md_checkbox_{{ lead_status_type.0 }}"#}
+{#                                           style="margin-bottom: 5px">{{ lead_status_type.1 }}</label>#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                            <div style="padding: 10px">#}
+{#                                <span style="color: #8a99b5; font-size: 18px; padding: 10px">Jami: {{ lead_count }} ta lead.</span>#}
+{#                                <span style="color: #8a99b5; font-size: 18px; padding: 10px">Filtrlandi <span#}
+{#                                        id="check_result">0</span> ta</span>#}
+{#                                <button onclick="check_filtered_lead_count()" type="button" class="btn btn-primary">#}
+{#                                    Tekshirish#}
+{#                                </button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="col-md-12 col-lg-12">
+                    <div class="box" style="border:1px solid #3f7bff; border-radius: 5px;">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Mijozlar</h4>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <select class="form-control select2" multiple="multiple" id="leads" name="leads"
+                                        data-placeholder="Leadlarni tanlash"
+                                        style="width: 100%;">
+                                    {% for l in mijoz %}
+                                        <option value="{{ l.id }}">{{ l.name|default_if_none:"" }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="box">
+
+                        <div class="box-header with-border">
+                            <h4 class="box-title">SMS Gateway</h4>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            {% csrf_token %}
+                            <div class="demo-checkbox">
+                                <div class="form-group">
+                                    <label>Xabar</label>
+                                    <textarea rows="5" cols="5" class="form-control" name="sms" id="sms"
+                                              placeholder="" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-rounded btn-success pull-right">Jo'natish</button>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </form>
+
+            <div class="content">
+                <div class="row form-group">
+                    <div class="col-2">
+                        <form action="{% url 'addshablon' %}" method="POST">
+                            {% csrf_token %}
+                            <textarea rows="3" cols="5" class="form-control" name="msg" placeholder="" required></textarea>
+                            <button class="form-control mt-1"><i class="fa fa-plus"></i></button>
+                        </form>
+                    </div>
+                    {% for i in example %}
+                    <div class="col-2 mt-2" style="margin-left: 15px; text-align: center; background-color: #2c3866; border-radius: 5px">
+                        <h4 style="padding: 5px">{{ i.msg }}</h4>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block js %}
+
+{% endblock %}

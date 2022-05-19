@@ -1,0 +1,137 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+{% load humanize %}
+
+{% endblock css %}
+{% block menu %}
+
+{% if user.type == 2 %}
+{% include 'menu/menu_bugalter.html' %}
+    
+{% endif %}
+
+{% if user.type == 12 %}
+{% include 'menu/menu_kassir.html' %}
+{% endif %}
+    
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div class="row">
+                    <div class="col-12 " id="message_container">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                        <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                        {% elif message.tags == 'error' %}
+                        <button class="tst3 btn btn-warning btn-block mb-15">{{ message }}</button>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="col-xl-12 col-12 text-center">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div>
+                                    {% if client.debt > 0 %}
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Umumiy Haqdorlik</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{ client.debt|floatformat:2|intcomma }}</h3>
+                                    {% else %}
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Umumiy Qarzdorlik</p>
+                                    <h3 class="text-white mb-0 font-weight-500">{{ client.debt|floatformat:2|intcomma }}</h3>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Button trigger modal -->
+
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h4 class="box-title">Taminotchi to'lov tarixi</h4>
+                                </div>
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table id="complex_header" class="table table-striped table-bordered display" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th>Mijoz ismi</th>
+                                                    <th>Miqdori</th>
+                                                    <th>Tolov qilingan sana</th>
+                                                    <th>Kim tomonidan tolov qilindi</th>
+                                                    <th>Manzil</th>
+                                                    <th>Kurs</th>
+                                                    <th>Bank hisob raqam</th>
+                                                    <th>Tolov turi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    {% for i in payment %}
+                                                <tr>
+                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                    <td>{{i.client}}</td>
+                                                    <td>{{i.payment}}</td>
+                                                    <td>{{ i.date|date:'Y-m-d H:i' }}</td>
+                                                    <td>{{ i.by_user }}</td>
+                                                    <td>{{ i.client.address }}</td>
+                                                    
+                                                    <td>{{ i.currency }}</td>
+                                                    <td>{{ i.bank_shot|default_if_none:'Yuq' }}</td>
+                                                    <td>{{ i.get_turi_display }}</td>
+                                                </tr>
+                                                    {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+<!-- Vendor JS -->
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+	<!-- Sunny Admin App -->
+<script>
+
+    let dollar = {{dollarjs|safe}}
+
+    var lastItem = dollar.pop();
+    $("tbody").find("tr").each(function() { //get all rows in table
+        var ratingTd = $(this).find('td.price-1').text();//Refers to TD element
+        var result = parseFloat(ratingTd) / parseFloat(lastItem.summ)
+        console.log(parseFloat(ratingTd))
+
+        $(this).find('td.result').text(result)
+    });
+
+</script>
+<script>
+
+    var lastItem = dollar.pop();
+
+    console.log($(this).find('td.price-2').text())
+    $("tbody").find("tr").each(function() { //get all rows in table
+        var ratingTd = $(this).find('td.price-2').text();//Refers to TD element
+        var result = parseFloat(ratingTd) / parseFloat(lastItem.summ)
+        console.log(parseFloat(ratingTd))
+
+        $(this).find('td.result1').text(result)
+    });
+
+</script>
+{% endblock js %}

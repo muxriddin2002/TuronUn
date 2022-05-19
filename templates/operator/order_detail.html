@@ -1,0 +1,102 @@
+{% extends 'base/base.html' %} 
+{% load static %} 
+{% load humanize %}
+{% load mathfilters %}
+{% block css %} 
+{% endblock css%} 
+
+
+
+{% block menu %}
+
+{% if user.type == 18 %}
+  {% include 'menu/menu_operator.html' %}
+  {% elif user.type == 17 %}
+    {% include 'menu/menu_sotuv_rahbari.html' %}
+  {% elif user.type == 21 %}
+    {% include 'menu/menu_yordamchi_bugalter.html' %}
+{% else %}
+  {% include 'menu/menu_director.html' %}
+
+{% endif %}
+  
+{% endblock menu %}
+
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="container-full">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <h3>Buyurtmachi "{{ order }}" malumotlari </h3>
+    </div>
+    <section class="content">
+      <div class="row" style="padding-top: 10px">
+        <div class="col-12">
+          <div class="box">
+            <div class="box-header with-border d-flex align-center justify-content-between">
+              <div>
+                <h4 class="box-title">Buyurtmalari ro'yxati</h4>
+   
+              </div>
+      
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive-lg">
+                <table class="table mb-0" id="complex_header">
+                  <thead>
+                    <tr>
+                      <th scope="col">Mahsulotlar</th>
+                      <th scope="col">Summa</th>
+                      <th scope="col">Miqdori</th>
+                      <th scope="col">Jami</th>
+                      <th scope="col">Buyurtma sanasi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                        {% for basket in order_baskets %}
+                      
+                          <tr>
+                            
+                            <td>{{ basket.product }}</td>
+                            <td>{{ basket.price  }}</td>
+                            <td>{{ basket.hajmi }}</td>
+                            <td>{{ basket.price|mul:basket.hajmi|floatformat:2 }} </td>
+                            <td>{{ order.date|date:'j-m-Y'}}</td>                      
+                          </tr>
+                    
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th scope="col">Jami:</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                      <th scope="col">{{ order_sum }}</th>
+                      <th scope="col">Buyurtma sanasi</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+<script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+<!-- Sunny Admin App -->
+{% endblock js %}

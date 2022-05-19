@@ -1,0 +1,552 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block menu %}
+    {% include 'menu/menu_sotuv_rahbari.html' %}
+    {% endblock menu %}
+    <style>
+
+      .fixedColl-product{
+          color: red !important;
+      }     
+
+    </style>
+
+{% block content %}
+
+    <div class="content-wrapper">
+        <div class="container-full">
+            <!-- Main content -->
+            <section class="content" >
+                <div class="row">
+                    <div class="col-12 py-4">
+                        <div class="row" style="margin: 0 auto">
+                            <div class="offset-lg-3 col-lg-2 py-1 text-center">
+                                <input type="date" style="border: 1px solid rgba(0, 0, 255, 0.555);" id="start" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-2 py-1 text-center">
+                                <input type="date" style="border: 1px solid rgba(0, 0, 255, 0.555);" id="end" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-1 py-1 text-center">
+                                <button onclick="myFunction()" id="myFunction" class="btn btn-primary">Filtrlash</button>
+                            </div>
+                        </div>
+                    </div>
+                        <!-- message  -->
+                    <div class="col-12 " id="message_container">
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags == 'success' %}
+                                    <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+                                {% elif message.tags == 'error' %}
+                                    <button class="tst3 btn btn-danger btn-block mb-15">{{ message }}</button>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col-xl-3 col-4">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto;" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Ishlamay qolgan mijozlar</p>
+                                    <h4 class=" mb-0 font-weight-500 text-center">{{ passive_haridorlar }} </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              
+                    <div class="col-xl-3 col-4 cart">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto;" class="icon bg-danger-light rounded w-60 h-60">
+                                    <i class="text-danger mr-0 font-size-20 mdi mdi-phone-incoming"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Aktiv Buyurtmalar sumasi </p>
+                                    <h4 class=" mb-0 font-weight-500 text-center" id="ac_order_sum">{{ neworder|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               
+                    <div class="col-xl-3 col-4">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto;" class="icon bg-light rounded w-60 h-60">
+                                    <i class=" mr-0 font-size-24 mdi mdi-chart-line"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Qaytuvlar umumiy summasi</p>
+                                    <h4 class=" mb-0 font-weight-500 text-center" id="qaytuvsumma">{{ qaytuvsumma|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-4">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto;" class="icon bg-light rounded w-60 h-60">
+                                    <i class=" mr-0 font-size-24 mdi mdi-chart-line"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Qabul qilingan jami savdo sumasi</p>
+                                    <h4 class=" mb-0 font-weight-500 text-center" id="oldorder">{{ oldorder|floatformat:2|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-12 col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Mijozlar grafigi
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12 py-4">
+                                        <div class="box no-shadow mb-0">
+                                            <select class="form-control" style="border: 1px solid rgb(107, 107, 141);" id="customer">
+                                                <option value="" disabled selected>Mijoz tanlang</option>
+                                                {% for cus in customers %}
+                                                <option value="{{ cus.id }}">{{ cus.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="charts_widget_43_chart"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- table mijozlar  -->
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <div class="table-responsive" id="id_customber">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- table hududlar buyicha summalar  -->
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">Hududlar buylab sotuv summalari</h4>
+                            </div>
+                            
+                            <div class="box-body" style=" 
+                            overflow-x:scroll;
+                            width:100% !important;
+                            margin:0 auto;
+                            position: relative;">
+                                <div class="table-responsive contents" 
+                                style="overflow-x: auto;">
+                                    <table id="complex_header selector"  class="table table-striped table-bordered display" >
+                                        <thead style="position: sticky;top:20px;">
+                                            <tr> 
+                                                <th></th>
+                                                <th colspan="2" style="padding-left: 100px;">Toshkent</th>
+                                                <th colspan="2">Sirdaryo</th>
+                                                <th colspan="2">Jizzax</th>
+                                                <th colspan="2">Samarqand</th>
+                                                <th colspan="2">Buxoro</th>
+                                                <th colspan="2">Navoiy</th>
+                                                <th colspan="2">Xorazm</th>
+                                                <th colspan="2">Qoraqalpogiston</th>
+                                                <th colspan="2">Farg'ona</th>
+                                                <th colspan="2">Namangan</th>
+                                                <th colspan="2">Andijon</th>
+                                                <th colspan="2">Afg'on</th>
+                                                <th colspan="2">Qashqadaryo</th>
+                                                <th colspan="2">Surxondaryo</th>
+                                                <th colspan="2">Jami:</th>
+                                            </tr>
+                                        </thead>
+                                        <!-- hududlar aro summalar  -->
+                                        <tbody id="hudud_summa">
+ 
+                                        </tbody>
+                                        <tfoot>
+                                            <!-- <tr>
+                                                <th>Jami:</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr> -->
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+           <!-- table har bir sotuvching hudlarga sotgan savdo sumasi  -->
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">Sotuvchilarning hududlarga sotgan sotuv summasi</h4>
+                            </div>
+                            <div class="box-body">
+                                <div class="table-responsive" id="seller_hudud_summa">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- table for kup miqdorda kam marta oladiganlar uchun -->
+                    <!-- <div class="col-6">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">Ko'p miqdorda kam marta</h4>
+                            </div>
+                            <div class="box-body" style="overflow-y: auto; overflow-x:auto; height: 500px; width:100%">
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-striped table-bordered display" style='width: 100%;' style="height: 300px;">
+                                        <thead>                                      
+                                            <tr>
+                                                <th>Mijoz ismi</th>
+                                                <th>Hudud</th>
+                                                <th>Status</th>
+                                                <th>Status ABC</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for cus in customers %}
+                                            {% if cus.status_turi == 1 %}
+                                                <tr>
+                                                    <td>{{ cus.name }}</td>
+                                                    <td>{{ cus.get_hudud_display }}</td>
+                                                        <td><span class="badge badge-primary">Ko'p miqdorda, kam oladi</span></t>
+                                                    
+                                                    {% if cus.status == 1 %}
+                                                    <td style="color: green">{{cus.get_status_display }}</td>
+                                                    {% elif cus.status == 2 %}
+                                                    <td style="color: yellow">{{cus.get_status_display }}</td>
+                                                    {% elif cus.status == 3 %}
+                                                    <td style="color: red">{{cus.get_status_display }}</td>
+                                                    {% endif %}
+                                                    
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- table for kam miqdorda kup marta oladiganlar uchun -->
+                    <!-- <div class="col-6">
+                        <div class="box" style="width: 100;">
+                            <div class="box-header">
+                                <h4 class="box-title">Kam miqdorda ko'p marta</h4>
+                            </div>
+                            <div class="box-body" style="overflow-y: auto; overflow-x:auto; height: 500px;  width:100%">
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-striped table-bordered display" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Mijoz ismi</th>
+                                                <th>Hudud</th>
+                                                <th>Status</th>
+                                                <th>Status ABC</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for cus in customers %}
+                                                {% if cus.status_turi == 2 %}
+                                                    <tr>
+                                                        <td>{{ cus.name }}</td>
+                                                        <td>{{ cus.get_hudud_display|title  }}</td>
+                                                        
+                                                        <td><span class="badge badge-warning">Kam miqdorda, ko'p oladi</span></td>
+
+                                                        {% if cus.status == 1 %}
+                                                        <td style="color: green">{{cus.get_status_display }}</td>
+                                                        {% elif cus.status == 2 %}
+                                                        <td style="color: yellow">{{cus.get_status_display }}</td>
+                                                        {% elif cus.status == 3 %}
+                                                        <td style="color: red">{{cus.get_status_display }}</td>
+                                                        {% endif %}
+                                                        
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/pages/advanced-form-element.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/easypiechart/dist/jquery.easypiechart.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/irregular-data-series.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/dist/apexcharts.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
+    <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+    <!-- Sunny Admin App -->
+    <script src="{% static 'main/js/template.js' %}"></script>
+    <script src="{% static 'tableFix/demo.js'%}"></script>
+    <script src="{% static 'tableFix/mouse.js'%}"></script>
+    <script>
+        $('selector').fixedHeaderTable({ footer: true, cloneHeadToFoot: true, fixedColumn: true  });
+    </script>
+
+     <script>
+        $(function (){
+            var options = {
+            series: [{
+                name: "Buyurtma",
+                data: [parseInt('{{jank}}'), parseInt('{{febk}}'), parseInt('{{mark}}'), parseInt('{{aprk}}'), parseInt('{{mayk}}'), parseInt('{{junk}}'), '{{julk}}', parseInt('{{augk}}'), parseInt('{{sepk}}'), parseInt('{{octk}}'), parseInt('{{novk}}'), parseInt('{{deck}}')]
+            },
+            {   name: "Qaytuv",
+                data: [parseInt('{{janch}}'), parseInt('{{febch}}'), parseInt('{{march}}'), parseInt('{{aprch}}'), parseInt('{{maych}}'), parseInt('{{junch}}'), '{{julch}}', parseInt('{{augch}}'), parseInt('{{sepch}}'), parseInt('{{octch}}'), parseInt('{{novch}}'), parseInt('{{decch}}')]
+            }],
+            chart: {
+            foreColor:"#bac0c7",
+              height: 385,
+              type: 'line',
+              zoom: {
+                enabled: false
+              }
+            },
+            colors:['#0F5EF7', '#ff0000'],
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'butt',
+                colors: undefined,
+                width: 5,
+                dashArray: 0,
+            },
+            markers: {
+                size: 5,
+                colors: '#ffffff',
+                strokeColors: ['#0F5EF7','#ff0000'],
+                strokeWidth: 3,
+                strokeOpacity: 0.9,
+                strokeDashArray: 0,
+                fillOpacity: 1,
+                discrete: [],
+                shape: "circle",
+                radius: 5,
+                offsetX: 0,
+                offsetY: 0,
+                onClick: undefined,
+                onDblClick: undefined,
+                hover: {
+                  size: undefined,
+                  sizeOffset: 3
+                }
+            },
+            grid: {
+                borderColor: '#f7f7f7',
+              row: {
+                colors: ['transparent'], // takes an array which will be repeated on columns
+                opacity: 0
+              },
+              yaxis: {
+                lines: {
+                  show: true,
+                },
+              },
+            },
+            xaxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              labels: {
+                show: true,
+              },
+              axisBorder: {
+                show: true
+              },
+              axisTicks: {
+                show: true
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+            yaxis: {
+              labels: {
+                show: true,
+                formatter: function (val) {
+                  return val + "$";
+                }
+              },
+            },
+          };
+            var chart = new ApexCharts(document.querySelector("#charts_widget_43_chart"), options);
+            chart.render();
+            if ( $("#customer").change(function ()  {
+                customer = document.getElementById('customer').value;
+                var data = {
+                        'customer': String(customer),
+                    }
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "getchangechartsel" %}',
+                    data: data,
+                    success: function (dt) {
+                        chart.updateSeries([{
+                            name: "Buyurtma",
+                            data: [parseInt(dt.jank), parseInt(dt.febk), parseInt(dt.mark), parseInt(dt.aprk), parseInt(dt.mayk), parseInt(dt.junk), parseInt(dt.julk), parseInt(dt.augk), parseInt(dt.sepk), parseInt(dt.octk), parseInt(dt.novk), parseInt(dt.deck)]
+                        },
+                        {   name: "Qaytuv",
+                            data: [parseInt(dt.janch), parseInt(dt.febch), parseInt(dt.march), parseInt(dt.aprch), parseInt(dt.maych), parseInt(dt.junch), parseInt(dt.julch), parseInt(dt.augch), parseInt(dt.sepch), parseInt(dt.octch), parseInt(dt.novch), parseInt(dt.decch)]
+                        }])
+                    }
+                })
+                }));
+            })
+    </script>
+
+    <script src="{% static 'main/js/pages/dashboard.js' %}"></script>
+
+    
+
+    <script>
+        function myFunction() {
+            start = document.getElementById('start').value;
+            end = document.getElementById('end').value;
+            var data = {
+                'start': String(start),
+                'end': String(end),
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: '{% url "getdashdetalsotuv" %}',
+                data: data,
+                success: function (dt){
+                    document.getElementById('ac_order_sum').innerText = dt.ac_order_sum;
+                    document.getElementById('qaytuvsumma').innerText = dt.qaytuvsumma;
+                    document.getElementById('oldorder').innerText = dt.oldorder;
+                }
+            });
+        }
+    </script>
+
+    <!-- ajax for smart select -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    <script>
+        $('#myFunction').click(function () {
+            start = document.getElementById('start').value;
+            end = document.getElementById('end').value;
+            var data = {
+                'start': String(start),
+                'end': String(end),
+            }
+            // get mijoz filter
+          $.ajax({
+            url: '{% url "getdashdetailmijoz" %}',
+            data:data,
+            success: function (data) {
+              $("#id_customber").html(data);
+            }
+          });
+            // get  hududlar summasi
+          $.ajax({
+            url: '{% url "getdashhududsumma" %}',
+            data:data,
+            success: function (data) {
+              $("#hudud_summa").html(data);
+            }
+          });
+            // get seller hududlar summasi
+          $.ajax({
+            url: '{% url "getdashsellerhududsumma" %}',
+            data:data,
+            success: function (data) {
+              $("#seller_hudud_summa").html(data);
+            }
+          });
+
+        });
+      </script>
+
+    <script>
+        $(document).ready(function () {
+            // mijozlar filter 
+          $.ajax({
+            url: '{% url "getdashdetailmijoz" %}',
+            success: function (data) {
+              $("#id_customber").html(data);
+            }
+          });
+            // hudud summa filter 
+          $.ajax({
+            url: '{% url "getdashhududsumma" %}',
+            success: function (data) {
+              $("#hudud_summa").html(data);
+            }
+          });
+            // seller  hudud summa filter 
+          $.ajax({
+            url: '{% url "getdashsellerhududsumma" %}',
+            success: function (data) {
+              $("#seller_hudud_summa").html(data);
+            }
+          });
+    
+        });
+      </script>
+
+{% endblock js %}
+
+          
+
+
+
+
+

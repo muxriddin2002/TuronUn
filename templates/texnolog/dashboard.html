@@ -1,0 +1,522 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block menu %}
+    {% include 'menu/menu_texnolog.html' %}
+{% endblock menu %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-full">
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-12 py-4">
+                        <div class="row" style="margin: 0 auto">
+                            <div class="offset-lg-3 col-lg-2 py-1 text-center">
+                                <input type="date" id="start" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-2 py-1 text-center">
+                                <input type="date" id="end" class="form-control mt-1">
+                            </div>
+                            <div class="col-lg-1 py-1 text-center">
+                                <button onclick="myFunction()" class="btn btn-primary">Filtrlash</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Taminotchilar</p>
+                                    <h3 class="text-white mb-0 font-weight-500  text-center">{{ clients| intcomma}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Taminotchilar (Un)</p>
+                                    <h3 class="text-white mb-0 font-weight-500  text-center">{{ clientsun| intcomma}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-warning-light rounded w-60 h-60">
+                                    <i class="text-warning mr-0 font-size-24 mdi mdi-account-multiple"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Mijozlar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" >{{ customers| intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Aktiv buyurtmalar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="neworders">{{ neworders| intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Ombordagi buyurtmalar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="ordersinware">{{ ordersinware| intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Muvofaqiyatli buyurtmalar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="oldorders">{{ oldorders| intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Aktiv qaytuvlar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="newqaytuvs">{{ newqaytuvs| intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Muvofaqiyatli qaytuvlar</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="oldqaytuvs">{{ oldqaytuvs| intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Sotilgan un</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="soldedun">{{ soldedun|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Sotilgan yem</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="soldedyem">{{ soldedyem|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Yangi buyurtmalar un</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="activeun">{{ activeun|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Yangi buyurtmalar yem</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="activeyem">{{ activeyem|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Yuklanayotgan un</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="loadingun">{{ loadingun|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-6">
+                        <div class="box overflow-hidden pull-up">
+                            <div class="box-body">
+                                <div style="margin: 0 auto" class="icon bg-primary-light rounded w-60 h-60">
+                                    <i class="text-primary mr-0 font-size-24 mdi mdi-clipboard-text"></i>
+                                </div>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16 text-center">Yuklanayotgan yem</p>
+                                    <h3 class="text-white mb-0 font-weight-500 text-center" id="loadingyem">{{ loadingyem|intcomma }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Bugdoy kirimi
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12 py-4">
+                                        <div class="box no-shadow mb-0">
+                                            <select class="form-control" id="client">
+                                                <option value="" disabled selected>Taminotchi tanlang</option>
+                                                {% for cus in client %}
+                                                <option value="{{ cus.id }}">{{ cus.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="charts_widget_43_chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Un va Yem buyurtmalari
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12 py-4">
+                                        <div class="box no-shadow mb-0">
+                                            <select class="form-control" id="customer">
+                                                <option value="" disabled selected>Client tanlang</option>
+                                                {% for cus in customer %}
+                                                <option value="{{ cus.id }}">{{ cus.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="charts_widget_43_chart1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'assets/vendor_components/easypiechart/dist/jquery.easypiechart.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/irregular-data-series.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/dist/apexcharts.js' %}"></script>
+
+    <!-- Sunny Admin App -->
+    <script src="{% static 'main/js/template.js' %}"></script>
+    <script src="{% static 'main/js/pages/dashboard.js' %}"></script>
+        <script>
+        $(function (){
+
+        var options = {
+            series: [{
+                name: "akt",
+                data: [parseInt('{{janch}}'), parseInt('{{febch}}'), parseInt('{{march}}'), parseInt('{{aprch}}'), parseInt('{{maych}}'), parseInt('{{junch}}'), parseInt('{{julch}}'), parseInt('{{augch}}'), parseInt('{{sepch}}'), parseInt('{{octch}}'), parseInt('{{novch}}'), parseInt('{{decch}}')]
+            },],
+            chart: {
+            foreColor:"#bac0c7",
+              height: 385,
+              type: 'line',
+              zoom: {
+                enabled: false
+              }
+            },
+            colors:['#0F5EF7'],
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'butt',
+                colors: undefined,
+                width: 5,
+                dashArray: 0,
+            },
+            markers: {
+                size: 5,
+                colors: '#ffffff',
+                strokeColors: '#0F5EF7',
+                strokeWidth: 3,
+                strokeOpacity: 0.9,
+                strokeDashArray: 0,
+                fillOpacity: 1,
+                discrete: [],
+                shape: "circle",
+                radius: 5,
+                offsetX: 0,
+                offsetY: 0,
+                onClick: undefined,
+                onDblClick: undefined,
+                hover: {
+                  size: undefined,
+                  sizeOffset: 3
+                }
+            },
+            grid: {
+                borderColor: '#f7f7f7',
+              row: {
+                colors: ['transparent'], // takes an array which will be repeated on columns
+                opacity: 0
+              },
+              yaxis: {
+                lines: {
+                  show: true,
+                },
+              },
+            },
+            xaxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              labels: {
+                show: true,
+              },
+              axisBorder: {
+                show: true
+              },
+              axisTicks: {
+                show: true
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+            yaxis: {
+              labels: {
+                show: true,
+                formatter: function (val) {
+                  return val + " sum";
+                }
+              },
+            },
+          };
+          var chart = new ApexCharts(document.querySelector("#charts_widget_43_chart"), options);
+          chart.render();
+          if ( $("#client").change(function ()  {
+                client = document.getElementById('client').value;
+                var data = {
+                        'client': String(client),
+                    }
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "getchangechartdashbug" %}',
+                    data: data,
+                    success: function (dt) {
+                        chart.updateSeries([{
+                            name: "akt",
+                            data: [parseInt(dt.janb), parseInt(dt.febb), parseInt(dt.marb), parseInt(dt.aprb), parseInt(dt.mayb), parseInt(dt.junb), parseInt(dt.julb), parseInt(dt.augb), parseInt(dt.sepb), parseInt(dt.octb), parseInt(dt.novb), parseInt(dt.decb)]
+                        }])
+                    }
+                })
+                }));
+
+        })
+    </script>
+        <script>
+        $(function (){
+            var options = {
+                series: [{
+                    name: "Order",
+                    data: [parseInt('{{jank}}'), parseInt('{{febk}}'), parseInt('{{mark}}'), parseInt('{{aprk}}'), parseInt('{{mayk}}'), parseInt('{{junk}}'), parseInt('{{julk}}'), parseInt('{{augk}}'), parseInt('{{sepk}}'), parseInt('{{octk}}'), parseInt('{{novk}}'), parseInt('{{deck}}')]
+                },
+                {   name: "Qaytuv",
+                    data: [parseInt('{{janch}}'), parseInt('{{febch}}'), parseInt('{{march}}'), parseInt('{{aprch}}'), parseInt('{{maych}}'), parseInt('{{junch}}'), parseInt('{{julch}}'), parseInt('{{augch}}'), parseInt('{{sepch}}'), parseInt('{{octch}}'), parseInt('{{novch}}'), parseInt('{{decch}}')]
+                }],
+                chart: {
+                foreColor:"#bac0c7",
+                  height: 385,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                colors:['#0F5EF7', '#ff0000'],
+                dataLabels: {
+                  enabled: false,
+                },
+                stroke: {
+                    show: true,
+                    curve: 'smooth',
+                    lineCap: 'butt',
+                    colors: undefined,
+                    width: 5,
+                    dashArray: 0,
+                },
+                markers: {
+                    size: 5,
+                    colors: '#ffffff',
+                    strokeColors: ['#0F5EF7', '#ff0000'],
+                    strokeWidth: 3,
+                    strokeOpacity: 0.9,
+                    strokeDashArray: 0,
+                    fillOpacity: 1,
+                    discrete: [],
+                    shape: "circle",
+                    radius: 5,
+                    offsetX: 0,
+                    offsetY: 0,
+                    onClick: undefined,
+                    onDblClick: undefined,
+                    hover: {
+                      size: undefined,
+                      sizeOffset: 3
+                    }
+                },
+                grid: {
+                    borderColor: '#f7f7f7',
+                  row: {
+                    colors: ['transparent'], // takes an array which will be repeated on columns
+                    opacity: 0
+                  },
+                  yaxis: {
+                    lines: {
+                      show: true,
+                    },
+                  },
+                },
+                xaxis: {
+                  categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                  labels: {
+                    show: true,
+                  },
+                  axisBorder: {
+                    show: true
+                  },
+                  axisTicks: {
+                    show: true
+                  },
+                  tooltip: {
+                    enabled: true,
+                  },
+                },
+                yaxis: {
+                  labels: {
+                    show: true,
+                    formatter: function (val) {
+                      return val + " sum";
+                    }
+                  },
+                },
+              };
+            const chart = new ApexCharts(document.querySelector("#charts_widget_43_chart1"), options);
+            chart.render();
+            if ( $("#customer").change(function ()  {
+                customer = document.getElementById('customer').value;
+                var data = {
+                        'customer': String(customer),
+                    }
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "getchangecharttex" %}',
+                    data: data,
+                    success: function (dt) {
+                        chart.updateSeries([{
+                            name: "Order",
+                            data: [parseInt(dt.jank), parseInt(dt.febk), parseInt(dt.mark), parseInt(dt.aprk), parseInt(dt.mayk), parseInt(dt.junk), parseInt(dt.julk), parseInt(dt.augk), parseInt(dt.sepk), parseInt(dt.octk), parseInt(dt.novk), parseInt(dt.deck)]
+                        },
+                        {   name: "Qaytuv",
+                            data: [parseInt(dt.janch), parseInt(dt.febch), parseInt(dt.march), parseInt(dt.aprch), parseInt(dt.maych), parseInt(dt.junch), parseInt(dt.julch), parseInt(dt.augch), parseInt(dt.sepch), parseInt(dt.octch), parseInt(dt.novch), parseInt(dt.decch)]
+                        }])
+                    }
+                })
+                }));
+            });
+    </script>
+    <script>
+    function myFunction() {
+        start = document.getElementById('start').value;
+        end = document.getElementById('end').value;
+        var data = {
+            'start': String(start),
+            'end': String(end),
+        }
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getdashdetailtexnolog" %}',
+            data: data,
+            success: function (dt){
+                document.getElementById('neworders').innerText = dt.neworders;
+                document.getElementById('oldorders').innerText = dt.oldorders;
+                document.getElementById('newqaytuvs').innerText = dt.newqaytuvs;
+                document.getElementById('oldqaytuvs').innerText = dt.oldqaytuvs;
+                document.getElementById('soldedun').innerText = dt.soldedun;
+                document.getElementById('soldedyem').innerText = dt.soldedyem;
+                document.getElementById('activeun').innerText = dt.activeun;
+                document.getElementById('activeyem').innerText = dt.activeyem;
+                document.getElementById('ordersinware').innerText = dt.ordersinware;
+                document.getElementById('loadingun').innerText = dt.loadingun;
+                document.getElementById('loadingyem').innerText = dt.loadingyem;
+            }
+        });
+    }
+    </script>
+
+{% endblock js %}
