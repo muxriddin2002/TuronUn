@@ -16,6 +16,7 @@ from rest_framework.decorators import api_view
 from django.db.models import Sum, Q
 from rest_framework.serializers import ModelSerializer
 from django.views.generic import TemplateView, ListView
+from home.sms_template import *
 
 class Dashboard(TemplateView, LoginRequiredMixin):
     login_url = '/login'
@@ -740,12 +741,15 @@ def paymentclient(request):
                     PaymentHistory.objects.create(customer=client, payment=sum, by_user=user, type=1, turi=turi,currency=dollar_narxi,comment = izoh, cash=cash2, custom_date=date)
                 client.save()
                 #sms kirim
-                format_tuladi = '{:,}'.format(int(sum))
-                user = f'{request.user.first_name} - {request.user.last_name}'
-                if currency == 'usd' and sum >= 1000:
-                    sendSmsOneContact(+998901300444, client.name + " mijozdan: " + format_tuladi  + " $ kirim " + user +" tomondan  "+ w_kassa +" kassaga to'lov qabul qilindi!")
-                elif currency == 'usz' and sum >= 10000000:
-                    sendSmsOneContact(+998901300444, client.name + " mijozdan: " + format_tuladi  + " so'm kirim "+ user +" tomondan "+ w_kassa +" kassaga to'lov qabul qilindi!")
+
+                payment_clint_sms(requests, client=client, summa=sum, currency=currency, kassa=w_kassa)
+
+                # format_tuladi = '{:,}'.format(int(sum))
+                # user = f'{request.user.first_name} - {request.user.last_name}'
+                # if currency == 'usd' and sum >= 1000:
+                #     sendSmsOneContact(+998901300444, client.name + " mijozdan: " + format_tuladi  + " $ kirim " + user +" tomondan  "+ w_kassa +" kassaga to'lov qabul qilindi!")
+                # elif currency == 'usz' and sum >= 10000000:
+                #     sendSmsOneContact(+998901300444, client.name + " mijozdan: " + format_tuladi  + " so'm kirim "+ user +" tomondan "+ w_kassa +" kassaga to'lov qabul qilindi!")
             elif user.type in [2, 21]: #bugalter & yordamchi
                 date = request.POST.get("date")
                 shot_number = request.POST.get("shot_number")
@@ -757,10 +761,11 @@ def paymentclient(request):
                 client.save()
                 PaymentHistory.objects.create(customer=client, payment=sum, turi=turi, by_user=user, type=1,  currency=dollar_narxi, comment = izoh, bank_shot = bank.shot_numbers, custom_date=date)
                 #sms kirim
-                if sum >= 10000000:
-                    format_tuladi = '{:,}'.format(int(sum))
-                    user = f'{request.user.first_name} - {request.user.last_name}'
-                    sendSmsOneContact(+998901300444, client.name + " mijozdan: " + format_tuladi  + " so'm kirim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan to'lov qabul qilindi!")
+                payment_clint_sms(request, client=client, summa=sum, currency=currency, bank=bank)
+                # if sum >= 10000000:
+                #     format_tuladi = '{:,}'.format(int(sum))
+                #     user = f'{request.user.first_name} - {request.user.last_name}'
+                #     sendSmsOneContact(+998901300444, client.name + " mijozdan: " + format_tuladi  + " so'm kirim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan to'lov qabul qilindi!")
             messages.success(request, "To'lov qabul qilindi")
             if user.type == 2:
                 return redirect("bugalter_clients")
@@ -825,16 +830,19 @@ def outincomepayment(request):
                     PaymentHistory.objects.create(payment=sum, by_user=request.user, type=1, turi=3, comment=comment, cash = cash2)
             messages.success(request, "To'lov qabul qilindi")
             #SMS
-            format_tuladi = '{:,}'.format(int(sum))
-            user = f'{request.user.first_name} - {request.user.last_name}'
-            if turi == '1' and sum >= 1000:
-                sendSmsOneContact(+998901300444, " Tashqi kirimda:  " + format_tuladi  + " $ kirim " + user +" tomondan  "+ w_kassa +" kassaga to'lov qabul qilindi!")
-            elif turi == '2' and sum >= 10000000:
-                sendSmsOneContact(+998901300444, "Tashqi kirimda" + format_tuladi  + " so'm kirim "+ user +" tomondan "+ w_kassa +" kassaga to'lov qabul qilindi!")
+            outincomepayment_sms(request, summa=sum, turi=turi, kassa=w_kassa)
+            # format_tuladi = '{:,}'.format(int(sum))
+            # user = f'{request.user.first_name} - {request.user.last_name}'
+            # if turi == '1' and sum >= 1000:
+            #     sendSmsOneContact(+998901300444, " Tashqi kirimda:  " + format_tuladi  + " $ kirim " + user +" tomondan  "+ w_kassa +" kassaga to'lov qabul qilindi!")
+            # elif turi == '2' and sum >= 10000000:
+            #     sendSmsOneContact(+998901300444, "Tashqi kirimda" + format_tuladi  + " so'm kirim "+ user +" tomondan "+ w_kassa +" kassaga to'lov qabul qilindi!")
             return redirect("kassa")
     except Exception as e:
         logger.error(e)
         return HttpResponse(e)
+
+
 #chiqim
 def chiqimpayment(request):
     try:
@@ -892,12 +900,13 @@ def chiqimpayment(request):
             
             messages.success(request, "Chiqim qabul qilindi")
             #SMS
-            format_tuladi = '{:,}'.format(int(sum))
-            user = f'{request.user.first_name} - {request.user.last_name}'
-            if turi == '1' and sum >= 1000:
-                sendSmsOneContact(+998901300444, " Tashqi chiqimda : " + format_tuladi  + " $ chiqim " + user +" tomondan  "+ w_kassa +" kassadan   qilindi!")
-            elif turi == '2' and sum >= 10000000:
-                sendSmsOneContact(+998901300444, "Tashqi chiqimda " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+ w_kassa +" kassadan qilindi!")
+            chiqim_payment_sms(request, summa=sum, turi=turi, kassa=kassa)
+            # format_tuladi = '{:,}'.format(int(sum))
+            # user = f'{request.user.first_name} - {request.user.last_name}'
+            # if turi == '1' and sum >= 1000:
+            #     sendSmsOneContact(+998901300444, " Tashqi chiqimda : " + format_tuladi  + " $ chiqim " + user +" tomondan  "+ w_kassa +" kassadan   qilindi!")
+            # elif turi == '2' and sum >= 10000000:
+            #     sendSmsOneContact(+998901300444, "Tashqi chiqimda " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+ w_kassa +" kassadan qilindi!")
             return redirect("kassa")
     except Exception as e:
         messages.error(request, "Chiqim qabul qilinmadi!")
@@ -1176,9 +1185,10 @@ def paymentoutlay(request):  # sourcery skip: last-if-guard
 
             PaymentHistory.objects.create(payment=outlay.summa, by_user=user, type=2, turi=turi, for_expance=True, bank_shot=bank.shot_numbers)
             #SMS
-            user = f'{request.user.first_name} - {request.user.last_name}'
-            if sum >= 1000:
-                sendSmsOneContact(+998901300444, " AktOutlay uchun: " + format_tuladi  + " $ chiqim summasi " + user +" tomondan  "+ bank.shot_numbers +" bank hisob raqamidan to'lov  qilindi!")
+            paymentoutlay_sms(request, summa=sum, bank=bank)
+            # user = f'{request.user.first_name} - {request.user.last_name}'
+            # if sum >= 1000:
+            #     sendSmsOneContact(+998901300444, " AktOutlay uchun: " + format_tuladi  + " $ chiqim summasi " + user +" tomondan  "+ bank.shot_numbers +" bank hisob raqamidan to'lov  qilindi!")
         else: #kassir
             kassa = request.POST.get("kassa")
             if kassa == 'kassa1':
@@ -1200,13 +1210,14 @@ def paymentoutlay(request):  # sourcery skip: last-if-guard
                 cash3.save()
                 PaymentHistory.objects.create(payment=outlay.summa, by_user=user, type=2, turi=turi, for_expance=True, cash = cash3)
 
-            user = f'{request.user.first_name} - {request.user.last_name}'
-            if sum >= 1000:
-                sendSmsOneContact(
-                    +998901300444,
-                    f" AktOutlay: {format_tuladi} $ chiqim {user} tomondan  {w_kassa}"
-                    + " kassadan chiqim qilindi!",
-                )
+            paymentoutlay_sms(request, summa=sum, kassa=w_kassa)
+            # user = f'{request.user.first_name} - {request.user.last_name}'
+            # if sum >= 1000:
+            #     sendSmsOneContact(
+            #         +998901300444,
+            #         f" AktOutlay: {format_tuladi} $ chiqim {user} tomondan  {w_kassa}"
+            #         + " kassadan chiqim qilindi!",
+            #     )
 
         messages.success(request, "Muvofaqiyatli to'landi")
 
@@ -1286,12 +1297,13 @@ def paymentforwheat(request):
                     PaymentHistory.objects.create(client=client, payment=sum, turi=turi, by_user=user, type=2,  currency=dollar_narxi, comment = izoh, cash = cash2)
                 client.save()
                 #SMS
-                format_tuladi = '{:,}'.format(int(sum))
-                user = f'{request.user.first_name} - {request.user.last_name}'
-                if currency == 'usd' and sum >= 1000:
-                    sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " $ chiqim " + user +" tomondan  "+ w_kassa +" kassadan chiqim qilindi!")
-                elif currency == 'usz' and sum >= 10000000:
-                    sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+ w_kassa +" kassadan chiqim qilindi!")
+                paymentforwheat_sms(request, client=client, summa=sum, kassa=w_kassa, currency=currency)
+                # format_tuladi = '{:,}'.format(int(sum))
+                # user = f'{request.user.first_name} - {request.user.last_name}'
+                # if currency == 'usd' and sum >= 1000:
+                #     sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " $ chiqim " + user +" tomondan  "+ w_kassa +" kassadan chiqim qilindi!")
+                # elif currency == 'usz' and sum >= 10000000:
+                #     sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+ w_kassa +" kassadan chiqim qilindi!")
             elif user.type == 2: # bugalter
                 shot_number = request.POST.get("shot_number")
 
@@ -1303,10 +1315,12 @@ def paymentforwheat(request):
                 bank.save()
                 client.save()
                 PaymentHistory.objects.create(client=client, payment=sum, turi=turi, by_user=user, type=2,  currency=dollar_narxi, comment = izoh, bank_shot = bank.shot_numbers )
-                user = f'{request.user.first_name} - {request.user.last_name}'
-                format_tuladi = '{:,}'.format(int(sum))
-                if sum >= 1000:
-                    sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan to'lov chiqim qilindi!")
+
+                paymentforwheat_sms(request, summa=sum, bank=bank, currency=currency, client=client)
+                # user = f'{request.user.first_name} - {request.user.last_name}'
+                # format_tuladi = '{:,}'.format(int(sum))
+                # if sum >= 1000:
+                #     sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan to'lov chiqim qilindi!")
             
             messages.success(request, "Muvofaqiyatli to'landi")
             return redirect("bugdoy_clients")
@@ -1371,11 +1385,13 @@ def paymentforun(request):
                     cash2.save()
                     client.save()
                     PaymentHistory.objects.create(clientun=client, payment=sum, turi=turi, by_user=user, type=2,  currency=dollar_narxi, comment = izoh, cash = cash2)
-                user = f'{request.user.first_name} - {request.user.last_name}'
-                if currency == 'usd' and sum >= 1000:
-                    sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " $ chiqim " + user +" tomondan  "+ w_kassa +" kassadan chiqim qilindi!")
-                elif currency == 'usz' and sum >= 10000000:
-                    sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+ w_kassa +" kassadan chiqim qilindi!")
+
+                paymentforun_sms(request, summa=sum, kassa=w_kassa, currency=currency, client=client)
+                # user = f'{request.user.first_name} - {request.user.last_name}'
+                # if currency == 'usd' and sum >= 1000:
+                #     sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " $ chiqim " + user +" tomondan  "+ w_kassa +" kassadan chiqim qilindi!")
+                # elif currency == 'usz' and sum >= 10000000:
+                #     sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+ w_kassa +" kassadan chiqim qilindi!")
             elif user.type == 2:
                 shot_number = request.POST.get("shot_number")
 
@@ -1387,11 +1403,13 @@ def paymentforun(request):
                 bank.save()
                 client.save()
                 PaymentHistory.objects.create(clientun=client, payment=sum, turi=turi, by_user=user, type=2,  currency=dollar_narxi, comment = izoh, bank_shot = bank.shot_numbers )
-                user = f'{request.user.first_name} - {request.user.last_name}'
-                format_tuladi = '{:,}'.format(int(sum))
-                
-                if sum >= 1000:
-                    sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan chiqim qilindi!")
+
+                paymentforun_sms(request, summa=sum, currency=currency, bank=bank, client=client)
+                # user = f'{request.user.first_name} - {request.user.last_name}'
+                # format_tuladi = '{:,}'.format(int(sum))
+                #
+                # if sum >= 1000:
+                #     sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan chiqim qilindi!")
             
             messages.success(request, "Muvofaqiyatli to'landi")
             return redirect("un_clients")
@@ -1432,9 +1450,10 @@ def paymentforqop(request):
             PaymentHistory.objects.create(clienttin=client, payment=sum, turi=turi, by_user=user, type=2,bank_shot=bank.shot_numbers, currency=dollar_narxi)
             messages.success(request, "Muvofaqiyatli to'landi")
             if sum >= 10000000:
-                user = f'{request.user.first_name} - {request.user.last_name}'
-                format_tuladi = '{:,}'.format(int(sum))
-                sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan chiqim qilindi!")
+                paymentforqop_sms(request, bank=bank, summa=sum, client=client)
+                # user = f'{request.user.first_name} - {request.user.last_name}'
+                # format_tuladi = '{:,}'.format(int(sum))
+                # sendSmsOneContact(+998901300444, client.name + " Taminotchiga: " + format_tuladi  + " so'm chiqim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan chiqim qilindi!")
             return redirect("qop_clients")
     except Exception as e:
         logger.error(e)
