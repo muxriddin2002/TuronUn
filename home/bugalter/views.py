@@ -703,6 +703,7 @@ def paymentclient(request):
                 date = request.POST.get("date")
 
                 kassa = request.POST.get("kassa")
+                print(kassa, '//////////////////')
                 if kassa == 'kassa1':
                     cash = Cash.objects.last()
                     w_kassa = 'Asosiy kassa'
@@ -741,8 +742,9 @@ def paymentclient(request):
                     PaymentHistory.objects.create(customer=client, payment=sum, by_user=user, type=1, turi=turi,currency=dollar_narxi,comment = izoh, cash=cash2, custom_date=date)
                 client.save()
                 #sms kirim
-
-                payment_clint_sms(requests, client=client, summa=sum, currency=currency, kassa=w_kassa)
+                print(kassa, '//////////////')
+                print(w_kassa, '/////////////////')
+                payment_clint_sms(request, client=client, summa=sum, currency=currency, kassa=w_kassa)
 
                 # format_tuladi = '{:,}'.format(int(sum))
                 # user = f'{request.user.first_name} - {request.user.last_name}'

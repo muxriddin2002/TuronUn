@@ -619,7 +619,7 @@ def add_turn(request):
             TurnofCarsofTashkent.objects.create(order=order, turn=turn, status=1)
         sendSmsOneContact(
             f'+998{driver_phone}',
-            f"Aссалому алайкум! Турон cомпанйга хуш келибсиз! Мувоффақиятли навбатга олинди. Навбат рақамингиз: {turn}",
+            f"Aссалому алайкум! Turon company хуш келибсиз! Мувоффақиятли навбатга олинди. Навбат рақамингиз: {turn}",
         )
 
 
@@ -1117,6 +1117,7 @@ class TurnofCarsViewset(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
 
 class TurnofCarsofTashkentViewset(viewsets.ModelViewSet):
     queryset = TurnofCarsofTashkent.objects.all()
