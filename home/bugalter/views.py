@@ -1199,15 +1199,16 @@ def paymentoutlay(request):  # sourcery skip: last-if-guard
                 cash3.naqd_pull_dollor -= Decimal(outlay.summa)
                 cash3.save()
                 PaymentHistory.objects.create(payment=outlay.summa, by_user=user, type=2, turi=turi, for_expance=True, cash = cash3)
+
+            user = f'{request.user.first_name} - {request.user.last_name}'
+            if sum >= 1000:
+                sendSmsOneContact(
+                    +998901300444,
+                    f" AktOutlay: {format_tuladi} $ chiqim {user} tomondan  {w_kassa}"
+                    + " kassadan chiqim qilindi!",
+                )
+
         messages.success(request, "Muvofaqiyatli to'landi")
-        #SMS
-        user = f'{request.user.first_name} - {request.user.last_name}'
-        if sum >= 1000:
-            sendSmsOneContact(
-                +998901300444,
-                f" AktOutlay: {format_tuladi} $ chiqim {user} tomondan  {w_kassa}"
-                + " kassadan chiqim qilindi!",
-            )
 
 
         return redirect("wheatexpances")

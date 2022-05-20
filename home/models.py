@@ -515,6 +515,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     seller = models.ForeignKey(Employee, on_delete=models.CASCADE)
     date_time = models.DateTimeField(blank=True, null=True)
+    date_payment = models.DateField(null=True, blank=True) # tulov vaqti
     date = models.DateField(default=timezone.now)
     update_date = models.DateField(default=timezone.now)
     summa_total = models.DecimalField(max_digits=155, decimal_places=2, default=0)

@@ -12,6 +12,7 @@ from home.models import *
 from django.db.models import Avg, Max, Min, Sum
 from django.contrib import messages
 
+
 class Dashboard(TemplateView, LoginRequiredMixin):
     login_url = '/login'
     template_name = 'director/dashboard.html'

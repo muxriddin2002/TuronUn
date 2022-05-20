@@ -2,7 +2,7 @@ from asyncio.log import logger
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 import datetime
-
+from home.bugalter.functions import sendSmsOneContact
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -503,24 +503,29 @@ def create_order(request):
         customer = request.POST.get('customer')
         tegirmon = request.POST.get('tegirmon')
         date = request.POST.get("date")
+        pay_date = request.POST.get('payment-date')
+
         order = Order.objects.create(
             customer_id=customer,
             payment_date=date,
             seller_id=request.user.id,
             tegirmon_id=tegirmon,
-            date_time = timezone.now()
+            date_time = timezone.now(),
+            date_payment=pay_date,
         )
         #send notification
         mobile_users = Employee.objects.filter(type__in = [5,6,15,16,20])
         p = threading.Thread(target=run_send_notification, args=(mobile_users,))
         p.start()
         messages.success(request, "Ma'lumot muvofaqiyatli saqlandi!")
+
         return redirect('sotuvchi-order-detail', pk=order.id)
         # return redirect('sotuvchi-get-order')
     except Exception as er:
         print(er)
         messages.error(request, "Ma'lumotlar saqlashda xatolik bor!")
         return redirect('sotuvchi-get-order')
+
 
 def create_qaytuv(request):
     try:
