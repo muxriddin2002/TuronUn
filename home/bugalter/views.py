@@ -742,8 +742,6 @@ def paymentclient(request):
                     PaymentHistory.objects.create(customer=client, payment=sum, by_user=user, type=1, turi=turi,currency=dollar_narxi,comment = izoh, cash=cash2, custom_date=date)
                 client.save()
                 #sms kirim
-                print(kassa, '//////////////')
-                print(w_kassa, '/////////////////')
                 payment_clint_sms(request, client=client, summa=sum, currency=currency, kassa=w_kassa)
 
                 # format_tuladi = '{:,}'.format(int(sum))
@@ -902,7 +900,7 @@ def chiqimpayment(request):
             
             messages.success(request, "Chiqim qabul qilindi")
             #SMS
-            chiqim_payment_sms(request, summa=sum, turi=turi, kassa=kassa)
+            chiqim_payment_sms(request, summa=sum, turi=turi, kassa=w_kassa)
             # format_tuladi = '{:,}'.format(int(sum))
             # user = f'{request.user.first_name} - {request.user.last_name}'
             # if turi == '1' and sum >= 1000:
