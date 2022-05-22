@@ -60,7 +60,7 @@
                                                     {% for i in clients %}
                                                 <tr>
                                                     <th scope="row">{{ forloop.counter }}</th>
-                                                    <td><a href="{% url 'paymentqophistory' i.pk %}">{{i.compony}}</a></td>
+                                                    <td><a id="{{i}}" class="linkToChange" href="{% url 'paymentqophistory' i.pk %}">{{i.compony}}</a></td>
                                                     <td>{{i.name}}</td>
                                                     <td>{{ i.phone }}</td>
                                                     <td>{{ i.address }}</td>
@@ -249,6 +249,9 @@
        pagination.forEach(item=>item.setAttribute("style", "background:#12185e"))
        selectBox.setAttribute("style","background-color:#14173d")
        searchBox.setAttribute("style","background-color:#14173d")
+
+       let linkToChange = document.querySelectorAll(".linkToChange").forEach(a=>a.setAttribute("href",`/director/qop-clients/paymentqophistory/${a.getAttribute("id")}`))
+      
     }
 </script>
 
