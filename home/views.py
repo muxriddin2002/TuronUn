@@ -104,6 +104,8 @@ def customeredit(request):
             messages.success(request, "Muvofaqiyatli o'zgartirildi")
             if request.user.type == 17:
                 return redirect('mijozlar')
+            elif request.user.type == 4:
+                return redirect('sotuvchi-mijozlar')
             return redirect("customers")
 
     except Exception as e:
