@@ -8,14 +8,14 @@
         {% include 'menu/menu_director.html' %}
 {% endblock menu %}
 {% block content %}
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="background:rgb(8, 5, 27)">
         <div class="container-full">
             <section class="content">
                 <!-- Button trigger modal -->
 
                     <div class="row" style="padding-top:10px;">
                         <div class="col-12">
-                            <div class="box">
+                            <div class="box" style="background:rgb(24, 24, 56);">
                                 <div class="box-header">
                                     <h4 class="box-title">Klientlar hisobi</h4>
                                 </div>
@@ -84,5 +84,14 @@
      'lengthChange': true,
      
     } );
+
+    let selectBox = document.querySelector(".dataTables_length").firstElementChild.firstElementChild
+    let searchBox = document.querySelector("#excel_filter").firstElementChild.firstElementChild
+    let pagination = document.querySelectorAll(".pagination .paginate_button a")
+
+    pagination.forEach(item=>item.setAttribute("style", "background:#12185e"))
+    selectBox.setAttribute("style","background-color:#14173d")
+    searchBox.setAttribute("style","background-color:#14173d")
+
     </script>
 {% endblock js %}

@@ -158,6 +158,15 @@ input[type=number] {
 <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
 
 <script>
+    if(window.location.pathname.includes("/director")){
+       let header = document.querySelector(".navbar")
+       header.setAttribute("style","background:#0d173b")
+       let sidebarFooter = document.querySelector(".sidebar-footer")
+       sidebarFooter.setAttribute("style","background:rgb(8, 8, 41)")
+    }
+</script>
+
+<script>
     
     let btn = document.querySelector(".btn-click")
     let body = document.querySelector("body")

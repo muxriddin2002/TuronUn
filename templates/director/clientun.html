@@ -8,12 +8,12 @@
         {% include 'menu/menu_director.html' %}
 {% endblock menu %}
 {% block content %}
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="background:rgb(8, 5, 27)">
         <div class="container-full">
             <section class="content">
                 <div class="row">
                     <div class="col-xl-12 col-12 text-center">
-                        <div class="box overflow-hidden pull-up">
+                        <div class="box overflow-hidden pull-up"  style="background:rgb(24, 24, 56);">
                             <div class="box-body">
                                 <div>
                                     <p class="text-mute mt-20 mb-0 font-size-16">Umumiy Qarzdorlik</p>
@@ -27,7 +27,7 @@
 
                     <div class="row" style="padding-top:10px;">
                         <div class="col-12">
-                            <div class="box">
+                            <div class="box"  style="background:rgb(24, 24, 56);">
                                 <div class="box-header">
                                     <h4 class="box-title">Klientlar hisobi</h4>
                                 </div>
@@ -106,6 +106,14 @@
                 'pdf'
             ],
         } );
+
+        let selectBox = document.querySelector(".dataTables_length").firstElementChild.firstElementChild
+    let searchBox = document.querySelector("#excel_filter").firstElementChild.firstElementChild
+    let pagination = document.querySelectorAll(".pagination .paginate_button a")
+
+    pagination.forEach(item=>item.setAttribute("style", "background:#12185e"))
+    selectBox.setAttribute("style","background-color:#14173d")
+    searchBox.setAttribute("style","background-color:#14173d")
     </script>
 
 {% endblock js %}
