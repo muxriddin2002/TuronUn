@@ -14,7 +14,7 @@ urlpatterns = [
     path("get-order", GetOrder.as_view(), name="sotuvchi-get-order"),
     path("get-order-active", GetOrderActive.as_view(), name="sotuvchi-get-order-active"),
     path('get-order-passive', GetOrderPassive.as_view(), name='sotuvchi-get-order-passive'),
-    path('mijozlar', Mijozlar.as_view(), name='mijozlar'),
+    path('mijozlar', Mijozlar.as_view(), name='sotuvchi-mijozlar'),
     path("add-bonus", addbonus, name="add-bonus"),
 
     path('create-order', create_order, name='sotuvchi-create-order'),

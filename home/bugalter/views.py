@@ -1486,12 +1486,16 @@ def changekurs(request):  # sourcery skip: last-if-guard
 def addlimit(request):
     try:
         if request.method == "POST":
+            print(request.user.type,  '////////////////')
+
             if request.user.type == 17:
                 limit = request.POST.get("limit", 0)
                 id = request.POST.get("id")
                 customer = Customer.objects.get(id=id)
+                print(customer.limit, '(1)')
                 customer.limit = limit
                 customer.save()
+                print(customer.limit, '(2)')
                 messages.success(request, "Muvofaqiyatli limit belgilandi")
                 return redirect("mijozlar")
             else:
