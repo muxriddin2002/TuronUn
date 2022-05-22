@@ -431,7 +431,12 @@ class Customer(models.Model):
     
     def __str__(self):
         return self.name
-    
+
+    # def save(self, *args, **kwargs):
+    #
+    #
+    #     super().save(self, *args, **kwargs)
+    #
     class Meta:
         verbose_name = 'Mijoz'
         verbose_name_plural = 'Mijozlar'

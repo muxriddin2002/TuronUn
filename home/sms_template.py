@@ -1,5 +1,5 @@
 from home.bugalter.functions import sendSmsOneContact
-
+from datetime import datetime
 
 def payment_clint_sms(request, client, summa, currency=None, kassa=None, bank=None):  #bank or kassa
     print(currency)
@@ -17,13 +17,15 @@ def payment_clint_sms(request, client, summa, currency=None, kassa=None, bank=No
     if send:
         if kassa:
             message = f"{client.name} mijozdan {summa} {currency} kirim {user} tomonidan {kassa} kassaga to'lov qabul qilindi"
+            message_salesman = f" To'lov qabul qilindi! Mijoz: {client.name}\n To'lov qabul qildi: {user} \n Naqd {summa} {currency} \n Mijoz jami qarzdorligi: {int(client.debt)}\n {datetime.now().strftime('%d %b %Y')} {datetime.now().strftime('%H:%M:%S')}"
 
         elif bank:
             message = f"{client.name} mijozdan {summa} {currency} kirim {user} tomonidan {bank.bank_name} {bank.shot_numbers} bank hisob raqamidan to'lov qabul qilindi!"
-
+            message_salesman = f" To'lov qabul qilindi! Mijoz: {client.name}\n To'lov qabul qildi: {user}\n Bank orqali {summa} {currency} \n Mijoz jami qarzdorligi: {int(client.debt)} \n {datetime.now().strftime('%d %b %Y')} {datetime.now().strftime('%H:%M:%S')}"
         sendSmsOneContact(+998944840604, message)
-        sendSmsOneContact(+998999021938, message)
-        # sendSmsOneContact(salesman_phone, message)
+        sendSmsOneContact(+998944840604, message_salesman)
+
+
 
 
 def outincomepayment_sms(request, summa, turi, kassa):
