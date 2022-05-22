@@ -6,6 +6,80 @@
 {% block css %}
   <style>
 
+  .form-inline{
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap !important;
+  }
+
+  .make-it-flex{
+      display: flex;
+      flex-wrap: wrap !important;
+  }
+.justify-content-between{
+    justify-content: space-between !important;
+}
+  .marg{
+      margin-right: 1px !important;
+  }
+
+@media (max-width:500px) {
+        .whole-wrapping-item{
+            padding:5px;
+            padding-top: 15px;
+        }
+
+        .current-title-item{
+            text-align: left !important;
+        }
+        .remove-items-margin{
+            margin: 5px 0px !important;
+        }
+
+        .contessting{
+            padding: 0 !important;
+        }
+        .changeNM{
+            margin-top: 7px;
+        }
+        .make-it-flex{
+            display: flex;
+            width:100%;
+            {#max-width: 350px !important;#}
+        }
+
+        .make-it-flex>select{
+            width: 45%  !important;
+        }
+        .make-it-flex>input{
+            {#width:160px !important;#}
+            margin-left:7px !important;
+        }
+
+        .contessting-2{
+            width: 150px !important;
+            margin:0% !important;
+        }
+
+        .contessting-3{
+            margin:0% !important;
+            margin-left:14px !important;
+        }
+
+        .ccall{
+            max-width:325px !important;
+            width:100% !important;
+        }
+
+        .ttab{
+            margin-top:15px;
+            padding:0;
+        }
+
+
+    }
+
+
     @media (max-width:326px) {
         .make-it-flex{
             display: flex;
@@ -36,61 +110,6 @@
         
     }
 
-    @media (max-width:500px) {
-        .whole-wrapping-item{
-            padding:5px;
-            padding-top: 15px;
-        }
-
-        .current-title-item{
-            text-align: left !important;
-        }
-        .remove-items-margin{
-            margin: 5px 0px !important;
-        }
-  
-        .contessting{
-            padding: 0 !important;
-        }
-        .changeNM{
-            margin-top: 7px;
-        }
-        .make-it-flex{
-            display: flex;
-            width:100%;
-            max-width: 350px !important;
-        }
-
-        .make-it-flex>select{
-            width: 45%  !important;
-        }
-        .make-it-flex>input{
-            width:160px !important;
-            margin-left:7px !important;
-        }
-
-        .contessting-2{
-            width: 150px !important;
-            margin:0% !important;
-        }
-
-        .contessting-3{
-            margin:0% !important;
-            margin-left:14px !important;
-        }
-
-        .ccall{
-            max-width:325px !important;
-            width:100% !important;
-        }
-
-        .ttab{
-            margin-top:15px;
-            padding:0;
-        }
-
-        
-    }
 
     
   </style>
@@ -103,7 +122,6 @@
         <div class="container-full">
             <section class="content whole-wrapping-item">
                 <div class="row">
-
                     <div class="col-12 " id="message_container">
                        {% if messages %}
                         {% for message in messages %}
@@ -122,15 +140,16 @@
                         <div class="box">
                             <div class="box-header with-border full-content-item">
                                 <div class="row">
-                                    <div class="col-xl-2 col-md-12 text-center py-5 current-title-item contessting">
-{#                                        <h5 class="box-title">Buyurtmalar ro'yxati</h5>#}
-                                    </div>
-                                    <div class="col-xl-6 col-md-12 contessting changeNM">
+
+                                    <div class="col-xl-12 col-md-12 contessting changeNM">
 
                                     <!-- news -->
-                                        <form action="{% url 'sotuvchi-create-order' %}" method="post" class=" form-inline omadbek wwqr" style="flex-wrap:wrap">
+                                        <div class="d-flex justify-content-between">
+                                            <form action="{% url 'sotuvchi-create-order' %}" method="post" class=" omadbek wwqr" style="flex-wrap:wrap">
                                             {% csrf_token %}
-                                            <div class="form-group make-it-flex">
+                                            <div class="form-group make-it-flex  justify-content-between">
+                                            <div>
+                                                <label class="mt-2">Xaridor tanlang:</label>
                                                 <select  class="border form-control omadbekmargin mx-1 remove-items-margin" name="customer"
                                                         required>
                                                     <option value="" disabled selected>Xaridor</option>
@@ -139,34 +158,47 @@
                                                         <option value="{{ client.id }}">{{ client.get_hudud_display }} - {{ client.location }} - {{ client.name }}</option>
                                                     {% endfor %}
                                                 </select>
-
-                                                <input type="date"  name="date" required class="border form-control mx-1 remove-items-margin"   id="timees">
                                             </div>
-
+                                               <div class="marg">
+                                                    <label class="my-2">Vaqti </label>
+                                                <input type="date"  name="date" required class="border form-control mx-1 remove-items-margin"   id="timees">
+                                               </div>
 
                                             <div class="form-group mx-1 contessting-2  div-teim">
-                                                <select class="border form-control omadbekmargin "  id="id_tegirmon"  name="tegirmon" required>
+
+                                                <div>
+                                                <label class="my-2">Omborni tanlang</label>
+                                                    <select class="border form-control omadbekmargin "  id="id_tegirmon"  name="tegirmon" required>
                                                     <option value="" disabled selected>Omborni tanlang</option>
                                                     {% for teg in tegirmons %}
                                                         <option value="{{ teg.id }}">{{ teg.name }} </option>
                                                     {% endfor %}
                                                 </select>
+                                                </div>
                                             </div>
-                                            <input type="date"  name="payment-date" required class="border form-control mx-1 remove-items-margin"   id="timees">
+                                            <div>
+                                                <label class="my-2">To'lash vaqti</label>
+                                                <input type="date"  name="payment-date" required class="border form-control mx-1 remove-items-margin"   id="timees">
+                                            </div>
 
+
+
+                                            </div>
                                             <div class="form-group omadi mt-1 ml-5 remove-btn-margin contessting-3">
                                                 <button type="submit"
                                                         style="width:140px;padding: 2px;"
                                                         class="btn btn-success curee">Buyurtma yaratish
                                                 </button>
 
-                                                <button type="submit"
-                                                        style="width:50px;padding: 5px;display:none;font-size:14px;"
-                                                        class="btn btn-success smalll">qo'shish
-                                                </button>
+{#
                                             </div>
-                                           
+
+
+
+
+
                                         </form>
+                                        </div>
                                        
                                         <br>
                                         
