@@ -1,4 +1,3 @@
-from celery.schedules import crontab
 from decouple import config
 from pathlib import Path
 import os
