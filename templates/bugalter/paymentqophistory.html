@@ -103,9 +103,8 @@
         if(window.location.pathname.includes("/director")){
            let contentWrapper = document.querySelector(".content-wrapper")
            contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
-           let box = document.querySelector(".box")
-           box.setAttribute("style","background:rgb(24, 24, 56)")
-     
+           let box = document.querySelectorAll(".box").forEach(item=>item.setAttribute("style","background:rgb(24, 24, 56)"))
+
            let selectBox = document.querySelector(".dataTables_length").firstElementChild.firstElementChild
            let searchBox = document.querySelector("#excel_filter").firstElementChild.firstElementChild
            let pagination = document.querySelectorAll(".pagination .paginate_button a")
