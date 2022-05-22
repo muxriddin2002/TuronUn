@@ -53,7 +53,7 @@
                                                 </div>
                                                 <div class="box-body">
                                                     <div class="form-group" style="border: 1px solid rgba(101, 101, 156, 0.582); border-radius: 10px;">
-                                                        <select class="form-control select2" multiple="multiple" id="leads" name="leads"
+                                                        <select class="form-control select2 selectableDark" multiple="multiple" id="leads" name="leads"
                                                                 data-placeholder="Leadlarni tanlash"
                                                                 style="width: 100%;">
                                                             {% for l in mijoz %}
@@ -77,7 +77,7 @@
                                                     <div class="demo-checkbox">
                                                         <div class="form-group">
                                                             <label>Xabar</label>
-                                                            <textarea style="border: 1px solid rgb(76, 76, 124);" rows="5" cols="5" class="form-control" name="sms" id="sms"
+                                                            <textarea style="border: 1px solid rgb(76, 76, 124);" rows="5" cols="5" class="form-control selectableDark" name="sms" id="sms"
                                                                       placeholder="" required></textarea>
                                                         </div>
                                                         <button type="submit" class="btn btn-rounded btn-success pull-right">Jo'natish</button>
@@ -118,7 +118,7 @@
                                                     <td>{{ i.text|truncatewords:5 }}</td>
                                                     <td>
                                                         <input type="checkbox" id="sms_t_{{ i.id }}"
-                                                           class="filled-in chk-col-success"
+                                                           class="filled-in chk-col-success selectableDark"
                                                            value="{{ i.pk }}"
                                                            onchange="status_change(this);"
                                                            {% if i.active %}checked{% endif %}/>
@@ -143,6 +143,28 @@
 {% block js %}
     <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
 	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+    <script>
+        if(window.location.pathname.includes("/director")){
+           let contentWrapper = document.querySelector(".content-wrapper")
+           contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
+           let box = document.querySelectorAll(".box").forEach(item=>item.setAttribute("style","background:rgb(24, 24, 56)"))
+          
+           let selectInput = document.querySelectorAll(".selectableDark").forEach(item=>item.setAttribute("style","background:rgb(24, 24, 56)"))
+           
+           let input = document.querySelector("#reservation")
+           input.setAttribute("style","background:rgb(24, 24, 56)") 
+     
+           let selectBox = document.querySelector(".dataTables_length").firstElementChild.firstElementChild
+           let searchBox = document.querySelector("#excel_filter").firstElementChild.firstElementChild
+           let pagination = document.querySelectorAll(".pagination .paginate_button a")
+    
+           pagination.forEach(item=>item.setAttribute("style", "background:#12185e"))
+           selectBox.setAttribute("style","background-color:#14173d")
+           searchBox.setAttribute("style","background-color:#14173d")
+        }
+    </script>
+
     <script>
         function status_change(obj) {
                 let nowV = obj.checked;

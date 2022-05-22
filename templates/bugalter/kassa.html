@@ -438,7 +438,7 @@
                             <form action="{% url 'dollor_to_sum' %}" method="post">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <select class="form-control" name="kassa" id="kassa">
+                                    <select class="form-control selectableDark"  name="kassa" id="kassa">
                                         <option value="">Kassa tanlang</option>
                                         <option value="kassa1">Asosiy kassadan</option>
                                         <option value="kassa2">Ikkinchi kassadan</option>
@@ -446,12 +446,12 @@
                                     </select>
                                     <br>
                                     <input id="dollor" type="number" step="any" min="0"
-                                        oninput="validity.valid||(value='');" class="form-control" name="dollor_to_sum"
+                                        oninput="validity.valid||(value='');" class="form-control selectableDark" name="dollor_to_sum"
                                         placeholder="Dollor miqdori kiriting!" required>
 
                                     <div class="form-group dollar_narxi">
                                         <h6>Dollar kursi</h6>
-                                        <input class="form-control dollar_narxi" type="text" placeholder="Доллар курси"
+                                        <input class="form-control dollar_narxi selectableDark" type="text" placeholder="Доллар курси"
                                             name="current_dollor_olish_sum" value="{{ olish_sum }}">
                                     </div>
                                 </div>
@@ -485,7 +485,7 @@
                             <form action="{% url 'sum_to_dollor' %}" method="post">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <select class="form-control" name="kassa" id="kassa">
+                                    <select class="form-control selectableDark" name="kassa" id="kassa">
                                         <option value="">Kassa tanlang</option>
                                         <option value="kassa1">Asosiy kassadan</option>
                                         <option value="kassa2">Ikkinchi kassadan</option>
@@ -493,12 +493,12 @@
                                     </select>
                                     <br>
                                     <input type="number" step="any" min="0" oninput="validity.valid||(value='');"
-                                        class="form-control" name="sum_to_dollor" placeholder="So'm miqdori kiriting!"
+                                        class="form-control selectableDark" name="sum_to_dollor" placeholder="So'm miqdori kiriting!"
                                         required>
 
                                     <div class="form-group dollar_narxi">
                                         <h6>Dollar kursi</h6>
-                                        <input class="form-control dollar_narxi" type="text" placeholder="Доллар курси"
+                                        <input class="form-control dollar_narxi selectableDark" type="text" placeholder="Доллар курси"
                                             name="current_dollor_sotish_sum" value="{{ sotish_sum }}">
                                     </div>
                                 </div>
@@ -531,21 +531,21 @@
                             <form action="{% url 'outincomepayment' %}" method="post">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <select class="form-control" name="kassa" id="kassa">
+                                    <select class="form-control selectableDark" name="kassa" id="kassa">
                                         <option value="">Kassa tanlang</option>
                                         <option value="kassa1">Asosiy kassaga</option>
                                         <option value="kassa2">Ikkinchi kassaga</option>
                                         <option value="kassa3">Qozoq kassaga</option>
                                     </select>
                                     <br>
-                                    <select class="form-control" name="turi" id="turi">
+                                    <select class="form-control selectableDark" name="turi" id="turi">
                                         <option value="">To'lob turini tanlang</option>
                                         <option value="1">USD</option>
                                         <option value="2">So'm</option>
                                     </select>
                                     <input type="number" step="any" min="0" oninput="validity.valid||(value='');"
-                                        class="form-control" name="money" placeholder="Miqdori kiriting!" required>
-                                    <input type="text" class="form-control" name="comment" placeholder="Izoh kiriting!">
+                                        class="form-control selectableDark" name="money" placeholder="Miqdori kiriting!" required>
+                                    <input type="text" class="form-control selectableDark" name="comment" placeholder="Izoh kiriting!">
 
                                 </div>
 
@@ -577,7 +577,7 @@
                             <form action="{% url 'chiqimpayment' %}" method="post">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <select class="form-control" name="kassa" id="kassa" required>
+                                    <select class="form-control selectableDark" name="kassa" id="kassa" required>
                                         <option value="">Kassa tanlang</option>
                                         <option value="kassa1">Asosiy kassaga</option>
                                         <option value="kassa2">Ikkinchi kassaga</option>
@@ -585,24 +585,24 @@
                                     </select>
                                     <br>
                                     <label for="categories">Chiqim turi</label>
-                                    <select class="form-control" name="categories" id="categories" required>
+                                    <select class="form-control selectableDark" name="categories" id="categories" required>
                                         <option value="">Kategory tanlang</option>
                                         {% for cat in categories %}
                                         <option value="{{ cat.id }}">{{ cat.name }}</option>
                                         {% endfor %}
                                     </select>
-                                    <select class="form-control" name="subcategory" id="subcategory">
+                                    <select class="form-control selectableDark" name="subcategory" id="subcategory">
 
                                     </select>
                                     <br>
-                                    <select class="form-control" name="turi" id="turi">
+                                    <select class="form-control selectableDark" name="turi" id="turi">
                                         <option value="">To'lob turini tanlang</option>
                                         <option value="1">USD</option>
                                         <option value="2">So'm</option>
                                     </select>
                                     <input type="number" step="any" min="0" oninput="validity.valid||(value='');"
-                                        class="form-control" name="money" placeholder="Miqdori kiriting!" required>
-                                    <input type="text" class="form-control" name="comment" placeholder="Izoh kiriting!">
+                                        class="form-control selectableDark" name="money" placeholder="Miqdori kiriting!" required>
+                                    <input type="text selectableDark" class="form-control" name="comment" placeholder="Izoh kiriting!">
 
                                 </div>
 
@@ -634,13 +634,13 @@
                             <form class="form-group" action="{% url 'add-type-expanse' %}" method="post">
                                 {% csrf_token %}
                                 <label for="categories"></label>
-                                <select class="form-control" name="categories" id="categories" required>
+                                <select class="form-control selectableDark" name="categories" id="categories" required>
                                     <option value="">Kategory tanlang</option>
                                     {% for cat in categories %}
                                     <option value="{{ cat.id }}">{{ cat.name }}</option>
                                     {% endfor %}
                                     <div class="form-group p-3">
-                                        <input type="text" class="form-control" name="name" placeholder="Chiqim turi"
+                                        <input type="text" class="form-control selectableDark" name="name" placeholder="Chiqim turi"
                                             required>
                                     </div>
                                     <div class="form-group p-3">
@@ -671,7 +671,7 @@
                                 {% csrf_token %}
                                 <div class="form-group pt-2">
                                     <label for="from_kassa">Kassadan</label>
-                                    <select class="form-control" name="from_kassa" required>
+                                    <select class="form-control selectableDark" name="from_kassa" required>
                                         <option value="" disabled selected>Kasssa tanlang</option>
                                         <option value="kassa1">Asosiy kassadan</option>
                                         <option value="kassa2">Ikkinchi kassadan</option>
@@ -679,7 +679,7 @@
 
                                     </select>
                                     <label for="to_kassa">Kassaga</label>
-                                    <select class="form-control" id="to_kassa" name="to_kassa" required>
+                                    <select class="form-control selectableDark" id="to_kassa" name="to_kassa" required>
                                         <option value="" disabled selected>Qaysi Kasssaga tanlang</option>
                                         <option value="kassa1">Asosiy kassaga</option>
                                         <option value="kassa2">Ikkinchi kassaga</option>
@@ -687,21 +687,21 @@
 
                                     </select>
                                     <br>
-                                    <select name="currency" id="" class="form-control select1">
+                                    <select name="currency" id="" class="form-control select1 selectableDark">
                                         <option value="" disabled selected>Valyuta turini tanlang</option>
                                         <option value="usd">Dollar</option>
                                         <option value="usz">So'm</option>
                                     </select>
                                     <div class="form-group dollar_narxi1" style="display:none;">
                                         <h6>Dollar kursi</h6>
-                                        <input class="form-control dollar_narxi1" type="text" placeholder="Доллар курси"
+                                        <input class="form-control dollar_narxi1 selectableDark" type="text" placeholder="Доллар курси"
                                             name="dollar_narxi" value="1">
                                     </div>
                                 </div>
                                 <div class="form-group pt-2">
                                     <input type="number" step="any" min="0" oninput="validity.valid||(value='');"
-                                        class="form-control" name="summa" placeholder="Summa" required>
-                                    <input type="text" class="form-control" name="izoh" placeholder="Izoh" >
+                                        class="form-control selectableDark" name="summa" placeholder="Summa" required>
+                                    <input type="text" class="form-control selectableDark" name="izoh" placeholder="Izoh" >
                                 </div>
                                 <div class="form-group pt-2">
                                     <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">
@@ -736,14 +736,14 @@
                                 {% csrf_token %}
                                 <div class="form-group p-3">
                                     <input type="hidden" name="id" value="{{ i.id }}">
-                                    <select name="mijoz" id="mijoz" class="form-control" required>
+                                    <select name="mijoz" id="mijoz" class="form-control selectableDark" required>
                                         <option value="{{ i.customer.id }}" selected>{{ i.customer.name }}</option>
                                         {% for mijoz in mijozlar %}
                                             <option value="{{ mijoz.id }}">{{ mijoz.name }}</option>
                                         {% endfor %}
                                     </select>
-                                    <input type="number" name="tulov" class="form-control" placeholder="To'lov" value="{{ i.payment }}" required>
-                                    <input type="date" name="date" id="timees" class="form-control mx-1 remove-items-margin" placeholder="{{ i.custom_date }}"  required>
+                                    <input type="number" name="tulov" class="form-control selectableDark" placeholder="To'lov" value="{{ i.payment }}" required>
+                                    <input type="date" name="date" id="timees" class="selectableDark form-control mx-1 remove-items-margin" placeholder="{{ i.custom_date }}"  required>
                                 </div>
                                 <div class="form-group p-3">
                                     <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">
@@ -776,6 +776,27 @@
 
 <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
 <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+<script>
+    if(window.location.pathname.includes("/director")){
+       let contentWrapper = document.querySelector(".content-wrapper")
+       contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
+       let box = document.querySelectorAll(".box").forEach(item=>item.setAttribute("style","background:rgb(24, 24, 56)"))
+      
+       let selectInput = document.querySelectorAll(".selectableDark").forEach(item=>item.setAttribute("style","background:rgb(24, 24, 56)"))
+       
+       let input = document.querySelector("#reservation")
+       input.setAttribute("style","background:rgb(24, 24, 56)") 
+ 
+       let selectBox = document.querySelector(".dataTables_length").firstElementChild.firstElementChild
+       let searchBox = document.querySelector("#excel_filter").firstElementChild.firstElementChild
+       let pagination = document.querySelectorAll(".pagination .paginate_button a")
+
+       pagination.forEach(item=>item.setAttribute("style", "background:#12185e"))
+       selectBox.setAttribute("style","background-color:#14173d")
+       searchBox.setAttribute("style","background-color:#14173d")
+    }
+</script>
 
 <script>
     $('#excel').DataTable({

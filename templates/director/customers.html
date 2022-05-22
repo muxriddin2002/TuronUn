@@ -496,6 +496,23 @@
 	<script src="{% static 'main/js/pages/data-table.js'%}"></script>
 	<!-- Sunny Admin App -->
     <script src="{% static 'filter/Filter.js' %}"></script>
+
+    <script>
+        if(window.location.pathname.includes("/director")){
+           let contentWrapper = document.querySelector(".content-wrapper")
+           contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
+           let box = document.querySelector(".box")
+           box.setAttribute("style","background:rgb(24, 24, 56)")
+     
+           let selectBox = document.querySelector(".dataTables_length").firstElementChild.firstElementChild
+           let searchBox = document.querySelector("#excel_filter").firstElementChild.firstElementChild
+           let pagination = document.querySelectorAll(".pagination .paginate_button a")
+    
+           pagination.forEach(item=>item.setAttribute("style", "background:#12185e"))
+           selectBox.setAttribute("style","background-color:#14173d")
+           searchBox.setAttribute("style","background-color:#14173d")
+        }
+    </script>
     
     {% if user.type == 4 %}
         <script>
