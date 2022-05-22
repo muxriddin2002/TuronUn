@@ -249,6 +249,14 @@
     <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
     <script src="{% static 'main/js/pages/data-table.js'%}"></script>
 
+           <script>
+    if(window.location.pathname.includes("/director")){
+       let contentWrapper = document.querySelector(".content-wrapper")
+       contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
+       let box = document.querySelectorAll(".box").forEach(item=>item.setAttribute("style","background:rgb(24, 24, 56)"))
+    }
+</script>
+
     <script>
            $('#complex_header50').DataTable( {
            'dom': 'Blfrtip',

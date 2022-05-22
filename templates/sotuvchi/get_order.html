@@ -123,7 +123,7 @@
                             <div class="box-header with-border full-content-item">
                                 <div class="row">
                                     <div class="col-xl-2 col-md-12 text-center py-5 current-title-item contessting">
-                                        <h5 class="box-title">Buyurtmalar ro'yxati</h5>
+{#                                        <h5 class="box-title">Buyurtmalar ro'yxati</h5>#}
                                     </div>
                                     <div class="col-xl-6 col-md-12 contessting changeNM">
 
@@ -134,13 +134,16 @@
                                                 <select  class="border form-control omadbekmargin mx-1 remove-items-margin" name="customer"
                                                         required>
                                                     <option value="" disabled selected>Xaridor</option>
-                                                    
+
                                                     {% for client in customers %}
                                                         <option value="{{ client.id }}">{{ client.get_hudud_display }} - {{ client.location }} - {{ client.name }}</option>
                                                     {% endfor %}
                                                 </select>
+
                                                 <input type="date"  name="date" required class="border form-control mx-1 remove-items-margin"   id="timees">
                                             </div>
+
+
                                             <div class="form-group mx-1 contessting-2  div-teim">
                                                 <select class="border form-control omadbekmargin "  id="id_tegirmon"  name="tegirmon" required>
                                                     <option value="" disabled selected>Omborni tanlang</option>
@@ -173,18 +176,18 @@
                                         
                                     </div>
                                     
-                                    <div class="col-xl-3 contessting ccall">
-                                        <div class="input-group">
-                                            <input type="text" onchange="filterdate(this)"
-                                                   class="border form-control pull-right" id="reservation">
-                                            <a href="" id="date_f">
-                                                <div class="input-group-addon"
-                                                     style="padding:10px; border-radius: 0px 10px 10px 0px;">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
+{#                                    <div class="col-xl-3 contessting ccall">#}
+{#                                        <div class="input-group">#}
+{#                                            <input type="text" onchange="filterdate(this)"#}
+{#                                                   class="border form-control pull-right" id="reservation">#}
+{#                                            <a href="" id="date_f">#}
+{#                                                <div class="input-group-addon"#}
+{#                                                     style="padding:10px; border-radius: 0px 10px 10px 0px;">#}
+{#                                                    <i class="fa fa-calendar"></i>#}
+{#                                                </div>#}
+{#                                            </a>#}
+{#                                        </div>#}
+{#                                    </div>#}
                                     
                                 </div>
                             </div>
@@ -252,6 +255,11 @@
 
 <script src="{% static 'assets/vendor_components/datatable/datatables.min.js'%}"></script>
 <script src="{% static 'main/js/pages/data-table.js'%}"></script>
+
+{#<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />#}
+
+
+
 <script>
     // $('#excel').DataTable( {
     //     dom: 'Bfrtip',
@@ -260,6 +268,8 @@
     //     { extend: 'pdf', className: 'pdfButton' }
     // ]
     // } );
+
+
 
         $('#excel').DataTable( {
             'dom': 'Blfrtip',

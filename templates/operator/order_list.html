@@ -101,7 +101,7 @@
                                                                 <tr>
                                                                     <th scope="row">{{ forloop.counter }}</th>
                                                                     <td>
-                                                                        <a href="{% url 'operator-active-orders-detail' ord.id %}">{{ ord.customer.name }}</a>
+                                                                        <a id = "{{ord.id}}" class="linkToChange" href="{% url 'operator-active-orders-detail' ord.id %}">{{ ord.customer.name }}</a>
                                                                     </td>
                                                                     <td>{{ ord.customer.get_hudud_display }}</td>
                                                                     <td>{{ ord.seller.username }} {{ ord.seller.last_name }} {{ ord.seller.first_name }}</td>
@@ -178,7 +178,7 @@
                                                                 <tr>
                                                                     <th scope="row">{{ forloop.counter }}</th>
                                                                     <td>
-                                                                        <a href="{% url 'operator-active-orders-detail' ord.id %}">{{ ord.customer.name }}</a>
+                                                                        <a id = "{{ord.id}}" class="linkToChange" href="{% url 'operator-active-orders-detail' ord.id %}">{{ ord.customer.name }}</a>
                                                                     </td>
                                                                     <td>{{ ord.customer.get_hudud_display }}</td>
                                                                     <td>{{ ord.seller.username }} {{ ord.seller.last_name }} {{ ord.seller.first_name }}</td>
@@ -326,6 +326,19 @@
     <script src="{% static 'main/js/pages/data-table.js'%}"></script>
 
     <!-- lBfrtip -->
+
+
+    <script>
+        if(window.location.pathname.includes("/director")){
+           let contentWrapper = document.querySelector(".content-wrapper")
+           contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
+           let box = document.querySelectorAll(".box").forEach(item=>item.setAttribute("style","background:rgb(24, 24, 56)"))
+
+           document.querySelectorAll(".linkToChange").forEach(a=>a.setAttribute("href",`/director/active-orders-details/${a.getAttribute("id")}`))
+
+        }
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#excel21').DataTable({
@@ -369,16 +382,9 @@
     }
 </script>
 
-<script>
-    if(window.location.pathname.includes("/director")){
-       let contentWrapper = document.querySelector(".content-wrapper")
-       contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
-       let box = document.querySelectorAll(".box").forEach(item=> item.setAttribute("style","background:rgb(24, 24, 56)"))
-       let input = document.querySelector("#reservation")
-       input.setAttribute("style","background:rgb(8, 5, 27)")
-       
-     }
-</script>
+
+
+
    
 
 {% endblock js %}

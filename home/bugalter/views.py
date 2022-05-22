@@ -767,7 +767,7 @@ def paymentclient(request):
                 #     user = f'{request.user.first_name} - {request.user.last_name}'
                 #     sendSmsOneContact(+998901300444, client.name + " mijozdan: " + format_tuladi  + " so'm kirim "+ user +" tomondan "+str(bank.bank_name) +" "+ str(bank.shot_numbers) +" bank hisob raqamidan to'lov qabul qilindi!")
             messages.success(request, "To'lov qabul qilindi")
-            if user.type == 2:
+            if user.type == 2 or user.type == 12:
                 return redirect("bugalter_clients")
             else:
                 return redirect("yordamchi_bugalter_dashboard")

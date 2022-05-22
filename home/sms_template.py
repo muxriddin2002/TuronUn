@@ -22,8 +22,8 @@ def payment_clint_sms(request, client, summa, currency=None, kassa=None, bank=No
         elif bank:
             message = f"{client.name} mijozdan {summa} {currency} kirim {user} tomonidan {bank.bank_name} {bank.shot_numbers} bank hisob raqamidan to'lov qabul qilindi!"
             message_salesman = f" To'lov qabul qilindi! Mijoz: {client.name}\n To'lov qabul qildi: {user}\n Bank orqali {summa} {currency} \n Mijoz jami qarzdorligi: {int(client.debt)} \n {datetime.now().strftime('%d %b %Y')} {datetime.now().strftime('%H:%M:%S')}"
-        sendSmsOneContact(+998944840604, message)
-        sendSmsOneContact(+998944840604, message_salesman)
+        sendSmsOneContact(+998901300444, message)
+        sendSmsOneContact(salesman_phone, message_salesman)
 
 
 
@@ -41,7 +41,7 @@ def outincomepayment_sms(request, summa, turi, kassa):
 
     if send:
         message = f"Tashqi kirimda {summa} {currency} kirim {user} tomonidan {kassa} kassaga to'lov qabul qilindi!"
-        sendSmsOneContact(+998944840604, message)
+        sendSmsOneContact(+998901300444, message)
 
 
 def chiqim_payment_sms(request, summa, turi, kassa):
@@ -57,7 +57,7 @@ def chiqim_payment_sms(request, summa, turi, kassa):
 
     if send:
         message = f"Tashqi chiqimda : {summa} chiqim {user} tomonidan {kassa} kassadan qilindi!"
-        sendSmsOneContact(+998944840604, message)
+        sendSmsOneContact(+998901300444, message)
 
 
 def paymentoutlay_sms(request, summa, kassa=None, bank=None):
@@ -70,7 +70,7 @@ def paymentoutlay_sms(request, summa, kassa=None, bank=None):
 
         elif bank:
             message = f"AktOutlay uchun {summa} chiqim summasi {user} tomonidan {bank.shot_numbers} bank hisob raqamidan to'lov  qilindi!"
-        sendSmsOneContact(+998944840604, message)
+        sendSmsOneContact(+998901300444, message)
 
 
 def paymentforwheat_sms(request, client, summa, currency, kassa=None, bank=None):
@@ -89,7 +89,7 @@ def paymentforwheat_sms(request, client, summa, currency, kassa=None, bank=None)
         elif bank:
             messgae = f"{client.name} Taminotchiga {summa} {currency} chiqim {user} tomonidan {bank.bank_name} {bank.shot_numbers} bank hisob raqamidan to'lov chiqim qilindi!"
 
-        sendSmsOneContact(+998944840604, message)
+        sendSmsOneContact(+998901300444, message)
 
 
 def paymentforun_sms(request, summa, currency, client, kassa=None, bank=None):
@@ -113,10 +113,10 @@ def paymentforun_sms(request, summa, currency, client, kassa=None, bank=None):
         elif bank:
             message = f"{client.name} Ta'minotchiga {summa} {currency} chiqim {user} tomonidan {bank.bank_name} {bank.shot_numbers} bank hisob raqamidan chiqim qilindi!"
 
-        sendSmsOneContact(+998944840604, message)
+        sendSmsOneContact(+998901300444, message)
 
 def paymentforqop_sms(request, summa, client, bank):
     #faqat bank
     user = f'{request.user.first_name} - {request.user.last_name}'
     message = f"{client.name} Taminotchiga: {summa} so'm chiqim {user} tomonidan {bank.bank_name} {bank.shot_numbers} bank hisob raqamidan chiqim qilindi!"
-    sendSmsOneContact(+998944840604, message)
+    sendSmsOneContact(+998901300444, message)

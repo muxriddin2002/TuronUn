@@ -185,7 +185,7 @@
                                                         background-color:rgb(245, 245, 245) !important;">{{ forloop.counter }}</th>
                                                       
                                                         <td style="padding-left:50px">
-                                                            <a href="{% url 'paymentclients' i.id %}">{{i.name}}</a>
+                                                            <a id="{{ i.id }}" class="linkToChange" href="{% url 'paymentclients' i.id %}">{{i.name}}</a>
                                                         </td>
                                                         <td>{{ i.get_hudud_display }}</td>
                                                         <td>{{i.employe.first_name}} {{ i.employe.last_name }}</td>
@@ -503,7 +503,8 @@
            contentWrapper.setAttribute("style","background:rgb(8, 5, 27)")
            let box = document.querySelector(".box")
            box.setAttribute("style","background:rgb(24, 24, 56)")
-     
+                 document.querySelectorAll(".linkToChange").forEach(a=>a.setAttribute("href",`/director/paymentclients/${a.getAttribute("id")}`))
+
            let selectBox = document.querySelector(".dataTables_length").firstElementChild.firstElementChild
            let searchBox = document.querySelector("#excel_filter").firstElementChild.firstElementChild
            let pagination = document.querySelectorAll(".pagination .paginate_button a")
@@ -513,7 +514,8 @@
            searchBox.setAttribute("style","background-color:#14173d")
         }
     </script>
-    
+
+
     {% if user.type == 4 %}
         <script>
             $('#excel').DataTable({

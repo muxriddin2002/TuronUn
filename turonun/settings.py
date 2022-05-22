@@ -10,7 +10,8 @@ import logging.config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = '1232'
+# SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = '1'
 DEBUG = True
 # DEBUG = config('DEBUG', default=False, cast=bool)
 
